@@ -1,0 +1,13 @@
+{
+  "Page": {
+    "Landing": {
+      "title": "Home"
+    },
+    "Search": {
+      "title": "Search"
+    }
+  },
+  "Landing": {
+    "test": "test"
+  }
+}
