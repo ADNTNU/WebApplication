@@ -1,14 +1,5 @@
-import * as React from 'react';
-import ThemeProvider from '@material/themes';
+import {ReactNode} from 'react';
 
-export default function RootLayout(props: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <ThemeProvider>
-          {props.children}
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+export default function RootLayout({children}: {children: ReactNode}) {
+  return children;
 }
