@@ -1,13 +1,16 @@
 {
   "Page": {
     "Landing": {
-      "title": "Home"
+      "title": "Home",
+      "description": "Welcome to the home page"
     },
     "Search": {
-      "title": "Search"
+      "title": "Search",
+      "description": ""
     }
   },
   "Landing": {
     "test": "test"
-  }
+  },
+  "NotToBeIncluded": "Not to be included in the resulting type"
 }

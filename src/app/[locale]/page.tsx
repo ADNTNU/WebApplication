@@ -2,15 +2,13 @@ import { Container, Typography } from "@mui/material";
 import {getTranslations, unstable_setRequestLocale} from 'next-intl/server';
 import {useTranslations} from 'next-intl';
 import ButtonLink from "@/components/ButtonLink";
+import { generateTranslatedMetadata } from "@/utils/translatedMetadata";
+import { Locale, locales } from "@/i18n";
 
 export async function generateMetadata({
   params: {locale}
 } : { params: {locale: string}; }) {
-  const t = await getTranslations({locale, namespace: 'Page.Landing'});
-
-  return {
-    title: t('title')
-  };
+  return await generateTranslatedMetadata({locale, page: 'Landing'});
 }
 
 export default function Landing({params: {locale}}: {params: {locale: string}}) {

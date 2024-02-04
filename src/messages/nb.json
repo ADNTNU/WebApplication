@@ -1,10 +1,12 @@
 {
   "Page": {
     "Landing": {
-      "title": "Hjem"
+      "title": "Hjem",
+      "description": ""
     },
     "Search": {
-      "title": "Søk"
+      "title": "Søk",
+      "description": ""
     }
   },
   "Landing": {

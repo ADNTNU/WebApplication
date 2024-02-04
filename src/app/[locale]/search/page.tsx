@@ -1,15 +1,12 @@
 import ButtonLink from "@/components/ButtonLink";
+import { generateTranslatedMetadata } from "@/utils/translatedMetadata";
 import { Container, Typography } from "@mui/material";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
   params: {locale}
 } : { params: {locale: string}; }) {
-  const t = await getTranslations({locale, namespace: 'Page.Search'});
-
-  return {
-    title: t('title')
-  };
+  return await generateTranslatedMetadata({locale, page: 'Search'});
 }
 
 export default function Search({params: {locale}}: {params: {locale: string}}) {
