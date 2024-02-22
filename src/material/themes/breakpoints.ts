@@ -12,13 +12,13 @@ const breakpoints = {
   },
 };
 
-declare module "@mui/material/styles" {
-  interface BreakpointOverrides {
+declare module '@mui/material/styles' {
+  type BreakpointOverrides = {
     xsm: true;
     xxl: true;
     xxxl: true;
     xxxxl: true;
-  }
+  };
 }
 
 export default breakpoints;

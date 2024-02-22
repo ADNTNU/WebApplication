@@ -1,14 +1,12 @@
-
-
-import { ThemeProvider as MyThemeProvider, } from "@mui/material/styles";
+import { ThemeProvider as MyThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 
-import { CssBaseline, } from "@mui/material";
-import { ReactNode, } from "react";
+import { CssBaseline } from '@mui/material';
+import { ReactNode } from 'react';
 // import overrides from "../overrides";
-import theme from "./theme";
+import theme from './theme';
 
-const ThemeProvider = ({ children, }: { children: ReactNode }) => {
+export default function ThemeProvider({ children }: { children: ReactNode }) {
   return (
     <AppRouterCacheProvider>
       <MyThemeProvider theme={theme}>
@@ -18,7 +16,4 @@ const ThemeProvider = ({ children, }: { children: ReactNode }) => {
       </MyThemeProvider>
     </AppRouterCacheProvider>
   );
-};
-
-export default ThemeProvider;
-        
+}

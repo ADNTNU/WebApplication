@@ -2,7 +2,7 @@
   "Page": {
     "Landing": {
       "title": "Hjem",
-      "description": ""
+      "description": "Dette er hjemmesiden til search aggregatoren. Her kan du søke etter informasjon fra flere kilder samtidig."
     },
     "Search": {
       "title": "Søk",
@@ -11,5 +11,23 @@
   },
   "Landing": {
     "test": "test2"
+  },
+  "Error": {
+    "404": {
+      "title": "404",
+      "description": "Siden du leter etter finnes ikke.",
+      "backAction": "Gå til forrige side",
+      "homeAction": "Gå tilbake til forsiden"
+    }
+  },
+  "Nav": {
+    "home": "Hjem",
+    "search": "Søk",
+    "privacy": "Personvernserklæring",
+    "about": "Om oss"
+  },
+  "Action": {
+    "goTo": "Gå til",
+    "goBackTo": "Gå tilbake til"
   }
 }
