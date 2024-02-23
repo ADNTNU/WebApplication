@@ -1,35 +1,28 @@
+import pick from 'lodash/pick';
 import { ReactNode } from 'react';
 import ThemeProvider from '@material/themes';
 import { locales } from '@/i18n';
-import { getTranslations } from 'next-intl/server';
+import { NextIntlClientProvider, useMessages } from 'next-intl';
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({locale}));
+  return locales.map((locale) => ({ locale }));
 }
-
-// export async function generateMetadata({
-//   params: {locale}
-// } : { params: {locale: string}; }) {
-//   const t = await getTranslations({locale, namespace: 'LocaleLayout'});
-
-//   return {
-//     title: t('title')
-//   };
-// }
 
 export default function LocaleLayout({
   children,
-  params: {locale}
+  params: { locale },
 }: {
   children: ReactNode;
-  params: {locale: string};
+  params: { locale: string };
 }) {
+  const messages = useMessages();
+
   return (
     <html lang={locale}>
       <body>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <NextIntlClientProvider locale={locale} messages={pick(messages, ['Error', 'Nav'])}>
+          <ThemeProvider>{children}</ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

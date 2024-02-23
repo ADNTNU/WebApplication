@@ -1,13 +1,33 @@
 {
   "Page": {
     "Landing": {
-      "title": "Home"
+      "title": "Home",
+      "description": "Welcome to the home page"
     },
     "Search": {
-      "title": "Search"
+      "title": "Search",
+      "description": ""
     }
   },
   "Landing": {
     "test": "test"
+  },
+  "Error": {
+    "404": {
+      "title": "404",
+      "description": "Page not found",
+      "backAction": "Go to last page",
+      "homeAction": "Go back to home page"
+    }
+  },
+  "Nav": {
+    "home": "Home",
+    "search": "Search",
+    "privacy": "Privacy Policy",
+    "about": "About"
+  },
+  "Action": {
+    "goTo": "Go to",
+    "goBackTo": "Go back to"
   }
 }
