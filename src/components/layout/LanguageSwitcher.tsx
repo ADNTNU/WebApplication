@@ -2,9 +2,10 @@
 
 import { Locale, locales } from '@/i18n';
 import { useRouter, usePathname } from '@/navigation';
-import { IconButton, Menu, MenuItem, SvgIcon } from '@mui/material';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { NO, GB } from 'country-flag-icons/react/1x1';
 import { useState, MouseEvent, ComponentProps } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 type LocaleFlagProps = {
   locale?: Locale;
@@ -86,9 +87,12 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
 
   return (
     <>
-      <IconButton onClick={handleClick} sx={iconButtonSxWithSize} {...restIconProps}>
-        {localeFlag}
-      </IconButton>
+      <Button onClick={handleClick}>
+        <IconButton sx={iconButtonSxWithSize} {...restIconProps}>
+          {localeFlag}
+        </IconButton>
+        <ExpandMoreIcon />
+      </Button>
       <Menu
         // aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}
