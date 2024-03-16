@@ -50,15 +50,7 @@ export default function Header(props: HeaderProps) {
             <Stack gap={1} alignItems="center" direction="row">
               <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
             </Stack>
-            <LanguageSwitcher
-              locale={locale}
-              iconSize={25}
-              iconProps={{
-                sx: {
-                  padding: 0,
-                },
-              }}
-            />
+            <LanguageSwitcher locale={locale} />
           </Stack>
         </Stack>
         {/* Add login and internationalization buttons or drawer if mobile */}

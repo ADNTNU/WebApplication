@@ -36,12 +36,12 @@ function LocaleFlag(props: LocaleFlagProps): LocaleFlagReturn {
 
 type LanguageSwitcherProps = {
   locale?: Locale;
-  iconProps?: ComponentProps<typeof IconButton>;
   iconSize?: number;
+  menuIconSize?: number;
 };
 
 export default function LanguageSwitcher(props: LanguageSwitcherProps) {
-  const { locale, iconProps, iconSize } = props;
+  const { locale, iconSize, menuIconSize } = props;
 
   const router = useRouter();
   const pathname = usePathname();
@@ -64,22 +64,14 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
     router.push(pathname, { locale: l });
   };
 
-  const { sx: iconSx, ...restIconProps } = iconProps || {};
-
-  const iconButtonSxWithSize = iconSize
-    ? {
-        ...iconSx,
-        width: iconSize,
-        height: iconSize,
-      }
-    : iconSx;
-
   const localeFlagReturn = LocaleFlag({
-    locale: locale,
+    locale: locale || 'en',
     flagProps: {
       style: {
         borderRadius: iconSize ? iconSize / 2 : 15,
       },
+      width: iconSize,
+      height: iconSize,
     },
   });
 
@@ -88,10 +80,13 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
   return (
     <>
       <Button onClick={handleClick}>
-        <IconButton sx={iconButtonSxWithSize} {...restIconProps}>
-          {localeFlag}
-        </IconButton>
-        <ExpandMoreIcon />
+        {localeFlag}
+        <ExpandMoreIcon
+          sx={{
+            width: iconSize,
+            height: iconSize,
+          }}
+        />
       </Button>
       <Menu
         // aria-labelledby="demo-positioned-button"
@@ -128,7 +123,9 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
               sx={{ gap: 1 }}
               selected={l === locale}
             >
-              <IconButton sx={iconButtonSxWithSize} {...restIconProps}>
+              <IconButton
+                sx={{ width: menuIconSize || 24, height: menuIconSize || 24, padding: 0 }}
+              >
                 {flag.flag}
               </IconButton>
               {flag.name}
