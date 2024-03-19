@@ -2,10 +2,22 @@
   "Page": {
     "Landing": {
       "title": "Home",
-      "description": "Welcome to the home page"
+      "description": "Flight finder is one of the leading flight search engines in the world. We help thousands of people around the globe to find the best flights"
     },
     "Search": {
       "title": "Search",
+      "description": "Search for thousands of flights on flight finder"
+    },
+    "Privacy": {
+      "title": "Privacy Policy",
+      "description": ""
+    },
+    "About": {
+      "title": "About",
+      "description": ""
+    },
+    "Trip": {
+      "title": "Trip - {tripId}",
       "description": ""
     }
   },

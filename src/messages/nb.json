@@ -7,6 +7,18 @@
     "Search": {
       "title": "Søk",
       "description": ""
+    },
+    "Privacy": {
+      "title": "Personvernserklæring",
+      "description": ""
+    },
+    "About": {
+      "title": "Om oss",
+      "description": ""
+    },
+    "Trip": {
+      "title": "Flytur - {tripId}",
+      "description": ""
     }
   },
   "Landing": {

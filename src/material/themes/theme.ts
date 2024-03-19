@@ -1,70 +1,43 @@
 'use client';
 
-import { red } from '@mui/material/colors';
-import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+import { createTheme as MUIcreateTheme, responsiveFontSizes } from '@mui/material/styles';
 import breakpoints from './breakpoints';
 import overrides from './overrides';
+import darkThemeOptions from './darkTheme';
+import lightThemeOptions from './lightTheme';
+import { Theme, ThemeMode, ThemeOptionsWithName } from '@models/theme';
 
-let theme = createTheme({
-  breakpoints: {
-    ...breakpoints,
-  },
-});
+export default function createTheme(ffTheme: ThemeOptionsWithName): Theme {
+  const { name, ...restTheme } = ffTheme;
 
-theme = createTheme(theme, {
-  palette: {
-    primary: {
-      light: '#6E6EAF',
-      main: '#31308D',
-      dark: '#222162',
+  let theme = MUIcreateTheme({
+    breakpoints: {
+      ...breakpoints,
     },
-    secondary: {
-      light: '#ABD7FF',
-      main: '#88c7ff',
-      dark: '#5F8BB2',
-    },
-    error: {
-      light: '#FFA8A8',
-      main: red.A400,
-    },
-    warning: {
-      light: '#ffb74d',
-      main: '#ffa726',
-      dark: '#f57c00',
-    },
-    info: {
-      main: '#9c27b0',
-    },
-    success: {
-      main: '#43a047',
-    },
-    text: {
-      primary: 'rgba(0, 0, 0, 0.87)',
-      secondary: 'rgba(0, 0, 0, 0.7)',
-      disabled: 'rgba(0, 0, 0, 0.38)',
-    },
-    action: {
-      active: 'rgba(0, 0, 0, 0.54)',
-      hover: 'rgba(0, 0, 0, 0.04)',
-      selected: 'rgba(0, 0, 0, 0.08)',
-      disabled: 'rgba(0, 0, 0, 0.26)',
-      disabledBackground: 'rgba(0, 0, 0, 0.12)',
-    },
-    background: {
-      default: '#FDFDFD',
-      paper: '#FFFFFF',
-    },
-    mode: 'light',
-  },
-  typography: {
-    h6: {
-      fontWeight: 400,
-    },
-  },
-});
+  });
 
-theme = responsiveFontSizes(theme, { breakpoints: ['sm', 'md', 'lg', 'xl'], factor: 2 });
+  theme = MUIcreateTheme(theme, {
+    typography: {
+      h6: {
+        fontWeight: 400,
+      },
+    },
+    ...restTheme,
+  });
 
-theme.components = overrides(theme);
+  theme = responsiveFontSizes(theme, { breakpoints: ['sm', 'md', 'lg', 'xl'], factor: 2 });
 
-export default theme;
+  theme.components = overrides(theme);
+
+  return {
+    name,
+    theme,
+  };
+}
+
+const darkTheme = createTheme(darkThemeOptions);
+const lightTheme = createTheme(lightThemeOptions);
+export const themes: { [K in ThemeMode]: Theme } = {
+  Dark: darkTheme,
+  Light: lightTheme,
+};

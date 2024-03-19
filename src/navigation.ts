@@ -1,5 +1,6 @@
 import { createLocalizedPathnamesNavigation, Pathnames } from 'next-intl/navigation';
 import { locales } from '@/i18n';
+import { ComponentProps } from 'react';
 
 export const localePrefix = 'always'; // default
 
@@ -27,6 +28,11 @@ export const pathnames = {
     nb: '/personvern',
   },
 
+  '/trip/[tripId]': {
+    en: '/trip/[tripId]',
+    nb: '/flytur/[tripId]',
+  },
+
   // Dynamic params are supported via square brackets
   // '/news/[articleSlug]-[articleId]': {
   //   en: '/news/[articleSlug]-[articleId]',
@@ -39,7 +45,11 @@ export const pathnames = {
   //   de: '/kategorien/[...slug]'
   // }
 } satisfies Pathnames<typeof locales>;
-export type Pathname = keyof typeof pathnames;
 
 export const { Link, redirect, usePathname, useRouter, getPathname } =
   createLocalizedPathnamesNavigation({ locales, localePrefix, pathnames });
+
+export type LinkProps<Pathname extends keyof typeof pathnames> = ComponentProps<
+  typeof Link<Pathname>
+>;
+export type Pathname = keyof typeof pathnames;

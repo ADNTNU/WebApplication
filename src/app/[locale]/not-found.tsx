@@ -3,7 +3,7 @@
 import PageSection from '@/components/layout/PageSection';
 import PageWrapper from '@/components/layout/PageWrapper';
 import ButtonLink from '@/components/navigation/ButtonLink';
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
 export default function NotFound() {

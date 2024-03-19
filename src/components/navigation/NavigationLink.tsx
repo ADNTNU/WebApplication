@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import Link from '@components/navigation/Link';
 import { ComponentProps } from 'react';
+import { LinkProps, pathnames } from '@/navigation';
 
 export const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
   cursor: 'pointer',
@@ -10,11 +11,17 @@ export const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
   },
 };
 
-type NavigationLinkProps = ComponentProps<typeof Link> & ComponentProps<typeof Typography>;
+type NavigationLinkProps<Pathname extends keyof typeof pathnames> = ComponentProps<
+  typeof Typography
+> &
+  LinkProps<Pathname>;
 
-export default function NavigationLink(props: NavigationLinkProps) {
-  const { children, sx, variant, ...rest } = props;
-
+export default function NavigationLink<Pathname extends keyof typeof pathnames>({
+  children,
+  sx,
+  variant,
+  ...rest
+}: NavigationLinkProps<Pathname>) {
   const sxWithDefaults = {
     ...navigationLinkStyles,
     ...sx,

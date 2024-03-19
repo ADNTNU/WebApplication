@@ -1,11 +1,9 @@
-// 'use client';
-
-import { AppBar, Container, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { AppBar, Container, Stack } from '@mui/material';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Link from '@components/navigation/Link';
 import NavigationLink from '@components/navigation/NavigationLink';
 import { useTranslations } from 'next-intl';
-import MobileMenu from './MobileMenu';
+import ThemeSwitcher from './ThemeSwitcher';
 
 type HeaderProps = {
   // TODO: Define the props for the header
@@ -33,9 +31,11 @@ export default function Header(props: HeaderProps) {
           flexDirection="row"
           gap={3}
           alignItems="center"
+          flexGrow={1}
           justifyContent="flex-start"
         >
-          <Link href={'/'} width={40} height={40}>
+          {/* TODO: Add internationalization to aria-label */}
+          <Link href={'/'} width={40} height={40} aria-label="Go to home page">
             <LogoDevIcon
               color="primary"
               sx={{
@@ -43,8 +43,11 @@ export default function Header(props: HeaderProps) {
               }}
             />
           </Link>
-          <Stack gap={1} alignItems="center" direction="row">
-            <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
+          <Stack direction="row" flexGrow={1} alignItems="center" justifyContent="space-between">
+            <Stack gap={2} alignItems="center" direction="row">
+              <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
+            </Stack>
+            <ThemeSwitcher />
           </Stack>
         </Stack>
         {/* Add login and internationalization buttons or drawer if mobile */}
