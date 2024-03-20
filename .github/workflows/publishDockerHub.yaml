@@ -34,16 +34,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Archive Production Artifacts
+      - name: Archive Files
+        run: |
+          zip -r nextjs-build.zip .next public node_modules package.json package-lock.json
+
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: nextjs-build
-          path: |
-            .next
-            public
-            node_modules
-            package.json
-            package-lock.json
+          name: nextjs-build.zip
+          path: nextjs-build.zip
 
       - name: Set unique image tag
         id: unique-image-tag
