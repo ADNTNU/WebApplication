@@ -1,4 +1,3 @@
-# Use an official lightweight Node.js image as the base
 FROM --platform=linux/x86_64 node:alpine
 
 # Set the working directory in the container
