@@ -43,11 +43,8 @@ export default function Header(props: HeaderProps) {
               }}
             />
           </Link>
-          <Stack direction="row" flexGrow={1} alignItems="center" justifyContent="space-between">
-            <Stack gap={2} alignItems="center" direction="row">
-              <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
-            </Stack>
-            <ThemeSwitcher />
+          <Stack gap={2} alignItems="center" direction="row">
+            <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
           </Stack>
         </Stack>
         {/* Add login and internationalization buttons or drawer if mobile */}

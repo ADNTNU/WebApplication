@@ -54,7 +54,7 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
           {({ theme: currentTheme }) => (
             <MUIThemeProvider theme={currentTheme.theme}>
               {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <CssBaseline />
+              <CssBaseline enableColorScheme />
               {children}
             </MUIThemeProvider>
           )}

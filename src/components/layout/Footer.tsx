@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { FooterContainer, FooterSection } from './FooterComponents';
 import NavigationLink from '@components/navigation/NavigationLink';
 import { useTranslations } from 'next-intl';
+import ThemeSwitcher from './ThemeSwitcher';
 
 type FooterProps = {
   // TODO: Define the props for the footer
@@ -24,7 +25,9 @@ export default function Footer(props: FooterProps) {
       borderColor="divider"
     >
       <FooterContainer>
-        <FooterSection></FooterSection>
+        <FooterSection>
+          <ThemeSwitcher />
+        </FooterSection>
         <FooterSection></FooterSection>
         <FooterSection sx={{ textAlign: 'right' }}>
           <NavigationLink variant="body1" href={'/privacy'}>
