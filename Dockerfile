@@ -4,16 +4,17 @@ FROM --platform=linux/x86_64 node:alpine
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the zipped build artifacts into the container
-COPY nextjs-build.zip /app
+# Copy package.json and package-lock.json (or yarn.lock)
+COPY package.json package-lock.json ./
 
-# Install unzip utility, unzip the artifact, and remove the zip file to save space
-RUN apk add --no-cache unzip && \
-    unzip nextjs-build.zip && \
-    rm nextjs-build.zip
+# Install dependencies
+RUN npm ci
 
-# After unzipping
-WORKDIR /app/nextjs-build
+# Copy the rest of your application code
+COPY . .
+
+# Build your Next.js project (if not already built)
+RUN npm run build
 
 # Expose port 3000 to be accessible from the outside
 EXPOSE 3000
