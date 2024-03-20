@@ -46,11 +46,11 @@ jobs:
 
       - name: Set unique image tag
         id: unique-image-tag
-        run: echo "::set-output name=tag::prod-${{ github.sha }}"
+        run: echo "::set-output name=tag::prod-web-${{ github.sha }}"
 
       - name: Build & push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: danielneset/idata2306:${{ steps.unique-image-tag.outputs.tag }}
+          tags: danielneset/idata2301:${{ steps.unique-image-tag.outputs.tag }}

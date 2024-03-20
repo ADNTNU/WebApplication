@@ -10,7 +10,9 @@ COPY nextjs-build.zip /app
 # Install unzip utility, unzip the artifact, and remove the zip file to save space
 RUN apk add --no-cache unzip && \
     unzip nextjs-build.zip && \
-    rm nextjs-build.zip
+    rm nextjs-build.zip && \
+    mv nextjs-build/* . && \
+    rmdir nextjs-build
 
 
 # Expose port 3000 to be accessible from the outside
