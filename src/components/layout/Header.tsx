@@ -3,14 +3,16 @@ import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Link from '@components/navigation/Link';
 import NavigationLink from '@components/navigation/NavigationLink';
 import { useTranslations } from 'next-intl';
-import ThemeSwitcher from './ThemeSwitcher';
+import MobileMenu from './MobileMenu';
+import { Locale } from '@/i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 type HeaderProps = {
-  // TODO: Define the props for the header
+  locale?: Locale;
 };
 
 export default function Header(props: HeaderProps) {
-  const {} = props;
+  const { locale } = props;
   const t = useTranslations('Nav');
 
   // const theme = useTheme();
@@ -33,6 +35,7 @@ export default function Header(props: HeaderProps) {
           alignItems="center"
           flexGrow={1}
           justifyContent="flex-start"
+          flexGrow={1}
         >
           {/* TODO: Add internationalization to aria-label */}
           <Link href={'/'} width={40} height={40} aria-label="Go to home page">
@@ -43,8 +46,11 @@ export default function Header(props: HeaderProps) {
               }}
             />
           </Link>
-          <Stack gap={2} alignItems="center" direction="row">
-            <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
+            <Stack gap={1} alignItems="center" direction="row">
+              <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
+            </Stack>
+            <LanguageSwitcher locale={locale} />
           </Stack>
         </Stack>
         {/* Add login and internationalization buttons or drawer if mobile */}
