@@ -35,7 +35,6 @@ export default function Header(props: HeaderProps) {
           alignItems="center"
           flexGrow={1}
           justifyContent="flex-start"
-          flexGrow={1}
         >
           {/* TODO: Add internationalization to aria-label */}
           <Link href={'/'} width={40} height={40} aria-label="Go to home page">
