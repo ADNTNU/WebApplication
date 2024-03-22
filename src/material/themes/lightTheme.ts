@@ -1,5 +1,5 @@
 import { red } from '@mui/material/colors';
-import { ThemeOptionsWithName } from '@models/theme';
+import { ThemeOptionsWithName } from '@/models/Theme';
 
 const lightThemeOptions: ThemeOptionsWithName = {
   name: 'Light',
@@ -42,8 +42,8 @@ const lightThemeOptions: ThemeOptionsWithName = {
       disabledBackground: 'rgba(0, 0, 0, 0.12)',
     },
     background: {
-      default: '#FDFDFD',
-      paper: '#FFFFFF',
+      default: '#FFFFFF',
+      paper: '#E9E9E9',
     },
     mode: 'light',
   },

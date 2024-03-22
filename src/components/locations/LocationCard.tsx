@@ -1,5 +1,4 @@
-import { Box, Grid, Skeleton, Typography } from '@mui/material';
-import { ComponentProps } from 'react';
+import { Box, Skeleton, Typography } from '@mui/material';
 
 type LocationCardProps = {
   title?: string;

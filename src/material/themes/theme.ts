@@ -5,7 +5,7 @@ import breakpoints from './breakpoints';
 import overrides from './overrides';
 import darkThemeOptions from './darkTheme';
 import lightThemeOptions from './lightTheme';
-import { Theme, ThemeMode, ThemeOptionsWithName } from '@models/theme';
+import { Theme, ThemeMode, ThemeOptionsWithName } from '@/models/Theme';
 
 export default function createTheme(ffTheme: ThemeOptionsWithName): Theme {
   const { name, ...restTheme } = ffTheme;

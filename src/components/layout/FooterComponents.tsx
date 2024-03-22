@@ -23,5 +23,6 @@ export const FooterSection = styled(Stack)(({ theme }) => ({
   textAlign: 'left',
   [theme.breakpoints.down('sm')]: {
     flexDirection: 'column',
+    width: '100%',
   },
 }));

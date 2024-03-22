@@ -23,7 +23,8 @@ export default function PopularDestinations() {
                 <Grid item xs={12} sm={6} md={3} key={destination.id} sx={{ ...gridItemSx }}>
                   <LocationCard
                     title={destination.name}
-                    subtitle={destination.flightCount}
+                    // TODO: Internationalize the subtitle
+                    subtitle={destination.flightCount.toString() + ' flights'}
                     image={destination.image}
                   />
                 </Grid>

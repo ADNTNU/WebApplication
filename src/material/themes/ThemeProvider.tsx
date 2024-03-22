@@ -6,7 +6,7 @@ import { CssBaseline, createTheme } from '@mui/material';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 // import overrides from "../overrides";
 import { themes } from './theme';
-import { Theme } from '@models/theme';
+import { Theme } from '@/models/Theme';
 import { ThemeContext, useDarkTheme } from '@/contexts/ThemeContext';
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
@@ -16,7 +16,6 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   const mutate = useCallback(() => {
     let themeToUse: Theme | undefined;
     const localStoreTheme = localStorage.getItem('theme');
-    console.log('localStoreTheme', localStoreTheme);
     switch (localStoreTheme) {
       case 'Dark':
         themeToUse = themes.Dark;
