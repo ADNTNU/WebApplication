@@ -1,7 +1,8 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { FooterContainer, FooterSection } from './FooterComponents';
-import { useTranslations } from 'next-intl';
 import NavigationLink from '@components/navigation/NavigationLink';
+import { useTranslations } from 'next-intl';
+import ThemeSwitcher from './ThemeSwitcher';
 
 type FooterProps = {
   // TODO: Define the props for the footer
@@ -25,8 +26,24 @@ export default function Footer(props: FooterProps) {
     >
       <FooterContainer>
         <FooterSection>
-          <NavigationLink href={'/privacy'}>{t('privacy')}</NavigationLink>
+          <ThemeSwitcher />
         </FooterSection>
+        <FooterSection></FooterSection>
+        <FooterSection sx={{ textAlign: 'right' }}>
+          <NavigationLink variant="body1" href={'/privacy'}>
+            {t('privacy')}
+          </NavigationLink>
+          <NavigationLink variant="body1" href={'/about'}>
+            {t('about')}
+          </NavigationLink>
+        </FooterSection>
+      </FooterContainer>
+      <FooterContainer>
+        <Typography variant="caption">
+          This website is a result of a university group project, performed in the course IDATA2301
+          Web technologies, at NTNU. All the information provided here is a result of imagination.
+          Any resemblance with real companies or products is a coincidence.
+        </Typography>
       </FooterContainer>
     </Box>
   );

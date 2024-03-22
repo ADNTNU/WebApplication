@@ -1,15 +1,13 @@
 'use client';
 
 import { Link as MUILink } from '@mui/material';
-import { Link as I18nLink, Pathname } from '@/navigation';
+import { Link as I18nLink, pathnames, LinkProps as I18nLinkProps } from '@/navigation';
 import { ComponentProps } from 'react';
 
-type LinkProps = Omit<ComponentProps<typeof MUILink>, 'href'> & {
-  href: Pathname;
-  locale?: ComponentProps<typeof I18nLink>['locale'];
-};
+type LinkProps<Pathname extends keyof typeof pathnames> = I18nLinkProps<Pathname> &
+  Omit<ComponentProps<typeof MUILink>, 'href'>;
 
-export default function Link(props: LinkProps) {
+export default function Link<Pathname extends keyof typeof pathnames>(props: LinkProps<Pathname>) {
   const { children, ...rest } = props;
 
   return (

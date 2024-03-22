@@ -1,6 +1,4 @@
-// 'use client';
-
-import { AppBar, Container, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { AppBar, Container, Stack } from '@mui/material';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Link from '@components/navigation/Link';
 import NavigationLink from '@components/navigation/NavigationLink';
@@ -35,10 +33,11 @@ export default function Header(props: HeaderProps) {
           flexDirection="row"
           gap={3}
           alignItems="center"
-          justifyContent="flex-start"
           flexGrow={1}
+          justifyContent="flex-start"
         >
-          <Link href={'/'} width={40} height={40}>
+          {/* TODO: Add internationalization to aria-label */}
+          <Link href={'/'} width={40} height={40} aria-label="Go to home page">
             <LogoDevIcon
               color="primary"
               sx={{
