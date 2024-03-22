@@ -6,13 +6,15 @@ import Link from '@components/navigation/Link';
 import NavigationLink from '@components/navigation/NavigationLink';
 import { useTranslations } from 'next-intl';
 import MobileMenu from './MobileMenu';
+import { Locale } from '@/i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 type HeaderProps = {
-  // TODO: Define the props for the header
+  locale?: Locale;
 };
 
 export default function Header(props: HeaderProps) {
-  const {} = props;
+  const { locale } = props;
   const t = useTranslations('Nav');
 
   // const theme = useTheme();
@@ -34,6 +36,7 @@ export default function Header(props: HeaderProps) {
           gap={3}
           alignItems="center"
           justifyContent="flex-start"
+          flexGrow={1}
         >
           <Link href={'/'} width={40} height={40}>
             <LogoDevIcon
@@ -43,8 +46,11 @@ export default function Header(props: HeaderProps) {
               }}
             />
           </Link>
-          <Stack gap={1} alignItems="center" direction="row">
-            <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
+            <Stack gap={1} alignItems="center" direction="row">
+              <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
+            </Stack>
+            <LanguageSwitcher locale={locale} />
           </Stack>
         </Stack>
         {/* Add login and internationalization buttons or drawer if mobile */}

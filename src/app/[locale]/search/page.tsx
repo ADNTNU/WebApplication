@@ -4,15 +4,16 @@ import generateTranslatedMetadata from '@/utils/translatedMetadata';
 import { Typography } from '@mui/material';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import PageSection from '@/components/layout/PageSection';
+import { Locale } from '@/i18n';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   return await generateTranslatedMetadata({ locale, page: 'Search' });
 }
 
-export default function Search({ params: { locale } }: { params: { locale: string } }) {
+export default function Search({ params: { locale } }: { params: { locale: Locale } }) {
   unstable_setRequestLocale(locale);
   return (
-    <PageWrapper>
+    <PageWrapper locale={locale}>
       <PageSection>
         <Typography variant="h1" component="h1" gutterBottom>
           Search
