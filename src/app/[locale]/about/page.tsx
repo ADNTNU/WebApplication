@@ -12,7 +12,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function About({ params: { locale } }: { params: { locale: Locale } }) {
   unstable_setRequestLocale(locale);
   return (
-    <PageWrapper>
+    <PageWrapper locale={locale}>
       <PageSection sx={{ pt: 2 }}>
         <Typography variant="h2" component="h1" gutterBottom>
           About us

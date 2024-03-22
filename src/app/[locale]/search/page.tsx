@@ -12,7 +12,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function Search({ params: { locale } }: { params: { locale: Locale } }) {
   unstable_setRequestLocale(locale);
   return (
-    <PageWrapper>
+    <PageWrapper locale={locale}>
       <PageSection sx={{ mt: 2 }}>
         <SearchResults></SearchResults>
       </PageSection>

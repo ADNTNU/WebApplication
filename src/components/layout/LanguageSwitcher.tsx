@@ -6,6 +6,7 @@ import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { NO, GB } from 'country-flag-icons/react/1x1';
 import { useState, MouseEvent, ComponentProps } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useParams } from 'next/navigation';
 
 type LocaleFlagProps = {
   locale?: Locale;
@@ -45,6 +46,7 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
 
   const router = useRouter();
   const pathname = usePathname();
+  const params = useParams();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);

@@ -20,7 +20,7 @@ export default async function Trip({
 }) {
   unstable_setRequestLocale(locale);
   return (
-    <PageWrapper>
+    <PageWrapper locale={locale}>
       <PageSection>
         <Typography variant="h1" component="h1" gutterBottom>
           Trip {tripId}
