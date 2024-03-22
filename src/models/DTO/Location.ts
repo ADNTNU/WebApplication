@@ -1,6 +1,6 @@
 export type PopularDestination = {
-  id: string;
+  id: number;
   name: string;
-  image?: string;
-  flightCount: string;
+  image: string;
+  flightCount: number;
 };

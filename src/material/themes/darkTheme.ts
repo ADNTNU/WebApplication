@@ -1,13 +1,13 @@
 import { red } from '@mui/material/colors';
-import { ThemeOptionsWithName } from '@models/theme';
+import { ThemeOptionsWithName } from '@/models/Theme';
 
 const darkThemeOptions: ThemeOptionsWithName = {
   name: 'Dark',
   palette: {
     primary: {
-      light: '#bEbEFF',
-      main: '#8E8EcF',
-      dark: '#222162',
+      light: '#8AA4F9',
+      main: '#446DF6',
+      dark: '#2958F5',
     },
     secondary: {
       light: '#ABD7FF',
@@ -42,8 +42,12 @@ const darkThemeOptions: ThemeOptionsWithName = {
       disabledBackground: 'rgba(255, 255, 255, 0.12)',
     },
     background: {
-      default: '#3c3c3c',
-      paper: '#404040',
+      // default: '#3c3c3c', // Anders leiking
+      // default: '#2A2D34', // Random
+      default: '#111111', // Home assistant
+      // paper: '#404040', // Anders leiking
+      // paper: '#363B44', // Random
+      paper: '#1c1c1c', // Home assistant
     },
     mode: 'dark',
   },

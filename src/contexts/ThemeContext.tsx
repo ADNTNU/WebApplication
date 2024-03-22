@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction, createContext, useContext } from 'react';
 import { useMediaQuery } from '@mui/material';
-import { Theme } from '@models/theme';
+import { Theme } from '@/models/Theme';
 
 export const useDarkTheme = () => {
   const isDarkModePreffered = useMediaQuery('(prefers-color-scheme: dark)');

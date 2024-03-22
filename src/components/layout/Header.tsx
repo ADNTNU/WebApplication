@@ -3,6 +3,7 @@ import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Link from '@components/navigation/Link';
 import NavigationLink from '@components/navigation/NavigationLink';
 import { useTranslations } from 'next-intl';
+import MenuIcon from '@mui/icons-material/Menu';
 import MobileMenu from './MobileMenu';
 import { Locale } from '@/i18n';
 import LanguageSwitcher from './LanguageSwitcher';
