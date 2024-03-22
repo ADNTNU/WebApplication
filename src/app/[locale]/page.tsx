@@ -14,7 +14,7 @@ export default function Landing({ params: { locale } }: { params: { locale: Loca
   unstable_setRequestLocale(locale);
 
   return (
-    <PageWrapper locale={locale}>
+    <PageWrapper>
       <PageSection>
         <SearchHero />
       </PageSection>
