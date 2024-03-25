@@ -34,8 +34,8 @@ export default function MobileMenu(props: MobileMenuProps) {
           gap: '1rem',
         }}
       >
-        <Link href={'/'}>{t('home')}</Link>
-        <Link href={'/about'}>{t('about')}</Link>
+        <Link href="/">{t('home')}</Link>
+        <Link href="/about">{t('about')}</Link>
       </Box>
     </Drawer>
   );

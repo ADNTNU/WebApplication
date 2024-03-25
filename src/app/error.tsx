@@ -1,5 +1,7 @@
 'use client';
 
+import ButtonLink from '@components/navigation/ButtonLink';
+import { Box, Button, Typography } from '@mui/material';
 import { useEffect } from 'react';
 
 export default function Error({
@@ -15,16 +17,11 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
-    </div>
+    <Box>
+      <Typography variant="h4">{error.message}</Typography>
+      {/* <h1>{t('title')}</h1> */}
+      <Button onClick={reset}>Retry</Button>
+      <ButtonLink href="/">Go to home page</ButtonLink>
+    </Box>
   );
 }

@@ -1,6 +1,6 @@
 import createMiddleware from 'next-intl/middleware';
-import { locales } from '@/i18n';
-import { localePrefix, pathnames } from '@/navigation';
+import { locales } from '@/internationalization/i18n';
+import { localePrefix, pathnames } from '@/internationalization/navigation';
 
 export default createMiddleware({
   // A list of all locales that are supported

@@ -22,7 +22,16 @@
     }
   },
   "Landing": {
-    "test": "test2"
+    "test": "test2",
+    "testing": "testing2"
+  },
+  "Flights": {
+    "direct": "Direkte",
+    "oneStop": "1 mellomlanding",
+    "pluralStops": "{stops} mellomlandinger",
+    "noFlights": "Ingen flyvninger",
+    "oneFlight": "1 flyvning",
+    "pluralFlights": "{flights} flyvninger"
   },
   "Error": {
     "404": {
@@ -39,7 +48,11 @@
     "about": "Om oss"
   },
   "Action": {
-    "goTo": "Gå til",
-    "goBackTo": "Gå tilbake til"
+    "goTo": "Gå til {page}",
+    "goToPage": "Gå til {page} siden",
+    "goToHomePage": "Gå til forsiden",
+    "goBackTo": "Gå tilbake til {page}",
+    "goBackToPage": "Gå tilbake til {page} siden",
+    "goBackToHomePage": "Gå tilbake til forsiden"
   }
 }

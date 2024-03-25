@@ -3,18 +3,16 @@ import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Link from '@components/navigation/Link';
 import NavigationLink from '@components/navigation/NavigationLink';
 import { useTranslations } from 'next-intl';
-import MenuIcon from '@mui/icons-material/Menu';
-import MobileMenu from './MobileMenu';
-import { Locale } from '@/i18n';
-import LanguageSwitcher from './LanguageSwitcher';
+import LanguageSwitcher from '../LanguageSwitcher';
 
-type HeaderProps = {
-  locale?: Locale;
-};
+// type HeaderProps = {
 
-export default function Header(props: HeaderProps) {
-  const { locale } = props;
-  const t = useTranslations('Nav');
+// };
+
+export default function Header(/* props: HeaderProps */) {
+  // const {} = props;
+  const navT = useTranslations('Nav');
+  const actionT = useTranslations('Action');
 
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -37,8 +35,7 @@ export default function Header(props: HeaderProps) {
           flexGrow={1}
           justifyContent="flex-start"
         >
-          {/* TODO: Add internationalization to aria-label */}
-          <Link href={'/'} width={40} height={40} aria-label="Go to home page">
+          <Link href="/" width={40} height={40} aria-label={actionT('goToHomePage')}>
             <LogoDevIcon
               color="primary"
               sx={{
@@ -48,9 +45,10 @@ export default function Header(props: HeaderProps) {
           </Link>
           <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
             <Stack gap={1} alignItems="center" direction="row">
-              <NavigationLink href={'/search'}>{t('search')}</NavigationLink>
+              <NavigationLink href="/search">{navT('search')}</NavigationLink>
             </Stack>
-            <LanguageSwitcher locale={locale} />
+            {/* <TestLocaleSwitcher /> */}
+            <LanguageSwitcher iconSize={24} />
           </Stack>
         </Stack>
         {/* Add login and internationalization buttons or drawer if mobile */}

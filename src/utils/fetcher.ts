@@ -4,11 +4,17 @@ type FetcherProps = RequestInit & {
   url: RequestInfo | URL;
 };
 
-type FetcherError = {
-  message: string;
-  info?: any;
-  status?: number;
-};
+class FetcherError extends Error {
+  info: unknown;
+
+  status: number | undefined;
+
+  constructor(message: string, info?: unknown, status?: number) {
+    super(message);
+    this.info = info;
+    this.status = status;
+  }
+}
 
 export type FetcherSWRReturn<T> = {
   data: T;
@@ -23,11 +29,11 @@ export default async function fetcher<T>(props: FetcherProps): Promise<T> {
   const res = await fetch(url, rest);
 
   if (!res.ok) {
-    const error: FetcherError = { message: 'An error occurred while fetching the data.' };
-    // Attach extra info to the error object.
-    error.info = await res.json();
-    error.status = res.status;
-    throw error;
+    throw new FetcherError(
+      'An error occurred while fetching the data',
+      await res.json(),
+      res.status,
+    );
   }
 
   return res.json();

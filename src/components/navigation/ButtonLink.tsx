@@ -1,6 +1,6 @@
 'use client';
 
-import { Link, LinkProps, pathnames } from '@/navigation';
+import { I18nLink, LinkProps, pathnames } from '@/internationalization/navigation';
 import { Button } from '@mui/material';
 import { ComponentProps } from 'react';
 
@@ -16,12 +16,10 @@ export default function ButtonLink<Pathname extends keyof typeof pathnames>({
   ...rest
 }: ButtonLinkProps<Pathname>) {
   return href === 'back' ? (
-    <a>
-      <Button {...rest} onClick={() => window.history.back()} />
-    </a>
+    <Button {...rest} onClick={() => window.history.back()} />
   ) : (
-    <Link href={href} locale={locale} passHref>
+    <I18nLink href={href} locale={locale} passHref>
       <Button {...rest} />
-    </Link>
+    </I18nLink>
   );
 }

@@ -5,7 +5,7 @@ export const inter = Inter({
   display: 'swap',
 });
 
-export const roboto_mono = Roboto_Mono({
+export const robotoMono = Roboto_Mono({
   subsets: ['latin'],
   display: 'swap',
 });

@@ -22,7 +22,16 @@
     }
   },
   "Landing": {
-    "test": "test"
+    "test": "test",
+    "testing": "testing"
+  },
+  "Flights": {
+    "direct": "Direct",
+    "oneStop": "1 stop",
+    "pluralStops": "{stops} stops",
+    "noFlights": "No flights",
+    "oneFlight": "1 flight",
+    "pluralFlights": "{flights} flights"
   },
   "Error": {
     "404": {
@@ -39,7 +48,11 @@
     "about": "About"
   },
   "Action": {
-    "goTo": "Go to",
-    "goBackTo": "Go back to"
+    "goTo": "Go to {page}",
+    "goToPage": "Go to {page} page",
+    "goToHomePage": "Go to home page",
+    "goBackTo": "Go back to {page}",
+    "goBackToPage": "Go back to {page} page",
+    "goBackToHomePage": "Go back to home page"
   }
 }

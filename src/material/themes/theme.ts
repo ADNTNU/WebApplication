@@ -1,11 +1,16 @@
 'use client';
 
-import { createTheme as MUIcreateTheme, responsiveFontSizes } from '@mui/material/styles';
+import {
+  createTheme as MUIcreateTheme,
+  responsiveFontSizes,
+  experimental_extendTheme as extendTheme,
+  Theme as MUITheme,
+} from '@mui/material/styles';
+import { Theme, ThemeMode, ThemeOptionsWithName } from '@/models/Theme';
 import breakpoints from './breakpoints';
-import overrides from './overrides';
+import overrides, { cssOverrides } from './overrides';
 import darkThemeOptions from './darkTheme';
 import lightThemeOptions from './lightTheme';
-import { Theme, ThemeMode, ThemeOptionsWithName } from '@/models/Theme';
 
 export default function createTheme(ffTheme: ThemeOptionsWithName): Theme {
   const { name, ...restTheme } = ffTheme;
@@ -34,6 +39,42 @@ export default function createTheme(ffTheme: ThemeOptionsWithName): Theme {
     theme,
   };
 }
+
+export function createCommonTheme() {
+  const themeOpts = {
+    colorSchemes: {
+      light: {
+        palette: lightThemeOptions.palette,
+      },
+      dark: {
+        palette: darkThemeOptions.palette,
+      },
+    },
+    breakpoints: {
+      ...breakpoints,
+    },
+  };
+
+  let theme = extendTheme();
+
+  theme = extendTheme(
+    {
+      ...themeOpts,
+      components: {
+        ...cssOverrides(theme),
+      },
+      breakpoints,
+    },
+    [
+      // theme,
+      responsiveFontSizes(theme as MUITheme, { breakpoints: ['sm', 'md', 'lg', 'xl'], factor: 2 }),
+    ],
+  );
+
+  return theme;
+}
+
+export const commonTheme = createCommonTheme();
 
 const darkTheme = createTheme(darkThemeOptions);
 const lightTheme = createTheme(lightThemeOptions);
