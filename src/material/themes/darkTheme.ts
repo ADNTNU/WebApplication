@@ -1,4 +1,3 @@
-import { red } from '@mui/material/colors';
 import { ThemeOptionsWithName } from '@/models/Theme';
 
 const darkThemeOptions: ThemeOptionsWithName = {
@@ -14,21 +13,6 @@ const darkThemeOptions: ThemeOptionsWithName = {
       main: '#88c7ff',
       dark: '#5F8BB2',
     },
-    error: {
-      light: '#FFA8A8',
-      main: red.A400,
-    },
-    warning: {
-      light: '#ffb74d',
-      main: '#ffa726',
-      dark: '#f57c00',
-    },
-    info: {
-      main: '#9c27b0',
-    },
-    success: {
-      main: '#43a047',
-    },
     text: {
       primary: 'rgba(255, 255, 255, 0.9)',
       secondary: 'rgba(255, 255, 255, 0.7)',
@@ -42,12 +26,12 @@ const darkThemeOptions: ThemeOptionsWithName = {
       disabledBackground: 'rgba(255, 255, 255, 0.12)',
     },
     background: {
-      // default: '#3c3c3c', // Anders leiking
+      // default: '#3c3c3c', // Anders testing
       // default: '#2A2D34', // Random
-      default: '#111111', // Home assistant
-      // paper: '#404040', // Anders leiking
+      // default: '#111111', // Home assistant
+      // paper: '#404040', // Anders testing
       // paper: '#363B44', // Random
-      paper: '#1c1c1c', // Home assistant
+      // paper: '#1c1c1c', // Home assistant
     },
     mode: 'dark',
   },

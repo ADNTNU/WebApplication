@@ -1,5 +1,5 @@
 import { Theme } from '@mui/material/styles';
-import { CssComponentReturn, CssOverridesProps } from '.';
+import { CssComponentReturn, CssOverridesProps } from './models';
 
 export function AppBar(theme: Theme) {
   return {

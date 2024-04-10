@@ -1,5 +1,5 @@
 import { TripSearchResult } from '@models/Trip';
-import { Divider, Stack } from '@mui/material';
+import { Divider, Paper, Stack } from '@mui/material';
 import PriceInfo from './PriceInfo';
 import FlightInfo from './FlightInfo';
 
@@ -22,14 +22,14 @@ export default function SearchResult(props: SearchResultProps) {
   };
 
   return (
-    <Stack
-      direction="row"
+    <Paper
+      component={Stack}
       width="100%"
       padding={1}
       gap={1}
       sx={{
+        flexDirection: { xs: 'column', md: 'row' },
         borderRadius: 2,
-        backgroundColor: 'background.paper',
       }}
     >
       <Stack flexGrow={1} gap={1}>
@@ -49,11 +49,11 @@ export default function SearchResult(props: SearchResultProps) {
         orientation="vertical"
         flexItem
         sx={{
-          width: '1px',
+          // width: '1px',
           backgroundColor: 'text.disabled',
         }}
       />
       <PriceInfo price={trip?.minPrice?.value} currency={trip?.minPrice?.currency} />
-    </Stack>
+    </Paper>
   );
 }

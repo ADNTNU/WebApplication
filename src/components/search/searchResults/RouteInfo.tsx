@@ -14,19 +14,20 @@ export default function RouteInfo(props: RouteInfoProps) {
   const { flights, fromDate, toDate } = props;
 
   const t = useTranslations('Flights');
+  const at = useTranslations('Actions');
 
   dayjs.extend(relativeTime);
 
   const duration = fromDate && toDate ? dayjs(toDate).from(fromDate, true) : undefined;
 
-  const durationFontSize = '1rem';
+  const fontSize = '0.75rem';
 
   if (!flights?.length || !duration) {
     return (
       <Stack minWidth="60px" alignItems="center">
-        <Skeleton width="60%" variant="text" sx={{ fontSize: durationFontSize }} />
+        <Skeleton width="60%" variant="text" sx={{ fontSize }} />
         <Skeleton width="100%" height="3px" />
-        <Skeleton width="60%" variant="text" sx={{ fontSize: durationFontSize }} />
+        <Skeleton width="60%" variant="text" sx={{ fontSize }} />
       </Stack>
     );
   }
@@ -44,11 +45,15 @@ export default function RouteInfo(props: RouteInfoProps) {
     stopsString = t('pluralStops', { stops: numberOfStops });
   }
 
+  if (numberOfStops > 0) {
+    stopsString = at('expandMessage', { message: stopsString });
+  }
+
   return (
     <Stack alignItems="center">
-      <Typography fontSize={durationFontSize}>{duration}</Typography>
+      <Typography fontSize={fontSize}>{duration}</Typography>
       <Divider orientation="vertical" />
-      <Typography fontSize={durationFontSize}>{stopsString}</Typography>
+      <Typography fontSize={fontSize}>{stopsString}</Typography>
     </Stack>
   );
 }

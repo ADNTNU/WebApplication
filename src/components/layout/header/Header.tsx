@@ -11,8 +11,7 @@ import LanguageSwitcher from '../LanguageSwitcher';
 
 export default function Header(/* props: HeaderProps */) {
   // const {} = props;
-  const navT = useTranslations('Nav');
-  const actionT = useTranslations('Action');
+  const t = useTranslations('Nav');
 
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -35,7 +34,7 @@ export default function Header(/* props: HeaderProps */) {
           flexGrow={1}
           justifyContent="flex-start"
         >
-          <Link href="/" width={40} height={40} aria-label={actionT('goToHomePage')}>
+          <Link href="/" width={40} height={40} aria-label={t('Action.goToHomePage')}>
             <LogoDevIcon
               color="primary"
               sx={{
@@ -45,7 +44,7 @@ export default function Header(/* props: HeaderProps */) {
           </Link>
           <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
             <Stack gap={1} alignItems="center" direction="row">
-              <NavigationLink href="/search">{navT('search')}</NavigationLink>
+              <NavigationLink href="/search">{t('search')}</NavigationLink>
             </Stack>
             {/* <TestLocaleSwitcher /> */}
             <LanguageSwitcher iconSize={24} />

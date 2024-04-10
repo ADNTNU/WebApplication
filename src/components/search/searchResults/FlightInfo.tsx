@@ -1,6 +1,6 @@
 import { Airline } from '@models/Airline';
 import { FlightSearchResult } from '@models/Flight';
-import { Box, Skeleton, Typography } from '@mui/material';
+import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import ConnectingAirportsIcon from '@mui/icons-material/ConnectingAirports';
 import RouteInfo from './RouteInfo';
 import AirportInfo from './AirportInfo';
@@ -35,8 +35,8 @@ export default function FlightInfo(props: FlightInfoProps) {
   const departureDate = firstFlight?.departureDate;
   const arrivalDate = lastFlight?.arrivalDate;
 
-  const iconSize = 40;
-  const airlineNameFontSize = '0.75rem';
+  const iconSize = 32;
+  const airlineNameFontSize = '0.7rem';
 
   return (
     <Box
@@ -49,17 +49,22 @@ export default function FlightInfo(props: FlightInfoProps) {
     >
       <Box
         sx={{
-          gridRow: { xs: '2', sm: '1 / 3' },
-          gridColumn: { xs: '1 / 2', md: '1 / 2' },
+          gridRow: { xs: '1', md: '1 / 3' },
+          gridColumn: { xs: '1 / 13', md: '1 / 3' },
         }}
       >
         {airline ? (
-          <Box>
+          <Stack
+            sx={{
+              flexDirection: { xs: 'row', md: 'column' },
+              alignItems: { xs: 'center', md: 'flex-start' },
+            }}
+          >
             <ConnectingAirportsIcon sx={{ width: iconSize, height: iconSize }} />
             <Typography fontSize={airlineNameFontSize}>
               {typeof airline !== 'string' ? airline.name : 'several'}
             </Typography>
-          </Box>
+          </Stack>
         ) : (
           <>
             <Skeleton variant="rectangular" width={40} height={40} />
@@ -69,16 +74,16 @@ export default function FlightInfo(props: FlightInfoProps) {
       </Box>
       <Box
         sx={{
-          gridRow: { xs: '1', md: '1 / 3' },
-          gridColumn: { xs: '1 / 7', sm: '3 / 8', md: '2 / 6' },
+          gridRow: { xs: '2', md: '1 / 3' },
+          gridColumn: { xs: '1 / 7', sm: '1 / 5', md: '3 / 7' },
         }}
       >
         <AirportInfo airportCode={fromAirport?.code} date={departureDate} />
       </Box>
       <Box
         sx={{
-          gridRow: { xs: '2', md: '1 / 3' },
-          gridColumn: { xs: '3 / 13', md: '6 / 9' },
+          gridRow: { xs: '2', sm: '2', md: '1 / 3' },
+          gridColumn: { xs: '3 / 13', sm: '5 / 8', md: '7 / 9' },
         }}
       >
         <RouteInfo
@@ -89,8 +94,8 @@ export default function FlightInfo(props: FlightInfoProps) {
       </Box>
       <Box
         sx={{
-          gridRow: { sx: '1', md: '1 / 3' },
-          gridColumn: { sx: '7 / 13', sm: '8 / 13', md: '9 / 13' },
+          gridRow: { xs: '2', md: '1 / 3' },
+          gridColumn: { xs: '7 / 13', sm: '8 / 13', md: '9 / 13' },
         }}
       >
         <AirportInfo airportCode={toAirport?.code} date={arrivalDate} side="right" />

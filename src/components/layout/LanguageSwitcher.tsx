@@ -65,12 +65,6 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
     setMounted(true);
   }, []);
 
-  // if (!mounted) {
-  //   // for server-side rendering
-  //   // learn more at https://github.com/pacocoursey/next-themes#avoid-hydration-mismatch
-  //   return null;
-  // }
-
   const handleLocaleClick = (l: Locale) => () => {
     setAnchorEl(null);
     if (l === locale) {
@@ -78,8 +72,6 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
     }
     startTransition(() => {
       // TODO: Discuss if we should use `router.push` or `router.replace`
-      // @ts-expect-error -- Always valid params
-      router.prefetch({ pathname, params }, { locale: l });
       router.push(
         // @ts-expect-error -- TypeScript will validate that only known `params`
         // are used in combination with a given `pathname`. Since the two will

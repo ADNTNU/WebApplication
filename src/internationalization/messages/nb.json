@@ -45,14 +45,22 @@
     "home": "Hjem",
     "search": "Søk",
     "privacy": "Personvernserklæring",
-    "about": "Om oss"
+    "about": "Om oss",
+    "Action": {
+      "goTo": "Gå til {page}",
+      "goToPage": "Gå til {page} siden",
+      "goToHomePage": "Gå til forsiden",
+      "goBackTo": "Gå tilbake til {page}",
+      "goBackToPage": "Gå tilbake til {page} siden",
+      "goBackToHomePage": "Gå tilbake til forsiden"
+    }
   },
-  "Action": {
-    "goTo": "Gå til {page}",
-    "goToPage": "Gå til {page} siden",
-    "goToHomePage": "Gå til forsiden",
-    "goBackTo": "Gå tilbake til {page}",
-    "goBackToPage": "Gå tilbake til {page} siden",
-    "goBackToHomePage": "Gå tilbake til forsiden"
+  "Actions": {
+    "show": "Vis",
+    "showMessage": "Vis {message}",
+    "hide": "Skjul",
+    "hideMessage": "Skjul {message}",
+    "expand": "Utvid",
+    "expandMessage": "Utvid {message}"
   }
 }

@@ -14,8 +14,8 @@ export default function AirportInfo(props: AirportInfoProps) {
 
   const locale = useLocale() as Locale;
 
-  const timeFontSize = '1.25rem';
-  const airportCodeFontSize = '1rem';
+  const timeFontSize = '1rem';
+  const airportCodeFontSize = '0.75rem';
   const dividerHeight = '0.9rem'; // Use approx. 80% of the font size
 
   if (!dateTime || !airportCode) {
