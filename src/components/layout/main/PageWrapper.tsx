@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { Box } from '@mui/material';
+import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
-import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
 
 type PageWrapperProps = {
   children: ReactNode;

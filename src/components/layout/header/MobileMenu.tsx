@@ -1,9 +1,9 @@
 import { Box, Drawer, IconButton, Stack } from '@mui/material';
 import Link from '@components/navigation/Link';
-import { MainLinkHref } from './links';
 import MenuIcon from '@mui/icons-material/Menu';
-import LanguageSwitcher from '../LanguageSwitcher';
 import OptionalSearchField from '@components/search/searchField/OptionalSearchField';
+import { MainLinkHref } from './links';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 type MobileMenuProps = {
   open: boolean;

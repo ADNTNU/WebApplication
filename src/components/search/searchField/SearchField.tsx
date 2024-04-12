@@ -7,10 +7,12 @@ import { RefObject } from 'react';
 
 export type SearchFieldProps = {
   obstructedRef?: RefObject<HTMLDivElement>;
-  variant: 'landing' | 'header';
+  variant: 'header' | 'landing';
 };
 
 export default function SearchField(props: SearchFieldProps) {
+  // TODO: Remove lint exception
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { obstructedRef, variant } = props;
 
   const { value, setValue } = useSearchFieldContext();

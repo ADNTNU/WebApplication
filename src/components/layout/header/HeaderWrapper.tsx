@@ -2,7 +2,7 @@
 
 import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
 import { AppBar } from '@mui/material';
-import { ReactNode, useRef } from 'react';
+import { ReactNode } from 'react';
 
 export default function HeaderWrapper({ children }: { children: ReactNode }) {
   const { obstructorRef } = useSearchFieldContext();

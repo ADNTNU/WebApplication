@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { Locale, locales } from '@/internationalization/i18n';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import { pick } from 'lodash';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
+// import { pick } from 'lodash';
+// import { NextIntlClientProvider, useMessages } from 'next-intl';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nb';
 import 'dayjs/locale/en';
@@ -20,7 +20,7 @@ export default function LocaleLayout({
   params: { locale: Locale };
 }) {
   unstable_setRequestLocale(locale);
-  const messages = useMessages();
+  // const messages = useMessages();
 
   switch (locale) {
     case 'en':

@@ -1,18 +1,20 @@
-import { Locale } from "@internationalization/i18n";
-import { GB, NO } from "country-flag-icons/react/1x1";
-import { ComponentProps } from "react";
+import { Locale } from '@internationalization/i18n';
+import { GB, NO } from 'country-flag-icons/react/1x1';
+import { ComponentProps } from 'react';
 
 type LocaleFlagProps = {
   locale: Locale;
   flagProps?: ComponentProps<typeof GB>;
 };
 
-type LocaleFlagReturn = {
+type LocaleFlagReturn =
+  | {
       flag: JSX.Element;
       name: string;
-    }| undefined;
+    }
+  | undefined;
 
-export function LocaleFlag(props: LocaleFlagProps): LocaleFlagReturn {
+export default function LocaleFlag(props: LocaleFlagProps): LocaleFlagReturn {
   const { locale, flagProps } = props;
 
   switch (locale) {

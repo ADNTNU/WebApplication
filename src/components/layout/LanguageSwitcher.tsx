@@ -3,12 +3,11 @@
 import { Locale, locales } from '@/internationalization/i18n';
 import { useRouter, usePathname } from '@/internationalization/navigation';
 import { Box, Button, IconButton, Menu, MenuItem, PopoverOrigin } from '@mui/material';
-import { NO, GB } from 'country-flag-icons/react/1x1';
-import { useState, MouseEvent, ComponentProps, useEffect, useTransition } from 'react';
+import { useState, MouseEvent, useEffect, useTransition } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { LocaleFlag } from './LocaleFlag';
+import LocaleFlag from './LocaleFlag';
 
 type LanguageSwitcherProps = {
   iconSize?: number;

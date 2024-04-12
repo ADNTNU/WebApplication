@@ -1,6 +1,7 @@
 'use client';
-import SearchField, { SearchFieldProps } from './SearchField';
+
 import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
+import SearchField, { SearchFieldProps } from './SearchField';
 
 export default function OptionalSearchField(props: SearchFieldProps) {
   const { showSearchField } = useSearchFieldContext();

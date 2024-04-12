@@ -1,7 +1,6 @@
 'use client';
 
 import SearchFieldContext from '@contexts/SearchFieldContext';
-import { usePathname } from '@internationalization/navigation';
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 
 type SearchFieldWrapperProps = {
@@ -15,7 +14,6 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
   const obstructedRef = useRef<HTMLDivElement>(null);
   const [showSearchField, setShowSearchField] = useState(false);
   const [value, setValue] = useState<string>('');
-  const pathname = usePathname();
 
   const checkObstruction = () => {
     if (obstructorRef.current && obstructedRef.current) {

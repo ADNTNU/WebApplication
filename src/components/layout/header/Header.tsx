@@ -1,4 +1,4 @@
-import { AppBar, Container, Stack } from '@mui/material';
+import { Container, Stack } from '@mui/material';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Link from '@components/navigation/Link';
 import { useTranslations } from 'next-intl';
