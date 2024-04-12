@@ -1,9 +1,10 @@
 import { AppBar, Container, Stack } from '@mui/material';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
 import Link from '@components/navigation/Link';
-import NavigationLink from '@components/navigation/NavigationLink';
 import { useTranslations } from 'next-intl';
-import LanguageSwitcher from '../LanguageSwitcher';
+import MenuWrapper from './MenuWrapper';
+import { mainLinks } from './links';
+import HeaderWrapper from './HeaderWrapper';
 
 // type HeaderProps = {
 
@@ -13,11 +14,13 @@ export default function Header(/* props: HeaderProps */) {
   // const {} = props;
   const t = useTranslations('Nav');
 
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const internationalizedMainLinks = mainLinks.map((link) => ({
+    href: link.href,
+    label: t(link.i18nNS),
+  }));
 
   return (
-    <AppBar position="sticky">
+    <HeaderWrapper>
       <Container
         sx={{
           justifyContent: 'space-between',
@@ -42,17 +45,9 @@ export default function Header(/* props: HeaderProps */) {
               }}
             />
           </Link>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
-            <Stack gap={1} alignItems="center" direction="row">
-              <NavigationLink href="/search">{t('search')}</NavigationLink>
-            </Stack>
-            {/* <TestLocaleSwitcher /> */}
-            <LanguageSwitcher iconSize={24} />
-          </Stack>
+          <MenuWrapper mainLinks={internationalizedMainLinks} />
         </Stack>
-        {/* Add login and internationalization buttons or drawer if mobile */}
-        {/* {isMobile ? <MobileMenu /> : <DesktopMenu />} */}
       </Container>
-    </AppBar>
+    </HeaderWrapper>
   );
 }

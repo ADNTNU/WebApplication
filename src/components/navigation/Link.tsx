@@ -1,7 +1,7 @@
 'use client';
 
 import { Link as MUILink } from '@mui/material';
-import { I18nLink, pathnames, LinkProps as I18nLinkProps } from '@internationalization/navigation';
+import { pathnames, LinkProps as I18nLinkProps, I18nLink } from '@internationalization/navigation';
 import { ComponentProps } from 'react';
 
 type LinkProps<Pathname extends keyof typeof pathnames> = I18nLinkProps<Pathname> &

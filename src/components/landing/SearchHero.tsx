@@ -1,6 +1,11 @@
-import { Paper, Typography } from '@mui/material';
+'use client';
+
+import SearchField from '@components/search/searchField';
+import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
+import { Paper } from '@mui/material';
 
 export default function SearchHero() {
+  const { obstructedRef } = useSearchFieldContext();
   return (
     <Paper
       sx={{
@@ -12,9 +17,7 @@ export default function SearchHero() {
         padding: '2rem',
       }}
     >
-      <Typography variant="h2" component="h1">
-        Will be replaced with a search hero
-      </Typography>
+      <SearchField obstructedRef={obstructedRef} variant="landing" />
     </Paper>
   );
 }

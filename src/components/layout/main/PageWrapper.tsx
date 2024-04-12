@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Box } from '@mui/material';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
+import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
 
 type PageWrapperProps = {
   children: ReactNode;
@@ -15,8 +16,10 @@ export default function PageWrapper(props: PageWrapperProps) {
   return (
     <>
       <Box minHeight="100vh">
-        {disableHeader ? null : <Header />}
-        <Box component="main">{children}</Box>
+        <SearchFieldProvider>
+          {disableHeader ? null : <Header />}
+          <Box component="main">{children}</Box>
+        </SearchFieldProvider>
       </Box>
       {disableFooter ? null : <Footer />}
     </>

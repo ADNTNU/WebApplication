@@ -1,9 +1,11 @@
+'use client';
+
 import { Typography } from '@mui/material';
 import Link from '@components/navigation/Link';
 import { ComponentProps } from 'react';
 import { LinkProps, pathnames } from '@/internationalization/navigation';
 
-export const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
+const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
   cursor: 'pointer',
   textDecoration: 'none',
   '&:hover': {
