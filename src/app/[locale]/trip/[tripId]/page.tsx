@@ -1,16 +1,16 @@
-import PageWrapper from '@/components/layout/PageWrapper';
+import PageWrapper from '@components/layout/main/PageWrapper';
 import generateTranslatedMetadata from '@/utils/translatedMetadata';
 import { Typography } from '@mui/material';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import PageSection from '@/components/layout/PageSection';
-import { Locale } from '@/i18n';
+import PageSection from '@components/layout/main/PageSection';
+import { Locale } from '@/internationalization/i18n';
 
 export async function generateMetadata({
   params: { locale, tripId },
 }: {
   params: { locale: Locale; tripId: string };
 }) {
-  return await generateTranslatedMetadata({ locale, page: 'Trip', titleProps: { tripId } });
+  return generateTranslatedMetadata({ locale, page: 'Trip', titleProps: { tripId } });
 }
 
 export default async function Trip({
@@ -20,7 +20,7 @@ export default async function Trip({
 }) {
   unstable_setRequestLocale(locale);
   return (
-    <PageWrapper locale={locale}>
+    <PageWrapper>
       <PageSection>
         <Typography variant="h1" component="h1" gutterBottom>
           Trip {tripId}

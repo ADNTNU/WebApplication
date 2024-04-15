@@ -1,5 +1,5 @@
-export type EnglishMessage = typeof import('@/messages/en.json');
-export type NorwegianMessage = typeof import('@/messages/nb.json');
+export type EnglishMessage = typeof import('@internationalization/messages/en.json');
+export type NorwegianMessage = typeof import('@internationalization/messages/nb.json');
 
 export type CommonKeys<T, U> = T extends object
   ? U extends object

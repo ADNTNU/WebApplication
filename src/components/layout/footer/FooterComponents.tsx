@@ -1,5 +1,8 @@
 'use client';
-import { Container, Stack, styled } from '@mui/material';
+
+import type {} from '@mui/material/themeCssVarsAugmentation';
+import { styled } from '@mui/material/styles';
+import { Container, Stack } from '@mui/material';
 
 export const FooterContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
@@ -9,7 +12,7 @@ export const FooterContainer = styled(Container)(({ theme }) => ({
   width: '100%',
   padding: 20,
   rowGap: 10,
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.vars.palette.background.default,
   maxWidth: 'lg',
   [theme.breakpoints.down('sm')]: {
     flexDirection: 'column',

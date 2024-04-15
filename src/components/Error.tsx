@@ -1,6 +1,6 @@
 'use client';
 
-import PageWrapper from './layout/PageWrapper';
+import { Box, Button, Typography } from '@mui/material';
 import ButtonLink from './navigation/ButtonLink';
 
 // import { useTranslations } from 'next-intl';
@@ -15,14 +15,11 @@ export default function Error({
   // const t = useTranslations('Error');
 
   return (
-    <PageWrapper>
-      <div>
-        <h1>{error.message}</h1>
-        {/* <h1>{t('title')}</h1>
-      <button onClick={reset}>{t('retry')}</button> */}
-        <button onClick={reset}>Retry</button>
-        <ButtonLink href="/">Go to home page</ButtonLink>
-      </div>
-    </PageWrapper>
+    <Box>
+      <Typography variant="h4">{error.message}</Typography>
+      {/* <h1>{t('title')}</h1> */}
+      <Button onClick={reset}>Retry</Button>
+      <ButtonLink href="/">Go to home page</ButtonLink>
+    </Box>
   );
 }

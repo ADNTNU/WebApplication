@@ -1,9 +1,12 @@
-import pick from 'lodash/pick';
 import { ReactNode } from 'react';
-import ThemeProvider from '@/material/themes/ThemeProvider';
-import { locales } from '@/i18n';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { Locale, locales } from '@/internationalization/i18n';
 import { unstable_setRequestLocale } from 'next-intl/server';
+// import { pick } from 'lodash';
+// import { NextIntlClientProvider, useMessages } from 'next-intl';
+import dayjs from 'dayjs';
+import 'dayjs/locale/nb';
+import 'dayjs/locale/en';
+import FlightFinderCssVarsProvider from '@components/layout/FlightFinderCssVarsProvider';
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -14,17 +17,31 @@ export default function LocaleLayout({
   params: { locale },
 }: {
   children: ReactNode;
-  params: { locale: string };
+  params: { locale: Locale };
 }) {
   unstable_setRequestLocale(locale);
-  const messages = useMessages();
+  // const messages = useMessages();
+
+  switch (locale) {
+    case 'en':
+      dayjs.locale('en');
+      break;
+    case 'nb':
+      dayjs.locale('nb');
+      break;
+    default:
+      // eslint-disable-next-line no-case-declarations
+      const compileTimeCheck: never = locale;
+      console.error(`Unhandled locale: ${compileTimeCheck}`);
+      break;
+  }
 
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider locale={locale} messages={pick(messages, ['Error', 'Nav'])}>
-          <ThemeProvider>{children}</ThemeProvider>
-        </NextIntlClientProvider>
+        {/* <NextIntlClientProvider locale={locale} messages={pick(messages, ['Error', 'Nav'])}> */}
+        <FlightFinderCssVarsProvider>{children}</FlightFinderCssVarsProvider>
+        {/* </NextIntlClientProvider> */}
       </body>
     </html>
   );

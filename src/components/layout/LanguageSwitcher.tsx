@@ -1,15 +1,16 @@
 'use client';
 
-import { Locale, locales } from '@/i18n';
-import { useRouter, usePathname } from '@/navigation';
+import { Locale, locales } from '@/internationalization/i18n';
+import { useRouter, usePathname } from '@/internationalization/navigation';
 import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { NO, GB } from 'country-flag-icons/react/1x1';
-import { useState, MouseEvent, ComponentProps } from 'react';
+import { useState, MouseEvent, ComponentProps, useEffect, useTransition } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 
 type LocaleFlagProps = {
-  locale?: Locale;
+  locale: Locale;
   flagProps?: ComponentProps<typeof GB>;
 };
 
@@ -29,24 +30,27 @@ function LocaleFlag(props: LocaleFlagProps): LocaleFlagReturn {
     case 'nb':
       return { flag: <NO {...flagProps} />, name: 'Norsk bokmål' };
     default:
-      console.warn(`Unsupported locale: ${locale}`);
-      const compileTimeCheck: undefined = locale;
-      return compileTimeCheck;
+      // eslint-disable-next-line no-case-declarations
+      const compileTimeCheck: never = locale;
+      throw new Error(`Unknown locale: ${compileTimeCheck}`);
   }
 }
 
 type LanguageSwitcherProps = {
-  locale?: Locale;
   iconSize?: number;
   menuIconSize?: number;
 };
 
 export default function LanguageSwitcher(props: LanguageSwitcherProps) {
-  const { locale, iconSize, menuIconSize } = props;
+  const { iconSize, menuIconSize } = props;
 
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
+  const locale = useLocale() as Locale;
+  const [isPending, startTransition] = useTransition();
+
+  const [mounted, setMounted] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
@@ -57,18 +61,25 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
     setAnchorEl(null);
   };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleLocaleClick = (l: Locale) => () => {
     setAnchorEl(null);
     if (l === locale) {
       return;
     }
-    router.replace(
-      // @ts-expect-error -- TypeScript will validate that only known `params`
-      // are used in combination with a given `pathname`. Since the two will
-      // always match for the current route, we can skip runtime checks.
-      { pathname, params },
-      { locale: l },
-    );
+    startTransition(() => {
+      // TODO: Discuss if we should use `router.push` or `router.replace`
+      router.push(
+        // @ts-expect-error -- TypeScript will validate that only known `params`
+        // are used in combination with a given `pathname`. Since the two will
+        // always match for the current route, we can skip runtime checks.
+        { pathname, params },
+        { locale: l },
+      );
+    });
   };
 
   const localeFlagReturn = LocaleFlag({
@@ -86,7 +97,7 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
 
   return (
     <>
-      <Button onClick={handleClick}>
+      <Button onClick={handleClick} disabled={isPending && !mounted}>
         {localeFlag}
         <ExpandMoreIcon
           sx={{
@@ -126,6 +137,7 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
           return (
             <MenuItem
               onClick={handleLocaleClick(l)}
+              disabled={isPending}
               key={l}
               sx={{ gap: 1 }}
               selected={l === locale}

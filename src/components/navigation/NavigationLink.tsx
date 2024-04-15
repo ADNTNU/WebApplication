@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import Link from '@components/navigation/Link';
 import { ComponentProps } from 'react';
-import { LinkProps, pathnames } from '@/navigation';
+import { LinkProps, pathnames } from '@/internationalization/navigation';
 
 export const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
   cursor: 'pointer',

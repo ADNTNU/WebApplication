@@ -1,7 +1,7 @@
 'use client';
 
-import PageSection from '@/components/layout/PageSection';
-import PageWrapper from '@/components/layout/PageWrapper';
+import PageSection from '@components/layout/main/PageSection';
+import PageWrapper from '@components/layout/main/PageWrapper';
 import ButtonLink from '@/components/navigation/ButtonLink';
 import { Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';

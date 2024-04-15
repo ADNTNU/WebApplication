@@ -1,4 +1,4 @@
-import { Locale, locales } from '@/i18n';
+import { Locale, locales } from '@/internationalization/i18n';
 import { TranslatedPage, TranslatedPageProp } from '@models/TranslationTypes';
 import { Metadata } from 'next';
 import { TranslationValues } from 'next-intl';

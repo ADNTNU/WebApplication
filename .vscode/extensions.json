@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "eamodio.gitlens",
+    "christian-kohler.npm-intellisense",
+    "esbenp.prettier-vscode",
+    "redhat.vscode-yaml",
+    "wayou.vscode-todo-highlight",
+    "naumovs.color-highlight",
+    "lokalise.i18n-ally"
+  ]
+}

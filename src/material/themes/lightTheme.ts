@@ -1,4 +1,3 @@
-import { red } from '@mui/material/colors';
 import { ThemeOptionsWithName } from '@/models/Theme';
 
 const lightThemeOptions: ThemeOptionsWithName = {
@@ -14,21 +13,6 @@ const lightThemeOptions: ThemeOptionsWithName = {
       main: '#88c7ff',
       dark: '#5F8BB2',
     },
-    error: {
-      light: '#FFA8A8',
-      main: red.A400,
-    },
-    warning: {
-      light: '#ffb74d',
-      main: '#ffa726',
-      dark: '#f57c00',
-    },
-    info: {
-      main: '#9c27b0',
-    },
-    success: {
-      main: '#43a047',
-    },
     text: {
       primary: 'rgba(0, 0, 0, 0.87)',
       secondary: 'rgba(0, 0, 0, 0.7)',
@@ -42,8 +26,8 @@ const lightThemeOptions: ThemeOptionsWithName = {
       disabledBackground: 'rgba(0, 0, 0, 0.12)',
     },
     background: {
-      default: '#FFFFFF',
-      paper: '#E9E9E9',
+      // default: '#FFFFFF',
+      // paper: '#E9E9E9',
     },
     mode: 'light',
   },

@@ -1,8 +1,8 @@
-import { Box, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 
 export default function SearchHero() {
   return (
-    <Box
+    <Paper
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -15,6 +15,6 @@ export default function SearchHero() {
       <Typography variant="h2" component="h1">
         Will be replaced with a search hero
       </Typography>
-    </Box>
+    </Paper>
   );
 }
