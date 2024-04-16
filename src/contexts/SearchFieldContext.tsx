@@ -14,7 +14,7 @@ export const defaultValues = {
   focusedInputId: null,
   active: false,
   validDate: false,
-  roundTrip: false,
+  roundTrip: true,
   dateTextValue: null,
 } as const;
 
