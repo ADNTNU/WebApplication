@@ -14,7 +14,8 @@ export default function SearchHero() {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'background.paper',
-        padding: '2rem',
+        padding: 4,
+        py: 20,
       }}
     >
       <SearchField obstructedRef={obstructedRef} variant="landing" />

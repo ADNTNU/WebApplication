@@ -31,7 +31,8 @@
     "pluralStops": "{stops} stops",
     "noFlights": "No flights",
     "oneFlight": "1 flight",
-    "pluralFlights": "{flights} flights"
+    "pluralFlights": "{flights} flights",
+    "roundTrip": "round trip"
   },
   "Error": {
     "404": {

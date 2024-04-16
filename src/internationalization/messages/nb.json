@@ -31,7 +31,8 @@
     "pluralStops": "{stops} mellomlandinger",
     "noFlights": "Ingen flyvninger",
     "oneFlight": "1 flyvning",
-    "pluralFlights": "{flights} flyvninger"
+    "pluralFlights": "{flights} flyvninger",
+    "roundTrip": "tur-retur"
   },
   "Error": {
     "404": {

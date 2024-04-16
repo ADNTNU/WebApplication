@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton, Stack } from '@mui/material';
 import Link from '@components/navigation/Link';
 import MenuIcon from '@mui/icons-material/Menu';
-import OptionalSearchField from '@components/search/searchField/OptionalSearchField';
+import SearchField from '@components/search/searchField';
 import { MainLinkHref } from './links';
 import LanguageSwitcher from '../LanguageSwitcher';
 
@@ -19,9 +19,9 @@ export default function MobileMenu(props: MobileMenuProps) {
   };
 
   return (
-    <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
-      <Box>
-        <OptionalSearchField variant="landing" />
+    <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1} gap={2}>
+      <Box flexGrow={1} display="flex">
+        <SearchField variant="header" />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton onClick={() => setOpen(true)}>

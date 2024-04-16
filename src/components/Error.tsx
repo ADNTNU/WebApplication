@@ -1,7 +1,7 @@
-'use client';
-
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import ButtonLink from './navigation/ButtonLink';
+import PageSection from './layout/main/PageSection';
+import PageWrapper from './layout/main/PageWrapper';
 
 // import { useTranslations } from 'next-intl';
 
@@ -15,11 +15,15 @@ export default function Error({
   // const t = useTranslations('Error');
 
   return (
-    <Box>
-      <Typography variant="h4">{error.message}</Typography>
-      {/* <h1>{t('title')}</h1> */}
-      <Button onClick={reset}>Retry</Button>
-      <ButtonLink href="/">Go to home page</ButtonLink>
-    </Box>
+    <PageWrapper disableHeader disableFooter rootProps={{ display: 'flex', alignItems: 'center' }}>
+      <PageSection>
+        <Typography variant="h4" component="h1">
+          {error.message}
+        </Typography>
+        {/* <h1>{t('title')}</h1> */}
+        <Button onClick={reset}>Retry</Button>
+        <ButtonLink href="/">Go to home page</ButtonLink>
+      </PageSection>
+    </PageWrapper>
   );
 }

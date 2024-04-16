@@ -4,17 +4,13 @@ import { I18nLink, LinkProps, pathnames } from '@/internationalization/navigatio
 import { Button } from '@mui/material';
 import { ComponentProps } from 'react';
 
-type ButtonProps = Omit<ComponentProps<typeof Button>, 'href'>;
-type ButtonLinkProps<Pathname extends keyof typeof pathnames> = ButtonProps & {
-  href: LinkProps<Pathname>['href'] | 'back';
-  locale?: LinkProps<Pathname>['locale'];
-};
+type ButtonLinkProps<Pathname extends keyof typeof pathnames> = LinkProps<Pathname> &
+  Omit<ComponentProps<typeof Button>, 'href'>;
 
-export default function ButtonLink<Pathname extends keyof typeof pathnames>({
-  href,
-  locale,
-  ...rest
-}: ButtonLinkProps<Pathname>) {
+export default function ButtonLink<Pathname extends keyof typeof pathnames>(
+  props: ButtonLinkProps<Pathname>,
+) {
+  const { href, locale, ...rest } = props;
   return href === 'back' ? (
     <Button {...rest} onClick={() => window.history.back()} />
   ) : (

@@ -1,7 +1,8 @@
 import { Container, Stack } from '@mui/material';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
-import Link from '@components/navigation/Link';
-import { useTranslations } from 'next-intl';
+import { NextIntlClientProvider, useMessages, useTranslations } from 'next-intl';
+import IconButton from '@components/navigation/IconButton';
+import { pick } from 'lodash';
 import MenuWrapper from './MenuWrapper';
 import { mainLinks } from './links';
 import HeaderWrapper from './HeaderWrapper';
@@ -13,6 +14,7 @@ import HeaderWrapper from './HeaderWrapper';
 export default function Header(/* props: HeaderProps */) {
   // const {} = props;
   const t = useTranslations('Nav');
+  const messages = useMessages();
 
   const internationalizedMainLinks = mainLinks.map((link) => ({
     href: link.href,
@@ -32,20 +34,17 @@ export default function Header(/* props: HeaderProps */) {
         <Stack
           component="nav"
           flexDirection="row"
-          gap={3}
+          gap={2}
           alignItems="center"
           flexGrow={1}
           justifyContent="flex-start"
         >
-          <Link href="/" width={40} height={40} aria-label={t('Action.goToHomePage')}>
-            <LogoDevIcon
-              color="primary"
-              sx={{
-                fontSize: 40,
-              }}
-            />
-          </Link>
-          <MenuWrapper mainLinks={internationalizedMainLinks} />
+          <IconButton href="/" aria-label={t('Action.goToHomePage')} disableRipple>
+            <LogoDevIcon color="primary" fontSize="large" />
+          </IconButton>
+          <NextIntlClientProvider messages={pick(messages, 'Flights')}>
+            <MenuWrapper mainLinks={internationalizedMainLinks} />
+          </NextIntlClientProvider>
         </Stack>
       </Container>
     </HeaderWrapper>
