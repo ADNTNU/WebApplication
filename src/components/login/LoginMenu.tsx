@@ -7,14 +7,18 @@ import LoginField from './LoginField';
 function LoginMenu() {
   return (
     <Stack 
-    spacing={2} 
+    spacing={2}
+    gap={1}
     direction="column" 
     alignItems="center"
+    width="100%"
     sx={{
+      borderRadius: 2,
       backgroundColor: 'background.paper'
     }}>
-      <Typography variant='h2'>Login form</Typography>
-      <Stack direction="row" spacing={4}>
+      <Typography variant='h2'>Login</Typography>
+
+      <Stack direction="row" spacing={4} gap={2}>
         <Stack spacing={2} direction="column">
           <SocialButton text='Sign in with Apple' Icon={AppleIcon}></SocialButton>
           <SocialButton></SocialButton>

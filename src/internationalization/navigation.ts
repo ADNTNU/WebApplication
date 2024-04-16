@@ -34,6 +34,16 @@ export const pathnames = {
     nb: '/flytur/[tripId]',
   },
 
+  '/signup': {
+    en: '/signup',
+    nb: '/registrer',
+  },
+
+  '/login': {
+    en: '/login',
+    nb: '/innlogging',
+  },
+
   // Dynamic params are supported via square brackets
   // '/news/[articleSlug]-[articleId]': {
   //   en: '/news/[articleSlug]-[articleId]',

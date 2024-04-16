@@ -1,12 +1,14 @@
 import { ReactNode } from 'react';
 import { Locale, locales } from '@/internationalization/i18n';
 import { unstable_setRequestLocale } from 'next-intl/server';
+
 // import { pick } from 'lodash';
 // import { NextIntlClientProvider, useMessages } from 'next-intl';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nb';
 import 'dayjs/locale/en';
 import FlightFinderCssVarsProvider from '@components/layout/FlightFinderCssVarsProvider';
+import AuthProvider from '@components/login/AuthProvider';
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -40,7 +42,9 @@ export default function LocaleLayout({
     <html lang={locale}>
       <body>
         {/* <NextIntlClientProvider locale={locale} messages={pick(messages, ['Error', 'Nav'])}> */}
-        <FlightFinderCssVarsProvider>{children}</FlightFinderCssVarsProvider>
+        <FlightFinderCssVarsProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </FlightFinderCssVarsProvider>
         {/* </NextIntlClientProvider> */}
       </body>
     </html>

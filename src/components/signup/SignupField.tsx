@@ -1,21 +1,20 @@
+import { Button, TextField, Stack } from '@mui/material';
 import React from 'react';
-import { Link, Button, Stack, TextField } from '@mui/material';
 import NavigationLink from '@components/navigation/NavigationLink';
 
-function LoginField() {
+function SignupField() {
   return (
     <Stack direction="column" spacing={1}>
+      <TextField required id="outlined-basic" label="First Name" variant="outlined" />
+      <TextField required id="outlined-basic" label="Last Name" variant="outlined" />
       <TextField required id="outlined-basic" label="Email" variant="outlined" />
       <TextField required id="outlined-basic" label="Password" variant="outlined" type="Password" />
-      <Stack direction="row" spacing={2}>
-        <NavigationLink href={'/signup'}>Signup</NavigationLink>
-        <Link href="#">Forgot Password?</Link>
-      </Stack>
+      <NavigationLink href={'/login'}>Already got an account?</NavigationLink>
       <Button variant="contained" color="primary">
-        Login
+        Signup
       </Button>
     </Stack>
   );
 }
 
-export default LoginField;
+export default SignupField;
