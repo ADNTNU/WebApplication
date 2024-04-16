@@ -85,7 +85,7 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
       roundTrip,
       setRoundTrip,
     };
-  }, [showHeaderSearchField, value, focusedInputId, active, roundTrip]);
+  }, [showHeaderSearchField, value, focusedInputId, active, validDate, roundTrip]);
 
   return (
     <SearchFieldContext.Provider value={searchFieldContextValue}>

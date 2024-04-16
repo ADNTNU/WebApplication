@@ -40,7 +40,8 @@
       "description": "Siden du leter etter finnes ikke.",
       "backAction": "Gå til forrige side",
       "homeAction": "Gå tilbake til forsiden"
-    }
+    },
+    "locale": "nb"
   },
   "Nav": {
     "home": "Hjem",

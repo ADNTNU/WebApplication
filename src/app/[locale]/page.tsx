@@ -19,7 +19,7 @@ export default function Landing({ params: { locale } }: { params: { locale: Loca
   return (
     <PageWrapper>
       <PageSection>
-        <NextIntlClientProvider messages={pick(messages, 'Flights')}>
+        <NextIntlClientProvider locale={locale} messages={pick(messages, 'Flights')}>
           <SearchHero />
         </NextIntlClientProvider>
       </PageSection>

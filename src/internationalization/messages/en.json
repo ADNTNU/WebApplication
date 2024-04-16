@@ -40,7 +40,8 @@
       "description": "Page not found",
       "backAction": "Go to last page",
       "homeAction": "Go back to home page"
-    }
+    },
+    "locale": "en"
   },
   "Nav": {
     "home": "Home",

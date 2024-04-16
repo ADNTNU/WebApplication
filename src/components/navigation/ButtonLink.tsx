@@ -11,9 +11,7 @@ export default function ButtonLink<Pathname extends keyof typeof pathnames>(
   props: ButtonLinkProps<Pathname>,
 ) {
   const { href, locale, ...rest } = props;
-  return href === 'back' ? (
-    <Button {...rest} onClick={() => window.history.back()} />
-  ) : (
+  return (
     <I18nLink href={href} locale={locale} passHref>
       <Button {...rest} />
     </I18nLink>

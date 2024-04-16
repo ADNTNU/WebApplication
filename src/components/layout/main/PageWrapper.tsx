@@ -1,5 +1,6 @@
 import { ComponentProps, ReactNode } from 'react';
 import { Box } from '@mui/material';
+import { Locale } from '@internationalization/i18n';
 import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
@@ -8,6 +9,7 @@ type PageWrapperProps = {
   children: ReactNode;
   disableHeader?: boolean;
   disableFooter?: boolean;
+  locale?: Locale;
   rootProps?: ComponentProps<typeof Box>;
   mainProps?: ComponentProps<typeof Box>;
   // headerProps?: ComponentProps<typeof Header>;
@@ -19,6 +21,7 @@ export default function PageWrapper(props: PageWrapperProps) {
     children,
     disableHeader,
     disableFooter,
+    locale,
     rootProps,
     mainProps /* , headerProps, footerProps */,
   } = props;
@@ -43,7 +46,7 @@ export default function PageWrapper(props: PageWrapperProps) {
   return (
     <SearchFieldProvider>
       <Box minHeight={minHeight} {...rootRestProps}>
-        {disableHeader ? null : <Header /* {...headerProps} */ />}
+        {disableHeader ? null : <Header locale={locale} /* {...headerProps} */ />}
         <Box
           component={component}
           minHeight={disableHeader && disableFooter ? minHeight : undefined}

@@ -15,7 +15,7 @@ import {
   TextField,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { ComponentType, FocusEventHandler, RefObject, useEffect, useRef, useState } from 'react';
+import { FocusEventHandler, RefObject, useEffect, useRef, useState } from 'react';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import { DateCalendar, PickersDay, PickersDayProps } from '@mui/x-date-pickers';
@@ -47,8 +47,6 @@ const inputIds = {
 const dateFormat = 'DD/MM/YYYY';
 
 export default function SearchField(props: SearchFieldProps) {
-  // TODO: Remove lint exception
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { obstructedRef, variant } = props;
 
   // To add more translations, you have to add them to the
@@ -121,10 +119,26 @@ export default function SearchField(props: SearchFieldProps) {
       }
 
       if (tempFromDate.isValid() && tempToDate.isValid()) {
+        let tempFromDateCopy: Dayjs | null = tempFromDate;
+        let tempToDateCopy: Dayjs | null = tempToDate;
+        if (tempFromDate.isAfter(tempToDate)) {
+          tempFromDateCopy = tempToDate;
+          tempToDateCopy = tempFromDate;
+        }
+        if (tempFromDateCopy.isBefore(dayjs())) {
+          tempFromDateCopy = dayjs();
+        }
+        if (tempToDateCopy.isBefore(dayjs())) {
+          tempToDateCopy = null;
+        }
+
+        formattedFromDate = tempFromDateCopy.format(dateFormat);
+        formattedToDate = tempToDateCopy?.format(dateFormat);
+
         setRoundTrip(true);
         setValidDate(valid);
-        setTextValue(`${formattedFromDate || ''}-${formattedToDate || ''}`);
-        setValue({ ...value, fromDate: tempFromDate, toDate: tempToDate });
+        setTextValue(`${formattedFromDate}${formattedToDate ? `-${formattedToDate}` : ''}`);
+        setValue({ ...value, fromDate: tempFromDateCopy, toDate: tempToDateCopy });
         return;
       }
 
@@ -179,23 +193,12 @@ export default function SearchField(props: SearchFieldProps) {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setActive(false);
-      // setValue(null);
     }
   };
 
   const handleBlur = () => {
     setActive(false);
   };
-
-  // const handleInputClick: MouseEventHandler<HTMLDivElement> = (event) => {
-  //   const { id } = event.currentTarget;
-  //   console.log('id', id);
-  //   if (Object.values(inputIds).includes(id)) {
-  //     console.log('setting focusedInputId', id);
-  //     setFocusedInputId(id);
-  //     setActive(true);
-  //   }
-  // };
 
   const handleInputFocus: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
     const { id } = event.currentTarget;
@@ -256,7 +259,6 @@ export default function SearchField(props: SearchFieldProps) {
         onChange={(e) => handleChangeFrom(e.target.value)}
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
-        // onClick={handleInputClick}
         onFocus={handleInputFocus}
         onBlur={handleBlur}
         type="search"
@@ -279,7 +281,6 @@ export default function SearchField(props: SearchFieldProps) {
         onChange={(e) => handleChangeTo(e.target.value)}
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
-        // onClick={handleInputClick}
         onFocus={handleInputFocus}
         onBlur={handleBlur}
         type="search"
@@ -305,9 +306,7 @@ export default function SearchField(props: SearchFieldProps) {
         onChange={(e) => handleChangeDate(e.target.value)}
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
-        // onClick={handleInputClick}
         onFocus={handleInputFocus}
-        // onBlur={handleBlur}
         type="search"
         InputProps={{
           startAdornment: (
@@ -462,10 +461,10 @@ const CustomPickersDay = styled(PickersDay, {
 });
 
 type DayProps = PickersDayProps<Dayjs> & {
-  selectedFromDate: Dayjs | null;
-  selectedToDate: Dayjs | null;
-  hoveredDate: Dayjs | null;
-  roundTrip: boolean;
+  selectedFromDate?: Dayjs | null;
+  selectedToDate?: Dayjs | null;
+  hoveredDate?: Dayjs | null;
+  roundTrip?: boolean;
 };
 
 function Day(props: DayProps) {
@@ -500,7 +499,7 @@ function Day(props: DayProps) {
         (roundTrip &&
           (day.isSame(selectedToDate, 'day') ||
             (!selectedToDate &&
-              hoveredDate?.isSameOrAfter(selectedFromDate, 'day') &&
+              // hoveredDate?.isSameOrAfter(selectedFromDate, 'day') &&
               day.isSame(hoveredDate, 'day')) ||
             (!hoveredDate?.isSame(selectedFromDate, 'day') &&
               selectedToDate &&
