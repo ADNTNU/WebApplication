@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode } from 'react';
 import { Box } from '@mui/material';
 import { Locale } from '@internationalization/i18n';
-import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
+// import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
 
@@ -38,13 +38,14 @@ export default function PageWrapper(props: PageWrapperProps) {
     };
 
     return (
-      <SearchFieldProvider>
-        <Box {...combinedProps}>{children}</Box>;
-      </SearchFieldProvider>
+      // <SearchFieldProvider>
+      <Box {...combinedProps}>{children}</Box>
+      // </SearchFieldProvider>
     );
   }
   return (
-    <SearchFieldProvider>
+    // <SearchFieldProvider>
+    <>
       <Box minHeight={minHeight} {...rootRestProps}>
         {disableHeader ? null : <Header locale={locale} /* {...headerProps} */ />}
         <Box
@@ -56,6 +57,7 @@ export default function PageWrapper(props: PageWrapperProps) {
         </Box>
       </Box>
       {disableFooter ? null : <Footer /* {...footerProps} */ />}
-    </SearchFieldProvider>
+    </>
+    // </SearchFieldProvider>
   );
 }

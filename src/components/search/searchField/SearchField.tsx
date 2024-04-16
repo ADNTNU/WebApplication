@@ -65,14 +65,17 @@ export default function SearchField(props: SearchFieldProps) {
     setValidDate,
     roundTrip,
     setRoundTrip,
+    dateTextValue,
+    setDateTextValue,
+    reset,
   } = useSearchFieldContext();
   const [shown, setShown] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<Dayjs | null>(null);
-  const [textValue, setTextValue] = useState<string | null>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const handleSearch = () => {
+    reset();
     router.push({
       pathname: '/search',
       query: {
@@ -137,15 +140,19 @@ export default function SearchField(props: SearchFieldProps) {
 
         setRoundTrip(true);
         setValidDate(valid);
-        setTextValue(`${formattedFromDate}${formattedToDate ? `-${formattedToDate}` : ''}`);
+        setDateTextValue(`${formattedFromDate}${formattedToDate ? `-${formattedToDate}` : ''}`);
         setValue({ ...value, fromDate: tempFromDateCopy, toDate: tempToDateCopy });
         return;
       }
 
-      if (roundTrip && tempFromDate.isValid() && !textValue?.startsWith(`${formattedFromDate}-`)) {
-        setTextValue(`${formattedFromDate || ''}-${formattedToDate || ''}`);
+      if (
+        roundTrip &&
+        tempFromDate.isValid() &&
+        !dateTextValue?.startsWith(`${formattedFromDate}-`)
+      ) {
+        setDateTextValue(`${formattedFromDate || ''}-${formattedToDate || ''}`);
       } else {
-        setTextValue(dateValue);
+        setDateTextValue(dateValue);
       }
 
       setValidDate(valid);
@@ -166,7 +173,7 @@ export default function SearchField(props: SearchFieldProps) {
           parsedToDate = dateValue;
         }
         setValue({ ...value, fromDate: parsedFromDate, toDate: parsedToDate });
-        setTextValue(
+        setDateTextValue(
           parsedFromDate
             ? `${parsedFromDate.format(dateFormat)}${
                 parsedToDate ? `-${parsedToDate.format(dateFormat)}` : ''
@@ -180,7 +187,7 @@ export default function SearchField(props: SearchFieldProps) {
 
     setValue({ ...value, fromDate: parsedFromDate });
     const formattedFromDate = parsedFromDate ? parsedFromDate.format(dateFormat) : '';
-    setTextValue(formattedFromDate);
+    setDateTextValue(formattedFromDate);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -255,7 +262,7 @@ export default function SearchField(props: SearchFieldProps) {
       <TextField
         placeholder="Hvor fra?"
         id={inputIds.from}
-        value={from || ''}
+        value={from}
         onChange={(e) => handleChangeFrom(e.target.value)}
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
@@ -299,9 +306,9 @@ export default function SearchField(props: SearchFieldProps) {
       <TextField
         placeholder="Når?"
         id={inputIds.date}
-        error={!!textValue?.length && !validDate}
-        color={!!textValue?.length && !validDate ? 'error' : undefined}
-        value={textValue || ''}
+        error={!!dateTextValue?.length && !validDate}
+        color={!!dateTextValue?.length && !validDate ? 'error' : undefined}
+        value={dateTextValue}
         ref={datePickerRef}
         onChange={(e) => handleChangeDate(e.target.value)}
         onKeyDown={handleKeyDown}

@@ -8,6 +8,20 @@ export type SearchFieldValue = {
   toDate?: Dayjs | null;
 };
 
+export const defaultValues = {
+  showHeaderSearchField: false,
+  value: null,
+  focusedInputId: null,
+  active: false,
+  validDate: false,
+  roundTrip: false,
+  dateTextValue: null,
+} as const;
+
+export type ResetOptions = {
+  [K in keyof typeof defaultValues]?: boolean;
+};
+
 type SearchFieldContextType = {
   showHeaderSearchField: boolean;
   // setShowSearchField: Dispatch<SetStateAction<boolean>>;
@@ -23,6 +37,9 @@ type SearchFieldContextType = {
   setValidDate: Dispatch<SetStateAction<boolean>>;
   roundTrip: boolean;
   setRoundTrip: Dispatch<SetStateAction<boolean>>;
+  dateTextValue: string | null;
+  setDateTextValue: Dispatch<SetStateAction<string | null>>;
+  reset: (props?: ResetOptions) => void;
 };
 
 const SearchFieldContext = createContext<SearchFieldContextType | undefined>(undefined);
