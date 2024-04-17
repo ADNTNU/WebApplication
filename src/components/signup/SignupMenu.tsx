@@ -25,7 +25,7 @@ function SignupMenu() {
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
         <Stack direction="column" spacing={2}>
-          <SignupField></SignupField>
+          <SignupField />
         </Stack>
       </Stack>
     </Stack>

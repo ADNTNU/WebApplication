@@ -9,7 +9,7 @@ function SignupField() {
       <TextField required id="outlined-basic" label="Last Name" variant="outlined" />
       <TextField required id="outlined-basic" label="Email" variant="outlined" />
       <TextField required id="outlined-basic" label="Password" variant="outlined" type="Password" />
-      <NavigationLink href={'/login'}>Already got an account?</NavigationLink>
+      <NavigationLink href="/login">Already got an account?</NavigationLink>
       <Button variant="contained" color="primary">
         Signup
       </Button>
