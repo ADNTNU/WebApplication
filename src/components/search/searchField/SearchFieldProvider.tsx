@@ -5,8 +5,8 @@ import SearchFieldContext, {
   SearchFieldValue,
   defaultValues,
 } from '@contexts/SearchFieldContext';
-import useDebounce from '@hooks/useDebounce';
-import { Backdrop } from '@mui/material';
+// import useDebounce from '@hooks/useDebounce';
+// import { Backdrop } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -28,7 +28,7 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
   const [validDate, setValidDate] = useState<boolean>(defaultValues.validDate);
   const [roundTrip, setRoundTrip] = useState<boolean>(defaultValues.roundTrip);
   const [dateTextValue, setDateTextValue] = useState<string | null>(defaultValues.dateTextValue);
-  const debouncedActive = useDebounce(active, 50);
+  // const debouncedActive = useDebounce(active, 50);
   const pathname = usePathname();
 
   const checkObstruction = useCallback(() => {
@@ -89,23 +89,29 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
         roundTrip: resetRoundTrip,
       } = resetProps || {};
 
-      if (resetShowHeaderSearchField) {
-        setShowHeaderSearchField(defaultValues.showHeaderSearchField);
+      if (resetShowHeaderSearchField !== undefined) {
+        setShowHeaderSearchField(
+          resetShowHeaderSearchField === 'default'
+            ? defaultValues.showHeaderSearchField
+            : resetShowHeaderSearchField,
+        );
       }
-      if (resetValue) {
-        setValue(defaultValues.value);
+      if (resetValue !== undefined) {
+        setValue(resetValue === 'default' ? defaultValues.value : resetValue);
       }
-      if (resetFocusedInputId) {
-        setFocusedInputId(defaultValues.focusedInputId);
+      if (resetFocusedInputId !== undefined) {
+        setFocusedInputId(
+          resetFocusedInputId === 'default' ? defaultValues.focusedInputId : resetFocusedInputId,
+        );
       }
-      if (resetActive) {
-        setActive(defaultValues.active);
+      if (resetActive !== undefined) {
+        setActive(resetActive === 'default' ? defaultValues.active : resetActive);
       }
-      if (resetValidDate) {
-        setValidDate(defaultValues.validDate);
+      if (resetValidDate !== undefined) {
+        setValidDate(resetValidDate === 'default' ? defaultValues.validDate : resetValidDate);
       }
-      if (resetRoundTrip) {
-        setRoundTrip(defaultValues.roundTrip);
+      if (resetRoundTrip !== undefined) {
+        setRoundTrip(resetRoundTrip === 'default' ? defaultValues.roundTrip : resetRoundTrip);
       }
       checkObstruction();
     },
@@ -144,11 +150,6 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
 
   return (
     <SearchFieldContext.Provider value={searchFieldContextValue}>
-      <Backdrop
-        open={debouncedActive}
-        onClick={() => setActive(false)}
-        sx={{ zIndex: (theme) => theme.zIndex.appBar + 1 }}
-      />
       {children}
     </SearchFieldContext.Provider>
   );

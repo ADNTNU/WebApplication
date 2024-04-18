@@ -3,7 +3,7 @@ import Link from '@components/navigation/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchField from '@components/search/searchField';
 import { MainLinkHref } from './links';
-import LanguageSwitcher from '../LanguageSwitcher';
+import LocaleSwitcher from '../LocaleSwitcher';
 
 type MobileMenuProps = {
   open: boolean;
@@ -57,7 +57,7 @@ export default function MobileMenu(props: MobileMenuProps) {
               </Link>
             ))}
           </Stack>
-          <LanguageSwitcher
+          <LocaleSwitcher
             iconSize={24}
             transformOrigin={{
               vertical: 'bottom',

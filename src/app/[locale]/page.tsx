@@ -7,6 +7,7 @@ import { Locale } from '@/internationalization/i18n';
 import PopularDestinations from '@/components/locations/PopularDestinations';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { pick } from 'lodash';
+import { Paper } from '@mui/material';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   return generateTranslatedMetadata({ locale, page: 'Landing' });
@@ -26,7 +27,9 @@ export default function Landing({ params: { locale } }: { params: { locale: Loca
       <PageSection sx={{ py: 1 }}>
         <PopularDestinations />
       </PageSection>
-      <PageSection sx={{ height: '1000px' }}>Temp</PageSection>
+      <PageSection sx={{ py: 2 }}>
+        <Paper sx={{ height: '1000px' }} />
+      </PageSection>
     </PageWrapper>
   );
 }
