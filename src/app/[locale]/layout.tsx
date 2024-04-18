@@ -41,9 +41,9 @@ export default function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider locale={locale} messages={pick(messages, ['Error', 'Nav'])}>
-          <FlightFinderCssVarsProvider locale={locale}>
-            <SearchFieldProvider>{children}</SearchFieldProvider>
-          </FlightFinderCssVarsProvider>
+          <SearchFieldProvider>
+            <FlightFinderCssVarsProvider locale={locale}>{children}</FlightFinderCssVarsProvider>
+          </SearchFieldProvider>
         </NextIntlClientProvider>
       </body>
     </html>

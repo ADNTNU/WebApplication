@@ -1,6 +1,6 @@
 import { Box, Stack } from '@mui/material';
 import SearchField from '@components/search/searchField';
-import LanguageSwitcher from '../LanguageSwitcher';
+import LocaleSwitcher from '../LocaleSwitcher';
 
 // type DesktopMenuProps = {
 //   // mainLinks: { href: MainLinkHref; label: string }[];
@@ -14,7 +14,7 @@ export default function DesktopMenu(/* props: DesktopMenuProps */) {
           <SearchField variant="header" />
         </Box>
       </Box>
-      <LanguageSwitcher iconSize={24} />
+      <LocaleSwitcher iconSize={24} />
     </Stack>
   );
 }

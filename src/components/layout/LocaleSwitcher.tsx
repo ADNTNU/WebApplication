@@ -9,14 +9,14 @@ import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import LocaleFlag from './LocaleFlag';
 
-type LanguageSwitcherProps = {
+type LocaleSwitcherProps = {
   iconSize?: number;
   menuIconSize?: number;
   anchorOrigin?: PopoverOrigin;
   transformOrigin?: PopoverOrigin;
 };
 
-export default function LanguageSwitcher(props: LanguageSwitcherProps) {
+export default function LocaleSwitcher(props: LocaleSwitcherProps) {
   const { iconSize, menuIconSize, anchorOrigin, transformOrigin } = props;
 
   const router = useRouter();
@@ -73,7 +73,15 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
   return (
     <>
       <Box>
-        <Button onClick={handleClick} disabled={isPending && !mounted}>
+        <Button
+          onClick={handleClick}
+          disabled={isPending && !mounted}
+          id="locale-switcher-button"
+          aria-label="Locale switcher"
+          aria-controls="locale-menu"
+          aria-haspopup="menu"
+          aria-expanded={open ? 'true' : 'false'}
+        >
           {localeFlag}
           <ExpandMoreIcon
             sx={{
@@ -84,7 +92,9 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
         </Button>
       </Box>
       <Menu
-        // aria-labelledby="demo-positioned-button"
+        id="locale-menu"
+        aria-label="Locale switcher menu"
+        aria-labelledby="locale-switcher-button"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -118,6 +128,7 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
           return (
             <MenuItem
               onClick={handleLocaleClick(l)}
+              aria-label={`Switch to ${l}`}
               disabled={isPending}
               key={l}
               sx={{ gap: 1 }}

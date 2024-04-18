@@ -3,22 +3,25 @@
 import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
 import { useRouter } from '@internationalization/navigation';
 import {
+  Backdrop,
   Box,
   Divider,
-  FormControlLabel,
   IconButton,
   InputAdornment,
   Paper,
   Popper,
-  Stack,
-  Switch,
   TextField,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { FocusEventHandler, RefObject, useEffect, useRef, useState } from 'react';
+import {
+  FocusEventHandler,
+  MouseEventHandler,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
-import { DateCalendar, PickersDay, PickersDayProps } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useTranslations } from 'next-intl';
@@ -28,6 +31,9 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import dayjsIsBetween from 'dayjs/plugin/isBetween';
 import capitalizeFirstLetter from '@utils/capitalizeFirstLetter';
 import SearchIcon from '@mui/icons-material/Search';
+import { SearchFieldValue } from '@contexts/SearchFieldContext';
+import useDebounce from '@hooks/useDebounce';
+import DateRangePicker from '../DateRangePicker';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -38,12 +44,6 @@ export type SearchFieldProps = {
   variant: 'header' | 'landing';
 };
 
-const inputIds = {
-  from: 'search-field-input-from',
-  to: 'search-field-input-to',
-  date: 'search-field-input-date',
-};
-
 const dateFormat = 'DD/MM/YYYY';
 
 export default function SearchField(props: SearchFieldProps) {
@@ -52,6 +52,19 @@ export default function SearchField(props: SearchFieldProps) {
   // To add more translations, you have to add them to the
   // pick(messages) in the wrapper server components
   const t = useTranslations('Flights');
+
+  const inputs = {
+    from: { id: 'search-field-input-from', label: 'Hvor fra?', placeholder: 'Legg til sted' },
+    to: { id: 'search-field-input-to', label: 'Hvor til?', placeholder: 'Legg til sted' },
+    date: { id: 'search-field-input-date', label: 'Når?', placeholder: 'DD/MM/YYYY' },
+    search: { id: 'search-field-button-search', label: 'Søk' },
+  };
+  const inputIds = {
+    from: inputs.from.id,
+    to: inputs.to.id,
+    date: inputs.date.id,
+    search: inputs.search.id,
+  };
 
   const {
     value,
@@ -73,18 +86,83 @@ export default function SearchField(props: SearchFieldProps) {
   const [hoveredDate, setHoveredDate] = useState<Dayjs | null>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  // const debouncedShowBackdrop = useDebounce(active && shown, active && !shown ? 0 : 0);
+  // const activeDebounced = useDebounce(active, active ? 0 : 50);
+  const activeDebounced = useDebounce(active, 50);
+
+  const datePopperOpen = active && shown && focusedInputId === inputIds.date;
+
+  const handleValidateAndApplyDateText = (): SearchFieldValue | null => {
+    let fromDate: Dayjs | null = null;
+    let toDate: Dayjs | null = null;
+    const now = dayjs();
+    let returnValue: SearchFieldValue | null = null;
+
+    if (!dateTextValue?.length) {
+      returnValue = { ...value, fromDate: null, toDate: null };
+      setValue(returnValue);
+      return returnValue;
+    }
+    const formattedDate = dayjs(dateTextValue, dateFormat);
+    if (dateTextValue?.split('-').length <= 1 && formattedDate.isValid()) {
+      fromDate = formattedDate;
+      if (fromDate.isBefore(now, 'day')) {
+        fromDate = now;
+      }
+      returnValue = { ...value, fromDate, toDate: null };
+      setValue(returnValue);
+      setDateTextValue(fromDate.format(dateFormat));
+      setValidDate(true);
+    } else {
+      const textArray = dateTextValue?.split('-');
+      const formattedFromDate =
+        textArray && textArray?.length >= 1 ? dayjs(textArray[0], dateFormat) : null;
+      const formattedToDate =
+        textArray && textArray?.length >= 2 ? dayjs(textArray[1], dateFormat) : null;
+      if (formattedFromDate?.isValid()) {
+        fromDate = formattedFromDate;
+        if (fromDate?.isBefore(now, 'day')) {
+          fromDate = now;
+        }
+      }
+      if (formattedToDate?.isValid()) {
+        toDate = formattedToDate;
+        if (toDate.isBefore(now, 'day')) {
+          toDate = now;
+        }
+      }
+      if (toDate && fromDate?.isAfter(toDate, 'day')) {
+        const temp = toDate;
+        toDate = fromDate;
+        fromDate = temp;
+      }
+      if (fromDate && toDate) {
+        setRoundTrip(true);
+      }
+
+      returnValue = { ...value, fromDate, toDate };
+      setValue(returnValue);
+      setDateTextValue(
+        `${fromDate ? fromDate.format(dateFormat) : ''}${
+          toDate ? `-${toDate.format(dateFormat)}` : ''
+        }`,
+      );
+    }
+    return returnValue;
+  };
 
   const handleSearch = () => {
-    reset();
+    const validatedValue = handleValidateAndApplyDateText();
     router.push({
       pathname: '/search',
       query: {
-        ...(value?.from && { f: value?.from }),
-        ...(value?.to && { t: value?.to }),
-        ...(value?.fromDate && { fd: value?.fromDate.format(dateFormat) }),
-        ...(value?.toDate && { td: value?.toDate.format(dateFormat) }),
+        ...(validatedValue?.from && { f: validatedValue?.from }),
+        ...(validatedValue?.to && { t: validatedValue?.to }),
+        ...(validatedValue?.fromDate && { fd: validatedValue?.fromDate.format(dateFormat) }),
+        ...(validatedValue?.toDate && { td: validatedValue?.toDate.format(dateFormat) }),
       },
     });
+    reset({ active: false });
   };
 
   const handleChangeFrom = (fromValue: string) => {
@@ -95,70 +173,9 @@ export default function SearchField(props: SearchFieldProps) {
     setValue({ ...value, to: toValue });
   };
 
-  const handleChangeDate = (dateValue: Dayjs | string | null) => {
-    let parsedFromDate: Dayjs | null | undefined = null;
-    let parsedToDate: Dayjs | null | undefined = null;
-    if (typeof dateValue === 'string') {
-      const dateArray = dateValue.split('-');
-      const tempFromDate = dayjs(dateArray[0], dateFormat);
-      const tempToDate = dayjs(dateArray[1], dateFormat);
-      let formattedFromDate: string | undefined;
-      let formattedToDate: string | undefined;
-      let valid = true;
-
-      if (tempFromDate.isValid()) {
-        formattedFromDate = tempFromDate.format(dateFormat);
-      }
-      if (tempToDate.isValid()) {
-        formattedToDate = tempToDate.format(dateFormat);
-      }
-
-      if (!tempFromDate.isValid() || !tempToDate.isValid()) {
-        valid = false;
-      }
-
-      if (tempFromDate.isValid() && !dateArray[1]) {
-        valid = true;
-      }
-
-      if (tempFromDate.isValid() && tempToDate.isValid()) {
-        let tempFromDateCopy: Dayjs | null = tempFromDate;
-        let tempToDateCopy: Dayjs | null = tempToDate;
-        if (tempFromDate.isAfter(tempToDate)) {
-          tempFromDateCopy = tempToDate;
-          tempToDateCopy = tempFromDate;
-        }
-        if (tempFromDateCopy.isBefore(dayjs())) {
-          tempFromDateCopy = dayjs();
-        }
-        if (tempToDateCopy.isBefore(dayjs())) {
-          tempToDateCopy = null;
-        }
-
-        formattedFromDate = tempFromDateCopy.format(dateFormat);
-        formattedToDate = tempToDateCopy?.format(dateFormat);
-
-        setRoundTrip(true);
-        setValidDate(valid);
-        setDateTextValue(`${formattedFromDate}${formattedToDate ? `-${formattedToDate}` : ''}`);
-        setValue({ ...value, fromDate: tempFromDateCopy, toDate: tempToDateCopy });
-        return;
-      }
-
-      if (
-        roundTrip &&
-        tempFromDate.isValid() &&
-        !dateTextValue?.startsWith(`${formattedFromDate}-`)
-      ) {
-        setDateTextValue(`${formattedFromDate || ''}-${formattedToDate || ''}`);
-      } else {
-        setDateTextValue(dateValue);
-      }
-
-      setValidDate(valid);
-
-      return;
-    }
+  const handleChangeDate = (dateValue: Dayjs | null) => {
+    let parsedFromDate: Dayjs | null = null;
+    let parsedToDate: Dayjs | null = null;
     if (dayjs.isDayjs(dateValue)) {
       setValidDate(true);
       if (roundTrip) {
@@ -176,7 +193,7 @@ export default function SearchField(props: SearchFieldProps) {
         setDateTextValue(
           parsedFromDate
             ? `${parsedFromDate.format(dateFormat)}${
-                parsedToDate ? `-${parsedToDate.format(dateFormat)}` : ''
+                parsedToDate ? ` - ${parsedToDate.format(dateFormat)}` : ''
               }`
             : '',
         );
@@ -207,12 +224,57 @@ export default function SearchField(props: SearchFieldProps) {
     setActive(false);
   };
 
-  const handleInputFocus: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
-    const { id } = event.currentTarget;
+  const handleChangeDateText = (dateText: string) => {
+    // TODO: Add validation for date format on each run
+    setDateTextValue(dateText);
+  };
+
+  const handleDateFieldBlur = () => {
+    handleValidateAndApplyDateText();
+  };
+
+  const handleFocusOrClick = (id: string, focusElement?: boolean) => {
     if (Object.values(inputIds).includes(id)) {
       setFocusedInputId(id);
       setActive(true);
     }
+
+    if (focusElement) {
+      const element = document.querySelector<HTMLElement>(`#${id}:not([hidden])`);
+      if (element) {
+        element.focus();
+      }
+    }
+    if (id !== inputIds.date) {
+      return;
+    }
+
+    if (!value?.fromDate) {
+      if (roundTrip) {
+        // setDateTextValue('DD/MM/YYYY-DD/MM/YYYY');
+      } else {
+        // setDateTextValue('DD/MM/YYYY');
+      }
+    } else if (value?.fromDate) {
+      const formattedFromDate = value.fromDate.format(dateFormat);
+      if (value?.toDate) {
+        setDateTextValue(`${formattedFromDate} - ${value?.toDate.format(dateFormat)}`);
+      } else {
+        setDateTextValue(formattedFromDate);
+      }
+    }
+  };
+
+  const handleInputClick: MouseEventHandler<HTMLDivElement> = (event) => {
+    const { id } = event.currentTarget;
+    handleFocusOrClick(id);
+  };
+
+  const handleInputFocus: FocusEventHandler<
+    HTMLButtonElement | HTMLInputElement | HTMLTextAreaElement
+  > = (event) => {
+    const { id } = event.currentTarget;
+    handleFocusOrClick(id);
   };
 
   useEffect(() => {
@@ -220,317 +282,293 @@ export default function SearchField(props: SearchFieldProps) {
       setShown(false);
     } else if (variant === 'header' && showHeaderSearchField) {
       setShown(true);
-    } else if (variant !== 'header' && showHeaderSearchField) {
-      setShown(false);
     } else if (variant !== 'header' && !showHeaderSearchField) {
       setShown(true);
+    } else if (variant !== 'header' && showHeaderSearchField) {
+      setShown(false);
     }
   }, [showHeaderSearchField, variant]);
 
-  const zIndexOffset = variant === 'header' ? 3 : 2;
+  const zIndexOffset = variant === 'header' ? 2 : 1;
 
-  const { from, to, fromDate, toDate } = value || {};
+  const { from, to /* , fromDate , toDate */ } = value || {};
 
   return (
-    <Box
-      ref={variant !== 'header' ? obstructedRef : undefined}
-      // visibility={variant !== 'header' && showHeaderSearchField ? 'hidden' : 'visible'}
-      // position="relative"
-      overflow="hidden"
-      maxWidth="800px"
-      flexGrow={1}
-      flexShrink={1}
-      mx="auto"
-      role="search"
-      sx={{
-        zIndex: (theme) => (active && shown ? theme.zIndex.appBar + zIndexOffset : undefined),
-        borderRadius: 5,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        border: '1px solid grey',
-        transition: 'opacity 0.2s ease-in-out',
-        ...(!shown
-          ? {
-              opacity: 0,
-            }
-          : {
-              opacity: 1,
-            }),
-      }}
-    >
-      <TextField
-        placeholder="Hvor fra?"
-        id={inputIds.from}
-        value={from}
-        onChange={(e) => handleChangeFrom(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        onFocus={handleInputFocus}
-        onBlur={handleBlur}
-        type="search"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <FlightTakeoffIcon />
-            </InputAdornment>
-          ),
-        }}
+    <>
+      <Backdrop
+        open={(active || activeDebounced) && shown}
+        onClick={() => setActive(false)}
         sx={{
-          '& fieldset': { border: 'none' },
+          zIndex: (theme) => theme.zIndex.appBar + 1,
+          ...(activeDebounced && { transition: 'opacity 0s !important' }),
         }}
       />
-      <Divider orientation="vertical" flexItem />
-      <TextField
-        placeholder="Hvor til?"
-        id={inputIds.to}
-        value={to || ''}
-        onChange={(e) => handleChangeTo(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        onFocus={handleInputFocus}
-        onBlur={handleBlur}
-        type="search"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <FlightLandIcon />
-            </InputAdornment>
-          ),
-        }}
+      <Box
+        ref={variant !== 'header' ? obstructedRef : undefined}
         sx={{
-          '& fieldset': { border: 'none' },
+          zIndex:
+            active && shown
+              ? (theme) => {
+                  return theme.zIndex.appBar + zIndexOffset;
+                }
+              : undefined,
+          position: 'relative',
+          left: shown ? undefined : '-10000px',
+          display: 'flex',
         }}
-      />
-      <Divider orientation="vertical" flexItem />
-      <TextField
-        placeholder="Når?"
-        id={inputIds.date}
-        error={!!dateTextValue?.length && !validDate}
-        color={!!dateTextValue?.length && !validDate ? 'error' : undefined}
-        value={dateTextValue}
-        ref={datePickerRef}
-        onChange={(e) => handleChangeDate(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        onFocus={handleInputFocus}
-        type="search"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <CalendarMonthIcon />
-            </InputAdornment>
-          ),
-        }}
-        sx={{
-          '& fieldset': { border: 'none' },
-        }}
-      />
-      <Divider orientation="vertical" flexItem />
-      {/* TODO: Add internationalized aria-labels */}
-      <IconButton disableRipple onClick={handleSearch} aria-label="search" sx={{ padding: 1 }}>
-        <SearchIcon />
-      </IconButton>
-      <Popper
-        open={active && shown && focusedInputId === inputIds.date}
-        anchorEl={datePickerRef.current}
-        placement="bottom"
-        sx={{ zIndex: (theme) => theme.zIndex.appBar + zIndexOffset + 1 }}
       >
-        <Paper>
-          <Stack>
-            {/* Switch to change between rund trip and not */}
-            <Box padding={2}>
-              <FormControlLabel
-                control={<Switch checked={roundTrip} onChange={() => setRoundTrip(!roundTrip)} />}
-                label={capitalizeFirstLetter(t('roundTrip'))}
-              />
-            </Box>
-            <Stack direction="row">
-              <DateCalendar
+        <Paper
+          elevation={variant === 'landing' ? 2 : undefined}
+          role={shown ? 'search' : undefined}
+          sx={{
+            zIndex: active && shown ? (theme) => theme.zIndex.appBar + zIndexOffset : undefined,
+            flexGrow: 1,
+            flexShrink: 1,
+            mx: 'auto',
+            maxWidth: '800px',
+            position: 'relative',
+            overflow: 'hidden',
+            borderRadius: 5,
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            justifyContent: 'center',
+            border: '1px solid grey',
+            borderColor: active && shown ? 'primary.main' : undefined,
+            transition: 'opacity 0.2s ease-in-out',
+            ...(!shown
+              ? {
+                  opacity: 0,
+                }
+              : {
+                  opacity: 1,
+                }),
+          }}
+        >
+          <Box
+            alignItems="end"
+            display="flex"
+            onClick={() => handleFocusOrClick(inputIds.from, true)}
+            sx={{
+              position: 'relative',
+              zIndex: (theme) =>
+                active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
+              cursor: 'text',
+              ...(variant !== 'header' && {
+                minHeight: '5rem',
+              }),
+            }}
+          >
+            <TextField
+              placeholder={variant === 'header' ? inputs.from.label : inputs.from.placeholder}
+              label={variant === 'header' ? undefined : inputs.from.label}
+              aria-label={inputs.from.label}
+              id={inputs.from.id}
+              // aria-controls={inputs.from.id}
+              aria-hidden={!shown}
+              tabIndex={shown ? undefined : -1}
+              hidden={!shown}
+              variant="outlined"
+              value={from || ''}
+              onChange={(e) => handleChangeFrom(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
+              onFocus={handleInputFocus}
+              onBlur={handleBlur}
+              type="search"
+              inputProps={{
+                tabIndex: shown ? undefined : -1,
+                hidden: !shown,
+              }}
+              // eslint-disable-next-line react/jsx-no-duplicate-props
+              InputProps={{
+                sx: {
+                  zIndex: (theme) =>
+                    active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
+                },
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FlightTakeoffIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                zIndex: (theme) =>
+                  active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
+                '& fieldset': { border: 'none' },
+              }}
+            />
+          </Box>
+          <Divider
+            flexItem
+            sx={{
+              borderBottomWidth: { xs: 'thin', md: 0 },
+              borderRightWidth: { xs: 0, md: 'thin' },
+            }}
+          />
+          <Box
+            alignItems="end"
+            display="flex"
+            onClick={() => handleFocusOrClick(inputIds.to, true)}
+            sx={{
+              cursor: 'text',
+              ...(variant !== 'header' && {
+                minHeight: '5rem',
+              }),
+            }}
+          >
+            <TextField
+              placeholder={variant === 'header' ? inputs.to.label : inputs.to.placeholder}
+              label={variant === 'header' ? undefined : inputs.to.label}
+              aria-label={inputs.to.label}
+              id={inputs.to.id}
+              // aria-controls={inputs.to.id}
+              aria-hidden={!shown}
+              tabIndex={shown ? undefined : -1}
+              hidden={!shown}
+              value={to || ''}
+              onChange={(e) => handleChangeTo(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
+              onFocus={handleInputFocus}
+              onClick={handleInputClick}
+              onBlur={handleBlur}
+              type="search"
+              inputProps={{
+                tabIndex: shown ? undefined : -1,
+                hidden: !shown,
+              }}
+              // eslint-disable-next-line react/jsx-no-duplicate-props
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FlightLandIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                '& fieldset': { border: 'none' },
+              }}
+            />
+          </Box>
+          <Divider
+            flexItem
+            sx={{
+              borderBottomWidth: { xs: 'thin', md: 0 },
+              borderRightWidth: { xs: 0, md: 'thin' },
+            }}
+          />
+          <Box
+            alignItems="end"
+            display="flex"
+            onClick={() => handleFocusOrClick(inputIds.date, true)}
+            sx={{
+              cursor: 'text',
+              ...(variant !== 'header' && {
+                minHeight: '5rem',
+              }),
+            }}
+          >
+            <TextField
+              placeholder={variant === 'header' ? inputs.date.label : inputs.date.placeholder}
+              label={variant === 'header' ? undefined : inputs.date.label}
+              aria-label={inputs.date.label}
+              id={inputs.date.id}
+              // aria-controls={inputIds.date}
+              aria-hidden={!shown}
+              tabIndex={shown ? undefined : -1}
+              hidden={!shown}
+              error={!!dateTextValue?.length && !validDate}
+              // color={!!dateTextValue?.length && !validDate ? 'error' : undefined}
+              value={dateTextValue || ''}
+              ref={datePickerRef}
+              onChange={(e) => handleChangeDateText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
+              onFocus={handleInputFocus}
+              onBlur={handleDateFieldBlur}
+              inputProps={{
+                tabIndex: shown ? undefined : -1,
+                hidden: !shown,
+                pattern:
+                  '([0-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/d{4}(-([0-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/d{4})?',
+              }}
+              // eslint-disable-next-line react/jsx-no-duplicate-props
+              InputProps={{
+                color: !!dateTextValue?.length && !validDate ? 'error' : undefined,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarMonthIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                minWidth: '300px',
+                '& fieldset': { border: 'none' },
+              }}
+            />
+          </Box>
+          <Popper
+            open={datePopperOpen}
+            anchorEl={datePickerRef.current}
+            placement="bottom"
+            sx={{ zIndex: (theme) => theme.zIndex.appBar + zIndexOffset + 1 }}
+          >
+            <Paper>
+              <DateRangePicker
                 onChange={(d) => handleChangeDate(d)}
-                minDate={dayjs()}
+                disablePast
                 value={null}
                 disableHighlightToday
-                slots={{ day: Day }}
-                slotProps={{
-                  day: (ownerState) => ({
-                    selectedFromDate: fromDate,
-                    selectedToDate: toDate,
-                    roundTrip,
-                    hoveredDate,
-                    onPointerEnter: () => setHoveredDate(ownerState.day),
-                    onPointerLeave: () => setHoveredDate(null),
-                  }),
-                }}
+                setHoveredDate={setHoveredDate}
+                hoveredDate={hoveredDate}
+                selectedFromDate={value?.fromDate}
+                selectedToDate={value?.toDate}
+                setRange={setRoundTrip}
+                range={roundTrip}
+                setRangeLabel={capitalizeFirstLetter(t('roundTrip'))}
               />
-              {/* <DateCalendar
-                onChange={(d) => handleChangeDate(d)}
-                minDate={dayjs()}
-                value={fromDate || dayjs()}
-                disableHighlightToday
-                slots={{ day: Day }}
-                slotProps={{
-                  day: (ownerState) => ({
-                    selectedFromDate: fromDate,
-                    selectedToDate: toDate,
-                    roundTrip,
-                    hoveredDate,
-                    onPointerEnter: () => setHoveredDate(ownerState.day),
-                    onPointerLeave: () => setHoveredDate(null),
-                    onFocus: () => setHoveredDate(ownerState.day),
-                    onBlur: () => setHoveredDate(null),
-                  }),
-                }}
-              /> */}
-            </Stack>
-          </Stack>
+            </Paper>
+          </Popper>
+          <Divider
+            flexItem
+            sx={{
+              borderBottomWidth: { xs: 'thin', md: 0 },
+              borderRightWidth: { xs: 0, md: 'thin' },
+            }}
+          />
+          {/* TODO: Add internationalized aria-labels */}
+          <Box
+            alignItems="end"
+            display="flex"
+            onClick={handleSearch}
+            sx={{
+              cursor: 'text',
+              ...(variant !== 'header' && {
+                minHeight: '5rem',
+              }),
+              backgroundColor: 'primary.main',
+            }}
+          >
+            <IconButton
+              id={inputIds.search}
+              aria-label="search"
+              aria-hidden={!shown}
+              disableRipple
+              onFocus={handleInputFocus}
+              onClick={handleSearch}
+              onBlur={handleBlur}
+              tabIndex={shown ? undefined : -1}
+              hidden={!shown}
+              sx={{
+                height: '100%',
+                width: '100%',
+              }}
+            >
+              <SearchIcon />
+            </IconButton>
+          </Box>
         </Paper>
-      </Popper>
-
-      {/* <DatePicker
-          onChange={(d) => handleChangeFromDate(d)}
-          value={value?.fromDate || null}
-          tabIndex={shown ? undefined : -2}
-          slotProps={{ textField: { id: 'search-field-input-fromDate' } }}
-          disablePast
-          sx={{
-            '& fieldset': { border: 'none' },
-          }}
-        /> */}
-    </Box>
-  );
-}
-
-type CustomPickerDayProps = PickersDayProps<Dayjs> & {
-  isSelected: boolean;
-  isHovered: boolean;
-  isBetween: boolean;
-  isStart: boolean;
-  isEnd: boolean;
-};
-
-const CustomPickersDay = styled(PickersDay, {
-  shouldForwardProp: (prop) =>
-    prop !== 'isSelected' &&
-    prop !== 'isHovered' &&
-    prop !== 'isBetween' &&
-    prop !== 'isStart' &&
-    prop !== 'isEnd',
-})<CustomPickerDayProps>(({ theme, isSelected, isHovered, isBetween, isStart, isEnd }) => {
-  // if (day.date() >= 23) {
-  //   console.log(day.date(), isSelected, isHovered, isStart, isBetween, isEnd);
-  // }
-  return {
-    width: 40,
-    height: 40,
-    borderRadius: '50%',
-    ...(isSelected && {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      '&:hover, &:focus': {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
-      },
-    }),
-    ...(isHovered && {
-      border: '1px solid white',
-    }),
-    ...(isBetween && {
-      borderLeft: 'none',
-      borderRight: 'none',
-      borderRadius: 0,
-    }),
-    ...(isStart &&
-      !isEnd &&
-      !isBetween && {
-        borderRight: 'none',
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
-        borderTopLeftRadius: '50%',
-        borderBottomLeftRadius: '50%',
-      }),
-    ...(isEnd &&
-      !isStart &&
-      !isBetween && {
-        borderLeft: 'none',
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        borderTopRightRadius: '50%',
-        borderBottomRightRadius: '50%',
-      }),
-    ...(isStart &&
-      isEnd &&
-      !isBetween && {
-        borderRadius: '50%',
-      }),
-  };
-});
-
-type DayProps = PickersDayProps<Dayjs> & {
-  selectedFromDate?: Dayjs | null;
-  selectedToDate?: Dayjs | null;
-  hoveredDate?: Dayjs | null;
-  roundTrip?: boolean;
-};
-
-function Day(props: DayProps) {
-  const { day, selectedFromDate, selectedToDate, hoveredDate, roundTrip, ...other } = props;
-
-  return (
-    <CustomPickersDay
-      sx={{ px: 2.5 }}
-      {...other}
-      day={day}
-      disableMargin
-      selected={false}
-      isSelected={
-        day.isSame(selectedFromDate, 'day') ||
-        (roundTrip &&
-          selectedToDate &&
-          day.isBetween(selectedFromDate, selectedToDate, 'day', '[]')) ||
-        false
-      }
-      isStart={
-        (roundTrip &&
-          (day.isSame(selectedFromDate, 'day') ||
-            (selectedToDate &&
-              !hoveredDate?.isSame(selectedToDate, 'day') &&
-              hoveredDate?.isAfter(selectedFromDate, 'day') &&
-              day.isSame(hoveredDate, 'day')) ||
-            (hoveredDate?.isSameOrBefore(selectedFromDate, 'day') &&
-              day.isSame(hoveredDate, 'day')))) ||
-        false
-      }
-      isEnd={
-        (roundTrip &&
-          (day.isSame(selectedToDate, 'day') ||
-            (!selectedToDate &&
-              // hoveredDate?.isSameOrAfter(selectedFromDate, 'day') &&
-              day.isSame(hoveredDate, 'day')) ||
-            (!hoveredDate?.isSame(selectedFromDate, 'day') &&
-              selectedToDate &&
-              day.isSame(hoveredDate, 'day')))) ||
-        false
-      }
-      isHovered={
-        day.isSame(hoveredDate, 'day') ||
-        (roundTrip &&
-          !selectedToDate &&
-          hoveredDate?.isAfter(selectedFromDate, 'day') &&
-          day.isBetween(selectedFromDate, hoveredDate, 'day', '[]')) ||
-        false
-      }
-      isBetween={
-        roundTrip && selectedFromDate
-          ? (!selectedToDate &&
-              hoveredDate &&
-              !selectedFromDate.isSame(hoveredDate, 'day') &&
-              day.isBetween(selectedFromDate, hoveredDate, 'day', '()')) ||
-            (selectedToDate && day.isBetween(selectedFromDate, selectedToDate, 'day', '()')) ||
-            false
-          : false
-      }
-    />
+      </Box>
+    </>
   );
 }

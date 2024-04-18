@@ -19,7 +19,13 @@ export const defaultValues = {
 } as const;
 
 export type ResetOptions = {
-  [K in keyof typeof defaultValues]?: boolean;
+  [K in keyof typeof defaultValues]?:
+    | 'default'
+    | ((typeof defaultValues)[K] extends boolean
+        ? boolean
+        : (typeof defaultValues)[K] extends null
+          ? null
+          : never);
 };
 
 type SearchFieldContextType = {
