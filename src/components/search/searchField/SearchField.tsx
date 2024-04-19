@@ -2,6 +2,7 @@
 
 import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
 import { useRouter } from '@internationalization/navigation';
+import { alpha } from '@mui/material/styles';
 import {
   Backdrop,
   Box,
@@ -84,7 +85,7 @@ export default function SearchField(props: SearchFieldProps) {
   } = useSearchFieldContext();
   const [shown, setShown] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<Dayjs | null>(null);
-  const datePickerRef = useRef<HTMLDivElement>(null);
+  const dateFieldRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   // const debouncedShowBackdrop = useDebounce(active && shown, active && !shown ? 0 : 0);
   // const activeDebounced = useDebounce(active, active ? 0 : 50);
@@ -193,7 +194,7 @@ export default function SearchField(props: SearchFieldProps) {
         setDateTextValue(
           parsedFromDate
             ? `${parsedFromDate.format(dateFormat)}${
-                parsedToDate ? ` - ${parsedToDate.format(dateFormat)}` : ''
+                parsedToDate ? `-${parsedToDate.format(dateFormat)}` : ''
               }`
             : '',
         );
@@ -258,7 +259,7 @@ export default function SearchField(props: SearchFieldProps) {
     } else if (value?.fromDate) {
       const formattedFromDate = value.fromDate.format(dateFormat);
       if (value?.toDate) {
-        setDateTextValue(`${formattedFromDate} - ${value?.toDate.format(dateFormat)}`);
+        setDateTextValue(`${formattedFromDate}-${value?.toDate.format(dateFormat)}`);
       } else {
         setDateTextValue(formattedFromDate);
       }
@@ -303,7 +304,8 @@ export default function SearchField(props: SearchFieldProps) {
           ...(activeDebounced && { transition: 'opacity 0s !important' }),
         }}
       />
-      <Box
+      <Paper
+        elevation={variant === 'landing' ? 2 : undefined}
         ref={variant !== 'header' ? obstructedRef : undefined}
         sx={{
           zIndex:
@@ -315,10 +317,10 @@ export default function SearchField(props: SearchFieldProps) {
           position: 'relative',
           left: shown ? undefined : '-10000px',
           display: 'flex',
+          borderRadius: 5,
         }}
       >
-        <Paper
-          elevation={variant === 'landing' ? 2 : undefined}
+        <Box
           role={shown ? 'search' : undefined}
           sx={{
             zIndex: active && shown ? (theme) => theme.zIndex.appBar + zIndexOffset : undefined,
@@ -328,12 +330,14 @@ export default function SearchField(props: SearchFieldProps) {
             maxWidth: '800px',
             position: 'relative',
             overflow: 'hidden',
-            borderRadius: 5,
             display: 'flex',
+            borderRadius: 5,
             flexDirection: { xs: 'column', md: 'row' },
             justifyContent: 'center',
-            border: '1px solid grey',
+            border: '1px solid lightgray',
             borderColor: active && shown ? 'primary.main' : undefined,
+            // Fixes a bug where the background color is darker in the header
+            backgroundColor: (theme) => alpha(theme.palette.background.default, 1),
             transition: 'opacity 0.2s ease-in-out',
             ...(!shown
               ? {
@@ -461,6 +465,7 @@ export default function SearchField(props: SearchFieldProps) {
             alignItems="end"
             display="flex"
             onClick={() => handleFocusOrClick(inputIds.date, true)}
+            ref={dateFieldRef}
             sx={{
               cursor: 'text',
               ...(variant !== 'header' && {
@@ -480,7 +485,6 @@ export default function SearchField(props: SearchFieldProps) {
               error={!!dateTextValue?.length && !validDate}
               // color={!!dateTextValue?.length && !validDate ? 'error' : undefined}
               value={dateTextValue || ''}
-              ref={datePickerRef}
               onChange={(e) => handleChangeDateText(e.target.value)}
               onKeyDown={handleKeyDown}
               onKeyUp={handleKeyUp}
@@ -509,7 +513,7 @@ export default function SearchField(props: SearchFieldProps) {
           </Box>
           <Popper
             open={datePopperOpen}
-            anchorEl={datePickerRef.current}
+            anchorEl={dateFieldRef.current}
             placement="bottom"
             sx={{ zIndex: (theme) => theme.zIndex.appBar + zIndexOffset + 1 }}
           >
@@ -564,11 +568,11 @@ export default function SearchField(props: SearchFieldProps) {
                 width: '100%',
               }}
             >
-              <SearchIcon />
+              <SearchIcon sx={{ color: 'white' }} />
             </IconButton>
           </Box>
-        </Paper>
-      </Box>
+        </Box>
+      </Paper>
     </>
   );
 }
