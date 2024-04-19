@@ -64,5 +64,10 @@
     "hideMessage": "Hide {message}",
     "expand": "Expand",
     "expandMessage": "Expand {message}"
+  },
+  "components": {
+    "popularDestinations": {
+      "title": "Popular destinations"
+    }
   }
 }

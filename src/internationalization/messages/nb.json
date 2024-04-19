@@ -64,5 +64,10 @@
     "hideMessage": "Skjul {message}",
     "expand": "Utvid",
     "expandMessage": "Utvid {message}"
+  },
+  "components": {
+    "popularDestinations": {
+      "title": "Populære destinasjoner"
+    }
   }
 }
