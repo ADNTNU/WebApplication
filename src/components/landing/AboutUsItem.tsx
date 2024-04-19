@@ -1,17 +1,19 @@
 import Link from '@components/navigation/Link';
 import { SafeHref } from '@internationalization/navigation';
 import { Box, Paper, Stack, Typography } from '@mui/material';
+import Image, { StaticImageData } from 'next/image';
 
 export type AboutUsItemProps = {
   title: string;
   description: string;
-  image: string;
+  image: { src: StaticImageData | string; alt: string };
+  // imageSources: { src: string; media: string }[];
   direction: 'left' | 'right';
   links?: { title: string; href: SafeHref }[];
 };
 
 export default function AboutUsItem(props: AboutUsItemProps) {
-  const { title, description, image, direction, links } = props;
+  const { title, description, image, /* imageSources, */ direction, links } = props;
   return (
     // <Paper sx={{ borderRadius: 2 }} elevation={2}>
     <Stack
@@ -23,8 +25,18 @@ export default function AboutUsItem(props: AboutUsItemProps) {
         overflow: 'hidden',
       }}
     >
-      <Box component="img" src={image} alt={title} sx={{ width: { xs: '100%', md: '50%' } }} />
-      <Paper sx={{ p: 2, width: { xs: '100%', md: '50%' } }}>
+      <Box sx={{ width: { xs: '100%', md: '50%' }, position: 'relative' }} height={400}>
+        {/* Cover  */}
+        <Image
+          src={image.src}
+          alt={image.alt}
+          sizes="(max-width: 900px) 100vw, 600px"
+          layout="fill"
+          objectFit="cover"
+          placeholder="blur"
+        />
+      </Box>
+      <Paper sx={{ p: 2, width: { xs: '100%', md: '50%' }, borderRadius: 0 }}>
         <Stack sx={{ width: '100%', height: '100%' }}>
           <Typography variant="h4">{title}</Typography>
           <Typography>{description}</Typography>

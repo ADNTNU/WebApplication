@@ -24,6 +24,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@utils/*": ["./src/utils/*"],
       "@internationalization/*": ["./src/internationalization/*"],
+      "@images/*": ["./public/images/*"],
       "@/*": ["./src/*"]
     },
     "plugins": [
