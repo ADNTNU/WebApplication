@@ -1,4 +1,5 @@
 import { Box, Skeleton, Typography } from '@mui/material';
+import Image from 'next/image';
 
 type LocationCardProps = {
   title?: string;
@@ -10,20 +11,21 @@ export default function LocationCard(props: LocationCardProps) {
   const { title, image, subtitle } = props;
   return title && image ? (
     <Box
-      component="img"
       sx={{
         borderRadius: 2,
         position: 'relative',
         height: '100%',
         width: '100%',
+        overflow: 'hidden',
       }}
-      src={image}
     >
+      <Image src={image} alt={title} layout="fill" objectFit="cover" />
       <Box
         sx={{
-          background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',
+          background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, #000000 100%)',
           height: '100%',
           width: '100%',
+          position: 'relative',
         }}
       >
         <Box
