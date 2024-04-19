@@ -31,8 +31,8 @@ export default function AboutUsItem(props: AboutUsItemProps) {
           src={image.src}
           alt={image.alt}
           sizes="(max-width: 900px) 100vw, 600px"
-          layout="fill"
-          objectFit="cover"
+          fill
+          style={{ objectFit: 'cover' }}
           placeholder="blur"
         />
       </Box>

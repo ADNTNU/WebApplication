@@ -19,7 +19,7 @@ export default function LocationCard(props: LocationCardProps) {
         overflow: 'hidden',
       }}
     >
-      <Image src={image} alt={title} layout="fill" objectFit="cover" />
+      <Image src={image} alt={title} fill style={{ objectFit: 'cover' }} />
       <Box
         sx={{
           background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, #000000 100%)',
