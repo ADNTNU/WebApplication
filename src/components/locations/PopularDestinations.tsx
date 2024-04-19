@@ -43,10 +43,11 @@ export default function PopularDestinations() {
   // const { data: popularDestinations } = usePopularDestinationsSWR({ limit: 4 });
   const popularDestinations: PopularDestination[] | undefined = tempPopularDestinations;
 
+  const tPD = useTranslations('components.popularDestinations');
   const t = useTranslations('Flights');
   return (
     <Stack gap={2}>
-      <Typography variant="h4">Popular destinations</Typography>
+      <Typography variant="h4">{tPD('title')}</Typography>
       <Grid container spacing={2} flexGrow={1} justifyContent="space-between">
         {popularDestinations
           ? popularDestinations.map((destination) => {
