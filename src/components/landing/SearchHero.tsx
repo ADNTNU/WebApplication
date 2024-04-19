@@ -12,7 +12,8 @@ export default function SearchHero() {
     <Paper
       sx={{
         backgroundColor: 'background.paper',
-        height: 450,
+        height: { xs: 350, md: 450 },
+        width: '100%',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -23,29 +24,22 @@ export default function SearchHero() {
         fill
         style={{
           objectFit: 'cover',
+          filter: 'brightness(0.75)' /* blur(0.25px)', */,
         }}
+        sizes="max-width: 1200px) 100vw, 1200px"
       />
       <Box
         sx={{
-          background: 'rgba(0, 0, 0, 0.15)',
           height: '100%',
           width: '100%',
-          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: 'rgba(0, 0, 0, 0.7)',
         }}
       >
-        <Box
-          sx={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            background: 'rgba(0, 0, 0, 0.7)',
-          }}
-        >
-          <SearchField obstructedRef={obstructedRef} variant="landing" />
-        </Box>
+        <SearchField obstructedRef={obstructedRef} variant="landing" />
       </Box>
     </Paper>
   );
