@@ -24,7 +24,7 @@ export default function Landing({ params: { locale } }: { params: { locale: Loca
           <SearchHero />
         </NextIntlClientProvider>
       </PageSection>
-      <PageSection sx={{ py: 1 }}>
+      <PageSection sx={{ py: 2 }}>
         <PopularDestinations />
       </PageSection>
       <PageSection sx={{ py: 2 }}>
