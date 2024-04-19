@@ -1,17 +1,15 @@
 'use client';
 
-import { I18nLink, LinkProps, pathnames } from '@/internationalization/navigation';
+import { I18nLink, LinkProps } from '@/internationalization/navigation';
 import { Button } from '@mui/material';
 import { ComponentProps } from 'react';
 
-type ButtonLinkProps<Pathname extends keyof typeof pathnames> = LinkProps<Pathname> &
-  Omit<ComponentProps<typeof Button>, 'href'>;
+type ButtonLinkProps = LinkProps & Omit<ComponentProps<typeof Button>, 'href'>;
 
-export default function ButtonLink<Pathname extends keyof typeof pathnames>(
-  props: ButtonLinkProps<Pathname>,
-) {
+export default function ButtonLink(props: ButtonLinkProps) {
   const { href, locale, ...rest } = props;
   return (
+    // @ts-expect-error - Validation passed to parent
     <I18nLink href={href} locale={locale} passHref>
       <Button {...rest} />
     </I18nLink>

@@ -514,11 +514,15 @@ export default function SearchField(props: SearchFieldProps) {
           <Popper
             open={datePopperOpen}
             anchorEl={dateFieldRef.current}
+            onKeyUp={handleKeyUp}
             placement="bottom"
             sx={{ zIndex: (theme) => theme.zIndex.appBar + zIndexOffset + 1 }}
           >
-            <Paper>
+            <Paper onKeyUp={handleKeyUp}>
               <DateRangePicker
+                rootProps={{
+                  onKeyUp: handleKeyUp,
+                }}
                 onChange={(d) => handleChangeDate(d)}
                 disablePast
                 value={null}
@@ -548,7 +552,7 @@ export default function SearchField(props: SearchFieldProps) {
             sx={{
               cursor: 'text',
               ...(variant !== 'header' && {
-                minHeight: '5rem',
+                minHeight: { xs: undefined, md: '5rem' },
               }),
               backgroundColor: 'primary.main',
             }}

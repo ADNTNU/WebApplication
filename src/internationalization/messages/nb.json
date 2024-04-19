@@ -1,8 +1,8 @@
 {
   "Page": {
     "Landing": {
-      "title": "Hjem",
-      "description": "Dette er hjemmesiden til search aggregatoren. Her kan du søke etter informasjon fra flere kilder samtidig."
+      "title": "Flight Finder",
+      "description": "Flight finder er en av de ledende flysøkemotorene i verden. Vi hjelper tusenvis av mennesker over hele verden med å finne de beste flyvningene"
     },
     "Search": {
       "title": "Søk",
@@ -17,7 +17,7 @@
       "description": ""
     },
     "Trip": {
-      "title": "Flytur - {tripId}",
+      "title": "Tur - {tripId}",
       "description": ""
     }
   },

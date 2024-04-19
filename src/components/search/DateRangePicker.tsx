@@ -2,6 +2,7 @@ import { FormControlLabel, Stack, Switch } from '@mui/material';
 import styled from '@mui/system/styled';
 import { DateCalendar, DateCalendarProps, PickersDay, PickersDayProps } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs';
+import { ComponentProps } from 'react';
 
 type CustomPickerDayProps = PickersDayProps<Dayjs> & {
   isSelected: boolean;
@@ -165,6 +166,7 @@ type DateRangePickerProps = DateCalendarProps<Dayjs> & {
   range?: boolean;
   setRangeLabel?: string;
   value: Dayjs | null;
+  rootProps?: ComponentProps<typeof Stack>;
 };
 
 export default function DateRangePicker(props: DateRangePickerProps) {
@@ -179,11 +181,12 @@ export default function DateRangePicker(props: DateRangePickerProps) {
     range = true,
     setRangeLabel,
     value,
+    rootProps,
     ...rest
   } = props;
 
   return (
-    <Stack>
+    <Stack {...rootProps}>
       <Stack padding={2} direction="row">
         {setRange ? (
           <FormControlLabel
