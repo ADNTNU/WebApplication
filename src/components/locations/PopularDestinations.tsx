@@ -44,7 +44,7 @@ export default function PopularDestinations() {
   const popularDestinations: PopularDestination[] | undefined = tempPopularDestinations;
 
   const tPD = useTranslations('components.popularDestinations');
-  const t = useTranslations('Flights');
+  const t = useTranslations('common.trip');
   return (
     <Stack gap={2}>
       <Typography variant="h4">{tPD('title')}</Typography>

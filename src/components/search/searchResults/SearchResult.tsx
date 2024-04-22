@@ -37,9 +37,9 @@ export default function SearchResult(props: SearchResultProps) {
         {returnFlightInfoProps && trip?.returnFlightInitial ? (
           <>
             <Divider
-              sx={{
-                backgroundColor: 'text.disabled',
-              }}
+            // sx={{
+            //   backgroundColor: 'text.disabled',
+            // }}
             />
             <FlightInfo {...returnFlightInfoProps} />
           </>
@@ -48,10 +48,10 @@ export default function SearchResult(props: SearchResultProps) {
       <Divider
         orientation="vertical"
         flexItem
-        sx={{
-          // width: '1px',
-          backgroundColor: 'text.disabled',
-        }}
+        // sx={{
+        //   // width: '1px',
+        //   backgroundColor: 'text.disabled',
+        // }}
       />
       <PriceInfo price={trip?.minPrice?.value} currency={trip?.minPrice?.currency} />
     </Paper>

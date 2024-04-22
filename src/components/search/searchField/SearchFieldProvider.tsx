@@ -37,10 +37,11 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
       const obstructedRect = obstructedRef.current.getBoundingClientRect();
 
       // if (obstructorRect.bottom > obstructedRect.bottom) {
-      if (obstructorRect.bottom > obstructedRect.top) {
+      if (obstructorRect.bottom > obstructedRect.top && showHeaderSearchField === false) {
         setShowHeaderSearchField(true);
         if (
           focusedInputId &&
+          active &&
           (obstructedRef.current === document.activeElement ||
             obstructedRef.current.contains(document.activeElement))
         ) {
@@ -50,10 +51,11 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
             obstructorRef.current.querySelector<HTMLElement>(`#${focusedInputId}`)?.focus();
           }
         }
-      } else {
+      } else if (obstructorRect.bottom <= obstructedRect.top && showHeaderSearchField === true) {
         setShowHeaderSearchField(false);
         if (
           focusedInputId &&
+          active &&
           (obstructorRef.current === document.activeElement ||
             obstructorRef.current.contains(document.activeElement))
         ) {
@@ -64,10 +66,10 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
           }
         }
       }
-    } else {
+    } else if (showHeaderSearchField === false) {
       setShowHeaderSearchField(true);
     }
-  }, [obstructorRef, obstructedRef, focusedInputId]);
+  }, [showHeaderSearchField, focusedInputId]);
 
   useEffect(() => {
     checkObstruction();

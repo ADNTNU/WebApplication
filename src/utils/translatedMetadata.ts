@@ -23,9 +23,9 @@ export default async function generateTranslatedMetadata({
     return;
   }
 
-  const pageNamespace = `Page.${page}` as `Page.${TranslatedPage}`;
+  const pageNamespace = `page.${page}` as `page.${TranslatedPage}`;
   const t = await getTranslations({ locale, namespace: pageNamespace });
-  const defaultTranslation = await getTranslations({ locale, namespace: 'Page.Landing' });
+  const defaultTranslation = await getTranslations({ locale, namespace: 'page.Landing' });
 
   const titleKey: TranslatedPageProp = 'title';
   const descriptionKey: TranslatedPageProp = 'description';

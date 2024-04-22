@@ -1,5 +1,5 @@
 {
-  "Page": {
+  "page": {
     "Landing": {
       "title": "Flight Finder",
       "description": "Flight finder er en av de ledende flysøkemotorene i verden. Vi hjelper tusenvis av mennesker over hele verden med å finne de beste flyvningene"
@@ -21,43 +21,53 @@
       "description": ""
     }
   },
-  "Landing": {
-    "test": "test2",
-    "testing": "testing2"
+  "common": {
+    "trip": {
+      "direct": "Direkte",
+      "oneStop": "1 mellomlanding",
+      "pluralStops": "{stops} mellomlandinger",
+      "zeroToOneStop": "0-1 mellomlandinger",
+      "zeroToPluralStops": "0-{to} mellomlandinger",
+      "oneToPluralStops": "1-{to} mellomlandinger",
+      "pluralToPluralStops": "{from}-{to} mellomlandinger",
+      "noFlights": "Ingen flyvninger",
+      "oneFlight": "1 flyvning",
+      "pluralFlights": "{flights} flyvninger",
+      "roundTrip": "tur-retur"
+    }
   },
-  "Flights": {
-    "direct": "Direkte",
-    "oneStop": "1 mellomlanding",
-    "pluralStops": "{stops} mellomlandinger",
-    "noFlights": "Ingen flyvninger",
-    "oneFlight": "1 flyvning",
-    "pluralFlights": "{flights} flyvninger",
-    "roundTrip": "tur-retur"
-  },
-  "Error": {
+  "error": {
     "404": {
       "title": "404",
-      "description": "Siden du leter etter finnes ikke.",
-      "backAction": "Gå til forrige side",
-      "homeAction": "Gå tilbake til forsiden"
+      "description": "Siden du leter etter finnes ikke."
+    },
+    "500": {
+      "title": "500",
+      "description": "Noe gikk galt."
+    },
+    "203": {
+      "title": "203",
+      "description": "Du er ikke autorisert til å se denne siden."
     },
     "locale": "nb"
   },
-  "Nav": {
+  "nav": {
     "home": "Hjem",
     "search": "Søk",
     "privacy": "Personvernserklæring",
     "about": "Om oss",
-    "Action": {
+    "actions": {
       "goTo": "Gå til {page}",
       "goToPage": "Gå til {page} siden",
       "goToHomePage": "Gå til forsiden",
+      "goToLastPage": "Gå til forrige side",
       "goBackTo": "Gå tilbake til {page}",
       "goBackToPage": "Gå tilbake til {page} siden",
-      "goBackToHomePage": "Gå tilbake til forsiden"
+      "goBackToHomePage": "Gå tilbake til forsiden",
+      "goBackToLastPage": "Gå tilbake til forrige side"
     }
   },
-  "Actions": {
+  "actions": {
     "show": "Vis",
     "showMessage": "Vis {message}",
     "hide": "Skjul",
@@ -68,6 +78,15 @@
   "components": {
     "popularDestinations": {
       "title": "Populære destinasjoner"
+    },
+    "search": {
+      "filters": {
+        "stopCount": "Antall mellomlandinger",
+        "price": "Pris",
+        "totalDuration": "Total varighet",
+        "inAirDuration": "Tid i luften",
+        "layoverDuration": "Ventetid"
+      }
     }
   }
 }

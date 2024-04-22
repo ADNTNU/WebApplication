@@ -14,7 +14,7 @@ type HeaderProps = {
 
 export default function Header(props: HeaderProps) {
   const { locale } = props;
-  const t = useTranslations('Nav');
+  const t = useTranslations('nav');
   const messages = useMessages();
 
   const internationalizedMainLinks = mainLinks.map((link) => ({
@@ -40,10 +40,10 @@ export default function Header(props: HeaderProps) {
           flexGrow={1}
           justifyContent="flex-start"
         >
-          <IconButton href="/" aria-label={t('Action.goToHomePage')} disableRipple>
+          <IconButton href="/" aria-label={t('actions.goToHomePage')} disableRipple>
             <LogoDevIcon color="primary" fontSize="large" />
           </IconButton>
-          <NextIntlClientProvider locale={locale} messages={pick(messages, 'Flights')}>
+          <NextIntlClientProvider locale={locale} messages={pick(messages, 'common.trip')}>
             <MenuWrapper mainLinks={internationalizedMainLinks} />
           </NextIntlClientProvider>
         </Stack>
