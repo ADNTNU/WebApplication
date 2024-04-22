@@ -11,5 +11,5 @@ export type CommonKeys<T, U> = T extends object
 
 export type CommonMessageKeys = CommonKeys<EnglishMessage, NorwegianMessage>;
 
-export type TranslatedPage = keyof CommonMessageKeys['Page'];
-export type TranslatedPageProp = keyof CommonMessageKeys['Page'][TranslatedPage];
+export type TranslatedPage = keyof CommonMessageKeys['page'];
+export type TranslatedPageProp = keyof CommonMessageKeys['page'][TranslatedPage];

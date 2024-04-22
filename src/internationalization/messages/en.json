@@ -1,5 +1,5 @@
 {
-  "Page": {
+  "page": {
     "Landing": {
       "title": "Flight Finder",
       "description": "Flight finder is one of the leading flight search engines in the world. We help thousands of people around the globe to find the best flights"
@@ -21,43 +21,53 @@
       "description": ""
     }
   },
-  "Landing": {
-    "test": "test",
-    "testing": "testing"
+  "common": {
+    "trip": {
+      "direct": "Direct",
+      "oneStop": "1 stop",
+      "pluralStops": "{stops} stops",
+      "zeroToOneStop": "0-1 stops",
+      "zeroToPluralStops": "0-{to} stops",
+      "oneToPluralStops": "1-{to} stops",
+      "pluralToPluralStops": "{from}-{to} stops",
+      "noFlights": "No flights",
+      "oneFlight": "1 flight",
+      "pluralFlights": "{flights} flights",
+      "roundTrip": "round trip"
+    }
   },
-  "Flights": {
-    "direct": "Direct",
-    "oneStop": "1 stop",
-    "pluralStops": "{stops} stops",
-    "noFlights": "No flights",
-    "oneFlight": "1 flight",
-    "pluralFlights": "{flights} flights",
-    "roundTrip": "round trip"
-  },
-  "Error": {
+  "error": {
     "404": {
       "title": "404",
-      "description": "Page not found",
-      "backAction": "Go to last page",
-      "homeAction": "Go back to home page"
+      "description": "Page not found"
+    },
+    "500": {
+      "title": "500",
+      "description": "Something went wrong. Please try again later"
+    },
+    "203": {
+      "title": "203",
+      "description": "You are not authorized to view this page"
     },
     "locale": "en"
   },
-  "Nav": {
+  "nav": {
     "home": "Home",
     "search": "Search",
     "privacy": "Privacy Policy",
     "about": "About",
-    "Action": {
+    "actions": {
       "goTo": "Go to {page}",
       "goToPage": "Go to {page} page",
       "goToHomePage": "Go to home page",
+      "goToLastPage": "Go to last page",
       "goBackTo": "Go back to {page}",
       "goBackToPage": "Go back to {page} page",
-      "goBackToHomePage": "Go back to home page"
+      "goBackToHomePage": "Go back to home page",
+      "goBackToLastPage": "Go back to last page"
     }
   },
-  "Actions": {
+  "actions": {
     "show": "Show",
     "showMessage": "Show {message}",
     "hide": "Hide",
@@ -68,6 +78,15 @@
   "components": {
     "popularDestinations": {
       "title": "Popular destinations"
+    },
+    "search": {
+      "filters": {
+        "stopCount": "Number of layovers",
+        "price": "Price",
+        "totalDuration": "Total duration",
+        "inAirDuration": "In air duration",
+        "layoverDuration": "Layover duration"
+      }
     }
   }
 }

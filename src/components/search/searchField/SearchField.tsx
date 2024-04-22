@@ -54,7 +54,7 @@ export default function SearchField(props: SearchFieldProps) {
 
   // To add more translations, you have to add them to the
   // pick(messages) in the wrapper server components
-  const t = useTranslations('Flights');
+  const t = useTranslations('common.trip');
   const compact = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
 
   const inputs: {
@@ -331,6 +331,7 @@ export default function SearchField(props: SearchFieldProps) {
           left: shown ? undefined : '-10000px',
           display: 'flex',
           borderRadius: 5,
+          mx: 'auto',
         }}
       >
         <Box
@@ -345,10 +346,10 @@ export default function SearchField(props: SearchFieldProps) {
             overflow: 'hidden',
             display: 'flex',
             borderRadius: 5,
-            flexDirection: { xs: 'column', md: 'row' },
+            flexDirection: variant === 'header' && compact ? 'row' : { xs: 'column', md: 'row' },
             justifyContent: 'center',
-            border: '1px solid lightgray',
-            borderColor: active && shown ? 'primary.main' : undefined,
+            border: '1px solid',
+            borderColor: (theme) => (active && shown ? 'primary.main' : theme.palette.divider),
             // Fixes a bug where the background color is darker in the header
             backgroundColor: (theme) => alpha(theme.palette.background.default, 1),
             transition: 'opacity 0.2s ease-in-out',
@@ -365,7 +366,7 @@ export default function SearchField(props: SearchFieldProps) {
             <Box
               alignItems="end"
               display="flex"
-              onClick={() => handleFocusOrClick(inputIds.from, true)}
+              onClick={() => handleFocusOrClick(inputIds.generic, true)}
               sx={{
                 position: 'relative',
                 zIndex: (theme) =>
@@ -375,7 +376,7 @@ export default function SearchField(props: SearchFieldProps) {
             >
               <TextField
                 onClick={() => handleFocusOrClick(inputIds.generic, true)}
-                placeholder="Søk etter flyreiser"
+                placeholder={inputs.generic.label}
                 onKeyDown={handleKeyDown}
                 onKeyUp={handleKeyUp}
                 onFocus={handleInputFocus}
@@ -578,46 +579,46 @@ export default function SearchField(props: SearchFieldProps) {
                   />
                 </Paper>
               </Popper>
-              <Divider
-                flexItem
-                sx={{
-                  borderBottomWidth: { xs: 'thin', md: 0 },
-                  borderRightWidth: { xs: 0, md: 'thin' },
-                }}
-              />
-              {/* TODO: Add internationalized aria-labels */}
-              <Box
-                alignItems="end"
-                display="flex"
-                onClick={handleSearch}
-                sx={{
-                  cursor: 'text',
-                  ...(variant !== 'header' && {
-                    minHeight: { xs: undefined, md: '5rem' },
-                  }),
-                  backgroundColor: 'primary.main',
-                }}
-              >
-                <IconButton
-                  id={inputIds.search}
-                  aria-label="search"
-                  aria-hidden={!shown}
-                  disableRipple
-                  onFocus={handleInputFocus}
-                  onClick={handleSearch}
-                  onBlur={handleBlur}
-                  tabIndex={shown ? undefined : -1}
-                  hidden={!shown}
-                  sx={{
-                    height: '100%',
-                    width: '100%',
-                  }}
-                >
-                  <SearchIcon sx={{ color: 'white' }} />
-                </IconButton>
-              </Box>
             </>
           )}
+          <Divider
+            flexItem
+            sx={{
+              borderBottomWidth: { xs: 'thin', md: 0 },
+              borderRightWidth: { xs: 0, md: 'thin' },
+            }}
+          />
+          {/* TODO: Add internationalized aria-labels */}
+          <Box
+            alignItems="end"
+            display="flex"
+            onClick={handleSearch}
+            sx={{
+              cursor: 'text',
+              ...(variant !== 'header' && {
+                minHeight: { xs: undefined, md: '5rem' },
+              }),
+              backgroundColor: 'primary.main',
+            }}
+          >
+            <IconButton
+              id={inputIds.search}
+              aria-label="search"
+              aria-hidden={!shown}
+              tabIndex={shown ? undefined : -1}
+              hidden={!shown}
+              disableRipple
+              onFocus={handleInputFocus}
+              onClick={handleSearch}
+              onBlur={handleBlur}
+              sx={{
+                height: '100%',
+                width: '100%',
+              }}
+            >
+              <SearchIcon sx={{ color: 'white' }} />
+            </IconButton>
+          </Box>
         </Box>
       </Paper>
     </>

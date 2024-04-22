@@ -8,17 +8,20 @@ import PageWrapper from '@components/layout/main/PageWrapper';
 import { Locale } from '@internationalization/i18n';
 
 export default function NotFound() {
-  const localeT = useTranslations('Error');
-  const locale = localeT('locale') as Locale;
-  const t = useTranslations('Error.404');
+  const t = useTranslations('error');
+  const locale = t('locale') as Locale;
+  const description = t('404.description');
+  const actionT = useTranslations('nav.actions');
+  const goBackToLastPage = actionT('goBackToLastPage');
+  const goToHomePage = actionT('goToHomePage');
 
   return (
     <PageWrapper locale={locale}>
       <PageSection paddingY>
         <Stack textAlign="center">
-          <Typography variant="h3">{t('description')}</Typography>
-          <Button onClick={() => window.history.back()}>{t('backAction')}</Button>
-          <ButtonLink href="/">{t('homeAction')}</ButtonLink>
+          <Typography variant="h3">{description}</Typography>
+          <Button onClick={() => window.history.back()}>{goBackToLastPage}</Button>
+          <ButtonLink href="/">{goToHomePage}</ButtonLink>
         </Stack>
       </PageSection>
     </PageWrapper>

@@ -1,3 +1,4 @@
+import { useTranslatedStopMessage } from '@utils/serverUtils/useTranslatedStopMessage';
 import { FlightSearchResult } from '@models/Flight';
 import { Divider, Skeleton, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
@@ -13,8 +14,11 @@ type RouteInfoProps = {
 export default function RouteInfo(props: RouteInfoProps) {
   const { flights, fromDate, toDate } = props;
 
-  const t = useTranslations('Flights');
-  const at = useTranslations('Actions');
+  const at = useTranslations('actions');
+
+  const numberOfStops = flights ? flights.length - 1 : 0;
+  let stopsString;
+  stopsString = useTranslatedStopMessage(numberOfStops);
 
   dayjs.extend(relativeTime);
 
@@ -33,17 +37,6 @@ export default function RouteInfo(props: RouteInfoProps) {
   }
 
   // TODO: Add collapsible to show all stops
-
-  const numberOfStops = flights.length - 1;
-  let stopsString;
-
-  if (numberOfStops === 0) {
-    stopsString = t('direct');
-  } else if (numberOfStops === 1) {
-    stopsString = t('oneStop');
-  } else {
-    stopsString = t('pluralStops', { stops: numberOfStops });
-  }
 
   if (numberOfStops > 0) {
     stopsString = at('expandMessage', { message: stopsString });
