@@ -19,14 +19,19 @@ export default function Landing({ params: { locale } }: { params: { locale: Loca
 
   return (
     <PageWrapper>
-      <PageSection sx={{ pb: 2 }}>
-        <NextIntlClientProvider locale={locale} messages={pick(messages, 'common.trip')}>
+      <NextIntlClientProvider locale={locale} messages={pick(messages, 'common.trip')}>
+        <PageSection sx={{ pb: 2 }}>
           <SearchHero />
-        </NextIntlClientProvider>
-      </PageSection>
-      <PageSection sx={{ py: 2 }}>
-        <PopularDestinations />
-      </PageSection>
+        </PageSection>
+        <PageSection sx={{ py: 2 }}>
+          <NextIntlClientProvider
+            locale={locale}
+            messages={pick(messages, 'components.popularDestinations')}
+          >
+            <PopularDestinations />
+          </NextIntlClientProvider>
+        </PageSection>
+      </NextIntlClientProvider>
       <PageSection sx={{ py: 2 }}>
         <AboutUs />
       </PageSection>

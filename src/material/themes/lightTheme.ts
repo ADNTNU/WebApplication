@@ -13,6 +13,11 @@ const lightThemeOptions: ThemeOptionsWithName = {
       main: '#88c7ff',
       dark: '#5F8BB2',
     },
+    error: {
+      light: '#FF8A80',
+      main: '#FF5252',
+      dark: '#E04848',
+    },
     text: {
       // primary: 'rgba(0, 0, 0, 0.87)',
       // secondary: 'rgba(0, 0, 0, 0.7)',

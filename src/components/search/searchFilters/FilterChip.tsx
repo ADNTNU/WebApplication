@@ -1,62 +1,107 @@
 import { Chip } from '@mui/material';
 import { ComponentProps } from 'react';
-import { Filters, RangeFilters } from './filters';
+import {
+  BooleanFilterType,
+  BooleanFilters,
+  FilterTypes,
+  Filters,
+  NumberFilterType,
+  NumberFilters,
+  RangeFilterType,
+  RangeFilters,
+  booleanKeys,
+  numberKeys,
+  rangeKeys,
+} from './filters';
 
 type FilterPropsWithStringLabel = Omit<ComponentProps<typeof Chip>, 'label'> & {
   label: string;
 };
 
-type FilterChipProps = Filters[keyof Filters] & {
-  filterKey: keyof Filters;
+type FunctionProperties = {
   onDelete: () => void;
-  setRangeFilter: (
-    key: keyof RangeFilters,
-    value: RangeFilters[keyof RangeFilters]['value'],
-  ) => void;
+  openFilter: (key: keyof Filters) => void;
 };
 
-type KeySpecificChipProps = Omit<ComponentProps<typeof Chip>, 'label'> &
-  Omit<FilterChipProps, 'onDelete'>;
+type FilterChipProps<FilterType extends FilterTypes, Filters> = FilterType &
+  FunctionProperties & {
+    filterKey: keyof Filters;
+  };
 
-function StopCountChip(props: KeySpecificChipProps) {
-  const { label, value, setRangeFilter, filterKey, type, ...muiProps } = props;
+type KeySpecificChipProps<FilterType extends FilterTypes, Filters> = Omit<
+  ComponentProps<typeof Chip>,
+  'label'
+> &
+  Omit<FilterChipProps<FilterType, Filters>, keyof FunctionProperties>;
+
+function RangeChip(props: KeySpecificChipProps<RangeFilterType, RangeFilters>) {
+  const { label, value, filterKey, type, ...muiProps } = props;
   const from = value ? value[0] : null;
   const to = value ? value[1] : null;
+  // TODO: Internationalize label value
+  let newLabel = value ? `${label}: ${from}-${to}` : label;
 
-  const newLabel = value ? `${label}: ${from}-${to}` : label;
-
-  if (value === null) {
-    return <Chip {...muiProps} />;
+  if (from === to) {
+    newLabel = `${label}: ${from}`;
   }
+
   return <Chip {...muiProps} label={newLabel} />;
 }
 
-export default function FilterChip(props: FilterChipProps) {
-  const { onDelete, ...propsWithoutOnDelete } = props;
-  const { label, value, filterKey } = propsWithoutOnDelete;
+function NumberChip(props: KeySpecificChipProps<NumberFilterType, NumberFilters>) {
+  const { label, value, filterKey, type, ...muiProps } = props;
+  // TODO: Internationalize label value
+  const newLabel = value ? `${label}: ${value}` : label;
+
+  return <Chip {...muiProps} label={newLabel} />;
+}
+
+function BooleanChip(props: KeySpecificChipProps<BooleanFilterType, BooleanFilters>) {
+  const { label, value, filterKey, ...muiProps } = props;
+  // TODO: Internationalize label
+  const newLabel = value ? `${label}: Yes` : `${label}: No`;
+
+  return <Chip {...muiProps} label={newLabel} />;
+}
+
+export default function FilterChip(props: FilterChipProps<FilterTypes, Filters>) {
+  const { onDelete, openFilter, ...propsWithoutFunctions } = props;
+  const { label, value, filterKey } = propsWithoutFunctions;
 
   const muiProps: FilterPropsWithStringLabel = {
     label,
     clickable: true,
     variant: 'outlined',
-    // onClick: handleClick
+    onClick: () => openFilter(filterKey),
     onDelete: value !== null ? onDelete : undefined,
     sx: { m: 0.5 },
-  };
-
-  const customChipProps: KeySpecificChipProps = {
-    ...propsWithoutOnDelete,
-    ...muiProps,
   };
 
   if (value === null) {
     return <Chip {...muiProps} />;
   }
 
-  switch (filterKey) {
-    case 'stopCount':
-      return <StopCountChip {...customChipProps} />;
-    default:
-      return <Chip {...muiProps} />;
+  const customChipProps: KeySpecificChipProps<FilterTypes, Filters> = {
+    ...propsWithoutFunctions,
+    ...muiProps,
+  };
+  if (rangeKeys.includes(filterKey)) {
+    return (
+      <RangeChip {...(customChipProps as KeySpecificChipProps<RangeFilterType, RangeFilters>)} />
+    );
   }
+  if (booleanKeys.includes(filterKey)) {
+    return (
+      <BooleanChip
+        {...(customChipProps as KeySpecificChipProps<BooleanFilterType, BooleanFilters>)}
+      />
+    );
+  }
+  if (numberKeys.includes(filterKey)) {
+    return (
+      <NumberChip {...(customChipProps as KeySpecificChipProps<NumberFilterType, NumberFilters>)} />
+    );
+  }
+  console.error(`Filter key ${filterKey} not found in any filter key arrays`);
+  return <Chip {...muiProps} />;
 }

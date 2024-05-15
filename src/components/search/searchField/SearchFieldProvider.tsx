@@ -69,7 +69,7 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
     } else if (showHeaderSearchField === false) {
       setShowHeaderSearchField(true);
     }
-  }, [showHeaderSearchField, focusedInputId]);
+  }, [showHeaderSearchField, focusedInputId, active]);
 
   useEffect(() => {
     checkObstruction();

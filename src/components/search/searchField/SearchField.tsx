@@ -150,8 +150,14 @@ export default function SearchField(props: SearchFieldProps) {
         toDate = fromDate;
         fromDate = temp;
       }
+      if (!fromDate && toDate) {
+        fromDate = toDate;
+        toDate = null;
+      }
       if (fromDate && toDate) {
         setRoundTrip(true);
+      } else if (fromDate) {
+        setRoundTrip(false);
       }
 
       returnValue = { ...value, fromDate, toDate };

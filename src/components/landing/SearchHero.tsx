@@ -16,6 +16,8 @@ export default function SearchHero() {
         width: '100%',
         position: 'relative',
         overflow: 'hidden',
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
       }}
     >
       <Image

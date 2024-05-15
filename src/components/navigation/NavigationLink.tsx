@@ -13,7 +13,7 @@ const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
   },
 };
 
-type NavigationLinkProps = ComponentProps<typeof Typography> & LinkProps;
+type NavigationLinkProps = Omit<ComponentProps<typeof Typography> & LinkProps, 'ref'>;
 
 export default function NavigationLink({ children, sx, variant, ...rest }: NavigationLinkProps) {
   const sxWithDefaults = {

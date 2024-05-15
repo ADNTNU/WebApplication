@@ -22,8 +22,8 @@ export default function SearchResult(props: SearchResultProps) {
   };
 
   return (
-    <Paper
-      component={Stack}
+    <Stack
+      component={Paper}
       width="100%"
       padding={1}
       gap={1}
@@ -54,6 +54,6 @@ export default function SearchResult(props: SearchResultProps) {
         // }}
       />
       <PriceInfo price={trip?.minPrice?.value} currency={trip?.minPrice?.currency} />
-    </Paper>
+    </Stack>
   );
 }

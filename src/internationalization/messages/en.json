@@ -87,6 +87,20 @@
         "inAirDuration": "In air duration",
         "layoverDuration": "Layover duration"
       }
+    },
+    "about": {
+      "mission": {
+        "title": "Our mission",
+        "description": "Our mission is to help people find the best flights at the best prices"
+      },
+      "team": {
+        "title": "Our team",
+        "description": "Our team is made up of the best flight experts in the world"
+      },
+      "vision": {
+        "title": "Our vision",
+        "description": "Our vision is to become the leading flight search engine in the world"
+      }
     }
   }
 }

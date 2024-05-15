@@ -87,6 +87,20 @@
         "inAirDuration": "Tid i luften",
         "layoverDuration": "Ventetid"
       }
+    },
+    "about": {
+      "mission": {
+        "title": "Vårt oppdrag",
+        "description": "Vårt oppdrag er å hjelpe deg med å finne de beste flyvningene til de beste prisene"
+      },
+      "team": {
+        "title": "Teamet vårt",
+        "description": "Teamet vårt består av de beste flyeksperterne i verden"
+      },
+      "vision": {
+        "title": "Vår visjon",
+        "description": "Vår visjon er å bli den ledende flysøkemotoren i verden"
+      }
     }
   }
 }

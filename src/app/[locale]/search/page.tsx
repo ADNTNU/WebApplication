@@ -4,11 +4,13 @@ import { unstable_setRequestLocale } from 'next-intl/server';
 import PageSection from '@components/layout/main/PageSection';
 import { Locale } from '@/internationalization/i18n';
 import { SearchResults } from '@components/search/searchResults';
-import SearchFilters from '@components/search/searchFilters/SearchFilters';
+import SearchFilterSection from '@components/search/searchFilters/SearchFilterChips';
 import SearchFilterProvider from '@components/search/searchFilters/SearchFilterProvider';
 import { NextIntlClientProvider, useMessages, useTranslations } from 'next-intl';
 import { Filters, defaultFilters } from '@components/search/searchFilters/filters';
 import { pick } from 'lodash';
+import FilterDrawer from '@components/search/searchFilters/FilterDrawer';
+import FilterList from '@components/search/searchFilters/FilterList';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   return generateTranslatedMetadata({ locale, page: 'Search' });
@@ -30,10 +32,11 @@ export default function Search({ params: { locale } }: { params: { locale: Local
 
   return (
     <SearchFilterProvider filterTranslations={filterTranslations}>
+      <FilterDrawer filterList={<FilterList filterTranslations={filterTranslations} />} />
       <PageWrapper>
         <PageSection sx={{ py: 2 }}>
           <NextIntlClientProvider messages={pick(messages, 'common.trip')}>
-            <SearchFilters />
+            <SearchFilterSection />
           </NextIntlClientProvider>
         </PageSection>
         <PageSection /*  sx={{ mt: 2 }} */>
