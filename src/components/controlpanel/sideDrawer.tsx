@@ -69,6 +69,9 @@ const menu = ({ onClick }: Props) => {
           <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.LOCATION)}>
             <ListItemText primary="Location" />
           </ListItemButton>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.FLIGHT)}>
+            <ListItemText primary="Flight" />
+          </ListItemButton>
         </List>
       </Collapse>
       <ListItemButton onClick={handleClick2}>

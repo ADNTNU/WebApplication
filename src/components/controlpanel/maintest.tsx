@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import Menu from '@components/controlpanel/menu';
+import Menu from '@components/controlpanel/sideDrawer';
 import Controls from '@/components/controlpanel/controls';
 import { Divider, Stack } from '@mui/material';
 import { ControlpanelTypes } from '@/constants/ControlpanelContext';
 
 function maintest() {
   const [test, setTest] = useState<(typeof ControlpanelTypes)[keyof typeof ControlpanelTypes]>(
-    ControlpanelTypes.USER,
+    ControlpanelTypes.FLIGHT,
   );
 
   const handleClickTest = (type: (typeof ControlpanelTypes)[keyof typeof ControlpanelTypes]) => {
@@ -16,7 +16,7 @@ function maintest() {
   };
 
   return (
-    <Stack direction="row">
+    <Stack direction="row" spacing={4}>
       <Menu onClick={handleClickTest} />
       <Divider orientation="vertical" flexItem />
       <Controls type={test} />

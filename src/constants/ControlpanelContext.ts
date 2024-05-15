@@ -4,6 +4,7 @@ export const ControlpanelTypes = {
   AIRLINE: 'Airline',
   AIRPORT: 'Airport',
   LOCATION: 'Location',
+  FLIGHT: 'Flight',
   PRICESANDPROVIDERS: 'PricesAndProviders',
   CLASS: 'Class',
   FEATURES: 'Features',
