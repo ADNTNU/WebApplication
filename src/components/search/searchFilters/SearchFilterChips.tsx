@@ -11,13 +11,7 @@ import { Filters } from './filters';
 
 export default function SearchFilterSection(/* props: SearchFiltersProps */) {
   // const { } = props;
-  const {
-    /* setNumberFilter, */ setRangeFilter,
-    /*  setBooleanFilter, */ filters,
-    clearSelected,
-    setDrawerOpen,
-    setFocusFilter,
-  } = useSearchFilterContext();
+  const { filters, clearSelected, setDrawerOpen, setFocusFilter } = useSearchFilterContext();
 
   const openFilter = (key: keyof Filters) => () => {
     setFocusFilter(key);
@@ -52,9 +46,6 @@ export default function SearchFilterSection(/* props: SearchFiltersProps */) {
               key={key}
               {...filter}
               filterKey={filterKey}
-              // setNumberFilter={setNumberFilter}
-              setRangeFilter={setRangeFilter}
-              // setBooleanFilter={setBooleanFilter}
               openFilter={openFilter(filterKey)}
               onDelete={() => clearSelected(filterKey)}
             />

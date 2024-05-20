@@ -1,7 +1,5 @@
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import ButtonLink from './navigation/ButtonLink';
-import PageSection from './layout/main/PageSection';
-import PageWrapper from './layout/main/PageWrapper';
 
 export default function Error({
   error,
@@ -11,14 +9,27 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <PageWrapper disableHeader disableFooter rootProps={{ display: 'flex', alignItems: 'center' }}>
-      <PageSection>
+    <Box
+      sx={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 2,
+        my: 'auto',
+      }}
+    >
+      <Stack sx={{ maxWidth: 600, justifyContent: 'center', alignItems: 'center' }}>
         <Typography variant="h4" component="h1">
           {error.message}
         </Typography>
-        <Button onClick={reset}>Retry</Button>
-        <ButtonLink href="/">Go to home page</ButtonLink>
-      </PageSection>
-    </PageWrapper>
+        <Stack direction="row" gap={2}>
+          <Button onClick={reset}>Retry</Button>
+          <ButtonLink href="/">Go to home page</ButtonLink>
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

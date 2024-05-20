@@ -3,6 +3,7 @@
 import { Box, Skeleton, useMediaQuery } from '@mui/material';
 import { Breakpoint, useTheme } from '@mui/system';
 import { useEffect, useState } from 'react';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import MobileMenu from './MobileMenu';
 import DesktopMenu from './DesktopMenu';
 import { MainLinkHref } from './links';
@@ -23,10 +24,11 @@ function SkeletonButton() {
 type MenuWrapperProps = {
   downBreakpoint?: Breakpoint;
   mainLinks: { href: MainLinkHref; label: string }[];
+  locationAutocompleteOptions: LocationOrAirportOption[];
 };
 
 export default function MenuWrapper(props: MenuWrapperProps) {
-  const { downBreakpoint, mainLinks } = props;
+  const { downBreakpoint, mainLinks, locationAutocompleteOptions } = props;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(downBreakpoint || 'md'));
@@ -43,8 +45,13 @@ export default function MenuWrapper(props: MenuWrapperProps) {
   }
 
   return isMobile ? (
-    <MobileMenu open={open} setOpen={setOpen} mainLinks={mainLinks} />
+    <MobileMenu
+      open={open}
+      setOpen={setOpen}
+      mainLinks={mainLinks}
+      locationAutocompleteOptions={locationAutocompleteOptions}
+    />
   ) : (
-    <DesktopMenu />
+    <DesktopMenu locationAutocompleteOptions={locationAutocompleteOptions} />
   );
 }

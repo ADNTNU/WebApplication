@@ -4,6 +4,7 @@ import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
 import { useRouter } from '@internationalization/navigation';
 import { alpha } from '@mui/material/styles';
 import {
+  Autocomplete,
   Backdrop,
   Box,
   Divider,
@@ -13,6 +14,8 @@ import {
   Popper,
   TextField,
   Theme,
+  darken,
+  lighten,
   useMediaQuery,
 } from '@mui/material';
 import {
@@ -36,6 +39,12 @@ import capitalizeFirstLetter from '@utils/capitalizeFirstLetter';
 import SearchIcon from '@mui/icons-material/Search';
 import { SearchFieldValue } from '@contexts/SearchFieldContext';
 import useDebounce from '@hooks/useDebounce';
+import { SearchQuery } from '@models/Search';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
+import { ParsedUrlQueryInput } from 'querystring';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+import LocalAirportIcon from '@mui/icons-material/LocalAirport';
+import styled from '@mui/system/styled';
 import DateRangePicker from '../DateRangePicker';
 
 dayjs.extend(isSameOrAfter);
@@ -45,12 +54,13 @@ dayjs.extend(dayjsIsBetween);
 export type SearchFieldProps = {
   obstructedRef?: RefObject<HTMLDivElement>;
   variant: 'header' | 'landing';
+  locationAutocompleteOptions: readonly LocationOrAirportOption[];
 };
 
 const dateFormat = 'DD/MM/YYYY';
 
 export default function SearchField(props: SearchFieldProps) {
-  const { obstructedRef, variant } = props;
+  const { obstructedRef, variant, locationAutocompleteOptions } = props;
 
   // To add more translations, you have to add them to the
   // pick(messages) in the wrapper server components
@@ -62,10 +72,21 @@ export default function SearchField(props: SearchFieldProps) {
       id: string;
       label: string;
       placeholder?: string;
+      ownerId?: string;
     };
   } = {
-    from: { id: 'search-field-input-from', label: 'Hvor fra?', placeholder: 'Legg til sted' },
-    to: { id: 'search-field-input-to', label: 'Hvor til?', placeholder: 'Legg til sted' },
+    from: {
+      id: 'search-field-input-from',
+      label: 'Fra?',
+      placeholder: 'Legg til sted',
+      ownerId: 'autocomplete-from',
+    },
+    to: {
+      id: 'search-field-input-to',
+      label: 'Til?',
+      placeholder: 'Legg til sted',
+      ownerId: 'autocomplete-to',
+    },
     date: { id: 'search-field-input-date', label: 'Når?', placeholder: 'DD/MM/YYYY' },
     search: { id: 'search-field-button-search', label: 'Søk' },
     generic: { id: 'search-field-input-generic', label: 'Søk etter flyreiser' },
@@ -88,16 +109,22 @@ export default function SearchField(props: SearchFieldProps) {
     showHeaderSearchField,
     active,
     setActive,
-    validDate,
-    setValidDate,
     roundTrip,
     setRoundTrip,
-    dateTextValue,
-    setDateTextValue,
+    validFrom,
+    setValidFrom,
+    validTo,
+    setValidTo,
+    validDate,
+    setValidDate,
     reset,
   } = useSearchFieldContext();
   const [shown, setShown] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<Dayjs | null>(null);
+  const [fromTextValue, setFromTextValue] = useState<string | null>(null);
+  const [toTextValue, setToTextValue] = useState<string | null>(null);
+  const [dateTextValue, setDateTextValue] = useState<string | null>(null);
+
   const dateFieldRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   // const debouncedShowBackdrop = useDebounce(active && shown, active && !shown ? 0 : 0);
@@ -106,15 +133,21 @@ export default function SearchField(props: SearchFieldProps) {
 
   const datePopperOpen = active && shown && focusedInputId === inputIds.date;
 
-  const handleValidateAndApplyDateText = (): SearchFieldValue | null => {
+  const handleValidateAndApplyDateText = (): {
+    fromDate: SearchFieldValue['fromDate'];
+    toDate: SearchFieldValue['toDate'];
+  } | null => {
     let fromDate: Dayjs | null = null;
     let toDate: Dayjs | null = null;
     const now = dayjs();
-    let returnValue: SearchFieldValue | null = null;
+    let returnValue: {
+      fromDate: SearchFieldValue['fromDate'];
+      toDate: SearchFieldValue['toDate'];
+    } | null = null;
 
     if (!dateTextValue?.length) {
-      returnValue = { ...value, fromDate: null, toDate: null };
-      setValue(returnValue);
+      returnValue = { fromDate: null, toDate: null };
+      setValue({ ...value, ...returnValue });
       return returnValue;
     }
     const formattedDate = dayjs(dateTextValue, dateFormat);
@@ -123,8 +156,8 @@ export default function SearchField(props: SearchFieldProps) {
       if (fromDate.isBefore(now, 'day')) {
         fromDate = now;
       }
-      returnValue = { ...value, fromDate, toDate: null };
-      setValue(returnValue);
+      returnValue = { fromDate, toDate: null };
+      setValue({ ...value, ...returnValue });
       setDateTextValue(fromDate.format(dateFormat));
       setValidDate(true);
     } else {
@@ -160,8 +193,8 @@ export default function SearchField(props: SearchFieldProps) {
         setRoundTrip(false);
       }
 
-      returnValue = { ...value, fromDate, toDate };
-      setValue(returnValue);
+      returnValue = { fromDate, toDate };
+      setValue({ ...value, ...returnValue });
       setDateTextValue(
         `${fromDate ? fromDate.format(dateFormat) : ''}${
           toDate ? `-${toDate.format(dateFormat)}` : ''
@@ -171,26 +204,94 @@ export default function SearchField(props: SearchFieldProps) {
     return returnValue;
   };
 
+  const handleValidateAndApplyFrom = (): SearchFieldValue['from'] | null => {
+    const { name } = value?.from || {};
+    if (name === fromTextValue) {
+      return value?.from;
+    }
+    const option = locationAutocompleteOptions.find((opt) => opt.name === fromTextValue);
+    if (option) {
+      setValue({ ...value, from: option });
+      return option;
+    }
+    setValue({ ...value, from: null });
+    return null;
+  };
+
+  const handleValidateAndApplyTo = (): SearchFieldValue['to'] | null => {
+    const { name } = value?.to || {};
+    if (name && name === toTextValue) {
+      return value?.to;
+    }
+    const option = locationAutocompleteOptions.find((opt) => opt.name === toTextValue);
+    if (option) {
+      setValue({ ...value, to: option });
+      return option;
+    }
+    setValue({ ...value, to: null });
+    return null;
+  };
+
+  const handleValidateAndApplyValue = (): SearchFieldValue | null => {
+    const validatedDate = handleValidateAndApplyDateText();
+    const validatedFrom = handleValidateAndApplyFrom();
+    const validatedTo = handleValidateAndApplyTo();
+
+    if (!validatedFrom) {
+      setValidFrom(false);
+    }
+    if (!validatedTo) {
+      setValidTo(false);
+    }
+    if (!validatedDate || (!validatedDate.fromDate && !validatedDate.toDate)) {
+      setValidDate(false);
+    }
+    if (!validatedFrom || !validatedTo || !validatedDate) {
+      return null;
+    }
+
+    return {
+      ...(validatedFrom && { from: validatedFrom }),
+      ...(validatedTo && { to: validatedTo }),
+      ...(validatedDate?.fromDate && { fromDate: validatedDate?.fromDate }),
+      ...(validatedDate?.toDate && { toDate: validatedDate?.toDate }),
+    };
+  };
+
   const handleSearch = () => {
-    const validatedValue = handleValidateAndApplyDateText();
+    const validatedValue = handleValidateAndApplyValue();
+    if (!validatedValue || !validatedValue.from || !validatedValue.to || !validatedValue.fromDate) {
+      return;
+    }
+    const query: { [key in keyof SearchQuery]: ParsedUrlQueryInput[keyof ParsedUrlQueryInput] } = {
+      ...(validatedValue?.from && {
+        ...(validatedValue?.from.type === 'airport' && { fa: validatedValue.from.id }),
+        ...(validatedValue?.from.type === 'location' && { fl: validatedValue.from.id }),
+      }),
+      ...(validatedValue?.to && {
+        ...(validatedValue?.to.type === 'airport' && { ta: validatedValue?.to.id }),
+        ...(validatedValue?.to.type === 'location' && { tl: validatedValue?.to.id }),
+      }),
+      ...(validatedValue?.fromDate && { fd: validatedValue?.fromDate.unix() }),
+      ...(validatedValue?.toDate && { td: validatedValue?.toDate.unix() }),
+    };
     router.push({
       pathname: '/search',
-      query: {
-        ...(validatedValue?.from && { f: validatedValue?.from }),
-        ...(validatedValue?.to && { t: validatedValue?.to }),
-        ...(validatedValue?.fromDate && { fd: validatedValue?.fromDate.format(dateFormat) }),
-        ...(validatedValue?.toDate && { td: validatedValue?.toDate.format(dateFormat) }),
-      },
+      query,
     });
     reset({ active: false });
   };
 
-  const handleChangeFrom = (fromValue: string) => {
+  const handleChangeFrom = (fromValue: LocationOrAirportOption | null) => {
+    const { name } = fromValue || {};
     setValue({ ...value, from: fromValue });
+    setFromTextValue(name || null);
   };
 
-  const handleChangeTo = (toValue: string) => {
+  const handleChangeTo = (toValue: LocationOrAirportOption | null) => {
+    const { name } = toValue || {};
     setValue({ ...value, to: toValue });
+    setToTextValue(name || null);
   };
 
   const handleChangeDate = (dateValue: Dayjs | null) => {
@@ -227,7 +328,7 @@ export default function SearchField(props: SearchFieldProps) {
     setDateTextValue(formattedFromDate);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement | HTMLInputElement>) => {
     if (event.key === 'Enter') {
       setActive(false);
       handleSearch();
@@ -244,12 +345,30 @@ export default function SearchField(props: SearchFieldProps) {
     setActive(false);
   };
 
+  const handleChangeFromText = (fromText: string) => {
+    if (fromText === '') {
+      setValidFrom(true);
+    }
+    setFromTextValue(fromText);
+  };
+
+  const handleChangeToText = (toText: string) => {
+    if (toText === '') {
+      setValidTo(true);
+    }
+    setToTextValue(toText);
+  };
+
   const handleChangeDateText = (dateText: string) => {
     // TODO: Add validation for date format on each run
+    if (dateText === '') {
+      setValidDate(true);
+    }
     setDateTextValue(dateText);
   };
 
   const handleDateFieldBlur = () => {
+    setValidDate(true);
     handleValidateAndApplyDateText();
   };
 
@@ -287,13 +406,35 @@ export default function SearchField(props: SearchFieldProps) {
 
   const handleInputClick: MouseEventHandler<HTMLDivElement> = (event) => {
     const { id } = event.currentTarget;
+    let focusId: string | undefined;
+    Object.values(inputs).forEach((input) => {
+      if (!focusId && input.ownerId === id) {
+        focusId = input.id;
+      }
+    });
+
+    if (!focusId) {
+      focusId = id;
+    }
+
     handleFocusOrClick(id);
   };
 
   const handleInputFocus: FocusEventHandler<
-    HTMLButtonElement | HTMLInputElement | HTMLTextAreaElement
+    HTMLButtonElement | HTMLDivElement | HTMLInputElement | HTMLTextAreaElement
   > = (event) => {
     const { id } = event.currentTarget;
+    let focusId: string | undefined;
+    Object.values(inputs).forEach((input) => {
+      if (!focusId && input.ownerId === id) {
+        focusId = input.id;
+      }
+    });
+
+    if (!focusId) {
+      focusId = id;
+    }
+
     handleFocusOrClick(id);
   };
 
@@ -311,7 +452,22 @@ export default function SearchField(props: SearchFieldProps) {
 
   const zIndexOffset = variant === 'header' ? 2 : 1;
 
-  const { from, to /* , fromDate , toDate */ } = value || {};
+  const { from, to } = value || {};
+
+  const GroupHeader = styled('div')(({ theme }) => ({
+    position: 'sticky',
+    top: '-8px',
+    padding: '4px 10px',
+    color: theme.palette.primary.main,
+    backgroundColor:
+      theme.palette.mode === 'light'
+        ? lighten(theme.palette.primary.light, 0.85)
+        : darken(theme.palette.primary.main, 0.8),
+  }));
+
+  const GroupItems = styled('ul')({
+    padding: 0,
+  });
 
   return (
     <>
@@ -410,43 +566,71 @@ export default function SearchField(props: SearchFieldProps) {
                   }),
                 }}
               >
-                <TextField
-                  placeholder={variant === 'header' ? inputs.from.label : inputs.from.placeholder}
-                  label={variant === 'header' ? undefined : inputs.from.label}
-                  aria-label={inputs.from.label}
+                <Autocomplete
+                  fullWidth
+                  options={locationAutocompleteOptions}
                   id={inputs.from.id}
+                  renderOption={(renderProps, option) => {
+                    const { name, type } = option;
+                    const location = type === 'location';
+                    return (
+                      <Box
+                        component="li"
+                        sx={{ '& > svg': { mr: 2, flexShrink: 0 } }}
+                        {...renderProps}
+                        key={name}
+                      >
+                        {location ? <LocationCityIcon /> : <LocalAirportIcon />}
+                        {name}
+                      </Box>
+                    );
+                  }}
+                  aria-label={inputs.from.label}
                   // aria-controls={inputs.from.id}
                   aria-hidden={!shown}
                   tabIndex={shown ? undefined : -1}
                   hidden={!shown}
-                  variant="outlined"
-                  value={from || ''}
-                  onChange={(e) => handleChangeFrom(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onKeyUp={handleKeyUp}
-                  onFocus={handleInputFocus}
-                  onBlur={handleBlur}
-                  type="search"
-                  inputProps={{
-                    tabIndex: shown ? undefined : -1,
-                    hidden: !shown,
-                  }}
-                  // eslint-disable-next-line react/jsx-no-duplicate-props
-                  InputProps={{
-                    sx: {
-                      zIndex: (theme) =>
-                        active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
-                    },
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <FlightTakeoffIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    zIndex: (theme) =>
-                      active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
-                    '& fieldset': { border: 'none' },
+                  value={from || null}
+                  getOptionLabel={(option) => option.name}
+                  getOptionKey={(option) => `${option.type}:${option.id}`}
+                  inputValue={fromTextValue || ''}
+                  onInputChange={(e, v) => handleChangeFromText(v)}
+                  onChange={(e, v) => handleChangeFrom(v)}
+                  // onFocus={handleInputFocus}
+                  // onClick={handleInputClick}
+                  // onBlur={handleBlur}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        type="search"
+                        label={variant === 'header' ? undefined : inputs.from.label}
+                        placeholder={
+                          variant === 'header' ? inputs.from.label : inputs.from.placeholder
+                        }
+                        error={!validFrom}
+                        sx={{
+                          minWidth: '200px',
+                          '& fieldset': { border: 'none' },
+                        }}
+                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyUp}
+                        {...params}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <FlightTakeoffIcon color={!validFrom ? 'error' : undefined} />
+                            </InputAdornment>
+                          ),
+                        }}
+                        // eslint-disable-next-line react/jsx-no-duplicate-props
+                        inputProps={{
+                          ...params.inputProps,
+                          tabIndex: shown ? params.inputProps.tabIndex : -1,
+                          hidden: !shown,
+                        }}
+                      />
+                    );
                   }}
                 />
               </Box>
@@ -460,7 +644,7 @@ export default function SearchField(props: SearchFieldProps) {
               <Box
                 alignItems="end"
                 display="flex"
-                onClick={() => handleFocusOrClick(inputIds.to, true)}
+                // onClick={() => handleFocusOrClick(inputIds.to, true)}
                 sx={{
                   cursor: 'text',
                   ...(variant !== 'header' && {
@@ -468,37 +652,89 @@ export default function SearchField(props: SearchFieldProps) {
                   }),
                 }}
               >
-                <TextField
-                  placeholder={variant === 'header' ? inputs.to.label : inputs.to.placeholder}
-                  label={variant === 'header' ? undefined : inputs.to.label}
-                  aria-label={inputs.to.label}
+                <Autocomplete
+                  fullWidth
+                  options={locationAutocompleteOptions}
                   id={inputs.to.id}
+                  renderOption={(renderProps, option) => {
+                    const { name, type } = option;
+                    const location = type === 'location';
+                    return (
+                      <Box
+                        component="li"
+                        sx={{ '& > svg': { mr: 2, flexShrink: 0 } }}
+                        {...renderProps}
+                        key={name}
+                      >
+                        {location ? <LocationCityIcon /> : <LocalAirportIcon />}
+                        {name}
+                      </Box>
+                    );
+                  }}
+                  // TODO: Internationalize group header
+                  groupBy={(option) => option.type}
+                  renderGroup={(params) => (
+                    <li key={params.key}>
+                      <GroupHeader>{params.group}</GroupHeader>
+                      <GroupItems>{params.children}</GroupItems>
+                    </li>
+                  )}
+                  renderTags={() => null}
+                  clearIcon={null}
+                  aria-label={inputs.to.label}
                   // aria-controls={inputs.to.id}
                   aria-hidden={!shown}
                   tabIndex={shown ? undefined : -1}
                   hidden={!shown}
-                  value={to || ''}
-                  onChange={(e) => handleChangeTo(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onKeyUp={handleKeyUp}
+                  value={to || null}
+                  getOptionLabel={(option) => option.name}
+                  getOptionKey={(option) => `${option.type}:${option.id}`}
+                  inputValue={toTextValue || ''}
+                  onInputChange={(e, v) => handleChangeToText(v)}
+                  onChange={(e, v) => handleChangeTo(v)}
                   onFocus={handleInputFocus}
                   onClick={handleInputClick}
                   onBlur={handleBlur}
-                  type="search"
-                  inputProps={{
-                    tabIndex: shown ? undefined : -1,
-                    hidden: !shown,
+                  slotProps={{
+                    popper: {
+                      style: {
+                        width: '300px',
+                      },
+                      sx: {
+                        zIndex: (theme) => theme.zIndex.appBar + zIndexOffset + 1,
+                      },
+                    },
                   }}
-                  // eslint-disable-next-line react/jsx-no-duplicate-props
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <FlightLandIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& fieldset': { border: 'none' },
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        type="search"
+                        label={variant === 'header' ? undefined : inputs.to.label}
+                        placeholder={variant === 'header' ? inputs.to.label : inputs.to.placeholder}
+                        error={!validTo}
+                        sx={{
+                          minWidth: '200px',
+                          '& fieldset': { border: 'none' },
+                        }}
+                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyUp}
+                        {...params}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <FlightLandIcon color={!validTo ? 'error' : undefined} />
+                            </InputAdornment>
+                          ),
+                        }}
+                        // eslint-disable-next-line react/jsx-no-duplicate-props
+                        inputProps={{
+                          ...params.inputProps,
+                          tabIndex: shown ? params.inputProps.tabIndex : -1,
+                          hidden: !shown,
+                        }}
+                      />
+                    );
                   }}
                 />
               </Box>
@@ -530,7 +766,7 @@ export default function SearchField(props: SearchFieldProps) {
                   aria-hidden={!shown}
                   tabIndex={shown ? undefined : -1}
                   hidden={!shown}
-                  error={!!dateTextValue?.length && !validDate}
+                  error={!validDate}
                   // color={!!dateTextValue?.length && !validDate ? 'error' : undefined}
                   value={dateTextValue || ''}
                   onChange={(e) => handleChangeDateText(e.target.value)}
@@ -546,10 +782,10 @@ export default function SearchField(props: SearchFieldProps) {
                   }}
                   // eslint-disable-next-line react/jsx-no-duplicate-props
                   InputProps={{
-                    color: !!dateTextValue?.length && !validDate ? 'error' : undefined,
+                    color: !validDate ? 'error' : undefined,
                     startAdornment: (
                       <InputAdornment position="start">
-                        <CalendarMonthIcon />
+                        <CalendarMonthIcon color={!validDate ? 'error' : undefined} />
                       </InputAdornment>
                     ),
                   }}

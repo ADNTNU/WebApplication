@@ -2,6 +2,7 @@ import { ComponentProps, ReactNode } from 'react';
 import { Box } from '@mui/material';
 import { Locale } from '@internationalization/i18n';
 // import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
 
@@ -12,6 +13,7 @@ type PageWrapperProps = {
   locale?: Locale;
   rootProps?: ComponentProps<typeof Box>;
   mainProps?: ComponentProps<typeof Box>;
+  locationAutocompleteOptions: LocationOrAirportOption[];
   // headerProps?: ComponentProps<typeof Header>;
   // footerProps?: ComponentProps<typeof Footer>;
 };
@@ -24,6 +26,7 @@ export default function PageWrapper(props: PageWrapperProps) {
     locale,
     rootProps,
     mainProps /* , headerProps, footerProps */,
+    locationAutocompleteOptions,
   } = props;
   const { minHeight = '100vh', ...rootRestProps } = rootProps || {};
   const { component = 'main', ...mainRestProps } = mainProps || {};
@@ -47,7 +50,12 @@ export default function PageWrapper(props: PageWrapperProps) {
     // <SearchFieldProvider>
     <>
       <Box minHeight={minHeight} {...rootRestProps}>
-        {disableHeader ? null : <Header locale={locale} /* {...headerProps} */ />}
+        {disableHeader ? null : (
+          <Header
+            locale={locale}
+            locationAutocompleteOptions={locationAutocompleteOptions} /* {...headerProps} */
+          />
+        )}
         <Box
           component={component}
           minHeight={disableHeader && disableFooter ? minHeight : undefined}

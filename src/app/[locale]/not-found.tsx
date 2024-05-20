@@ -1,28 +1,34 @@
-'use client';
-
 import PageSection from '@components/layout/main/PageSection';
-import ButtonLink from '@/components/navigation/ButtonLink';
-import { Button, Stack, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
 import PageWrapper from '@components/layout/main/PageWrapper';
 import { Locale } from '@internationalization/i18n';
+import { getTranslations } from 'next-intl/server';
+import getLocationAutocompleteOptions from '@components/serverComponents/getLocationAutocomplete';
+import NotFoundComponent from '@components/NotFound';
 
-export default function NotFound() {
-  const t = useTranslations('error');
+export default async function NotFound() {
+  const t = await getTranslations('error');
   const locale = t('locale') as Locale;
   const description = t('404.description');
-  const actionT = useTranslations('nav.actions');
+  const actionT = await getTranslations('nav.actions');
   const goBackToLastPage = actionT('goBackToLastPage');
   const goToHomePage = actionT('goToHomePage');
+  const locationAutocompleteOptions = await getLocationAutocompleteOptions();
 
   return (
-    <PageWrapper locale={locale}>
-      <PageSection paddingY>
-        <Stack textAlign="center">
-          <Typography variant="h3">{description}</Typography>
-          <Button onClick={() => window.history.back()}>{goBackToLastPage}</Button>
-          <ButtonLink href="/">{goToHomePage}</ButtonLink>
-        </Stack>
+    <PageWrapper
+      locale={locale}
+      locationAutocompleteOptions={locationAutocompleteOptions}
+      rootProps={{ sx: { display: 'flex', flexDirection: 'column', height: '100%' } }}
+      mainProps={{
+        sx: { display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'center' },
+      }}
+    >
+      <PageSection>
+        <NotFoundComponent
+          description={description}
+          goBackToLastPage={goBackToLastPage}
+          goToHomePage={goToHomePage}
+        />
       </PageSection>
     </PageWrapper>
   );
