@@ -1,4 +1,4 @@
-import { useTranslatedStopMessage } from '@utils/serverUtils/useTranslatedStopMessage';
+import { useTranslatedStopMessage } from '@utils/useTranslatedStopMessage';
 import { FlightSearchResult } from '@models/Flight';
 import { Divider, Skeleton, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';

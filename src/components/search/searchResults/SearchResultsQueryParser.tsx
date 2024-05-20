@@ -37,6 +37,7 @@ export default function SearchResultsQueryParser(props: SearchQuery) {
       page = parseInt(p, 10);
     }
   } catch (e) {
+    console.error(e);
     return <InvalidSearchQueryError message="Invalid search query. Please try again" />;
   }
 
@@ -50,6 +51,9 @@ export default function SearchResultsQueryParser(props: SearchQuery) {
       page: page || 0,
     };
   } else {
+    console.error(
+      `Invalid search query. from: ${from}, to: ${to}, departureDate: ${departureDate}`,
+    );
     return <InvalidSearchQueryError message="Invalid search query. Please try again" />;
   }
 

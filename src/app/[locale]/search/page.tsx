@@ -19,9 +19,11 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Search({
-  params: { locale, ...searchParams },
+  params: { locale },
+  searchParams,
 }: {
-  params: SearchQuery & { locale: Locale };
+  params: { locale: Locale };
+  searchParams: SearchQuery;
 }) {
   unstable_setRequestLocale(locale);
   const t = await getTranslations('components.search.filters');
@@ -47,7 +49,9 @@ export default async function Search({
           </NextIntlClientProvider>
         </PageSection>
         <PageSection /*  sx={{ mt: 2 }} */>
-          <SearchResultsQueryParser {...searchParams} />
+          <NextIntlClientProvider messages={pick(messages, 'common.trip', 'actions')}>
+            <SearchResultsQueryParser {...searchParams} />
+          </NextIntlClientProvider>
         </PageSection>
       </PageWrapper>
     </SearchFilterProvider>

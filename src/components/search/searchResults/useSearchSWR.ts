@@ -12,7 +12,7 @@ export default function useSearchSWR(props: UseSearchProps) {
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<SearchResult[]>(
     `${apiRoutes.search({ limit, page, departureDate, returnDate, from, to })}`,
-    (url: string) => fetcher<SearchResult[]>({ url }),
+    (url: string) => fetcher<SearchResult[]>({ url, noDataReturn: [] }),
   );
 
   return {
