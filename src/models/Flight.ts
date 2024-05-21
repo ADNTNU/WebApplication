@@ -1,11 +1,12 @@
+import { ISODateString } from 'next-auth';
 import { Airline } from './Airline';
 import { Airport, AirportSearchResult } from './Airport';
 
 export type Flight = {
   id: number;
   name: string;
-  fromAirport: Airport;
-  toAirport: Airport;
+  departureAirport: Airport;
+  arrivalAirport: Airport;
   airline: Airline;
   departureDate: Date;
   arrivalDate: Date;
@@ -14,9 +15,9 @@ export type Flight = {
 export type FlightSearchResult = {
   id: number;
   name: string;
-  fromAirport: AirportSearchResult;
-  toAirport: AirportSearchResult;
+  departureAirport: AirportSearchResult;
+  arrivalAirport: AirportSearchResult;
   airline: Airline;
-  departureDate: Date;
-  arrivalDate: Date;
+  departureDate: ISODateString;
+  arrivalDate: ISODateString;
 };

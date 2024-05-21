@@ -6,8 +6,8 @@ import RouteInfo from './RouteInfo';
 import AirportInfo from './AirportInfo';
 
 type FlightInfoProps = {
-  firstFlight?: FlightSearchResult;
-  lastFlight?: FlightSearchResult;
+  firstFlight?: FlightSearchResult | null;
+  lastFlight?: FlightSearchResult | null;
   flightIntervals?: FlightSearchResult[];
 };
 
@@ -20,7 +20,7 @@ export default function FlightInfo(props: FlightInfoProps) {
     ...(initLastFlight ? [initLastFlight] : []),
   ];
 
-  let lastFlight: FlightSearchResult | undefined = initLastFlight;
+  let lastFlight: FlightSearchResult | null | undefined = initLastFlight;
   if (firstFlight && !lastFlight) {
     lastFlight = firstFlight;
   }
@@ -30,10 +30,12 @@ export default function FlightInfo(props: FlightInfoProps) {
     airline = flights.every((flight) => flight.airline) ? flights[0].airline : 'several';
   }
 
-  const fromAirport = firstFlight?.fromAirport;
-  const toAirport = lastFlight?.toAirport;
-  const departureDate = firstFlight?.departureDate;
-  const arrivalDate = lastFlight?.arrivalDate;
+  const fromAirport = firstFlight?.departureAirport;
+  const toAirport = lastFlight?.arrivalAirport;
+  const departureDate = firstFlight?.departureDate
+    ? new Date(firstFlight?.departureDate)
+    : undefined;
+  const arrivalDate = lastFlight?.arrivalDate ? new Date(lastFlight?.arrivalDate) : undefined;
 
   const iconSize = 32;
   const airlineNameFontSize = '0.7rem';
@@ -86,11 +88,7 @@ export default function FlightInfo(props: FlightInfoProps) {
           gridColumn: { xs: '3 / 13', sm: '5 / 8', md: '7 / 9' },
         }}
       >
-        <RouteInfo
-          flights={flights}
-          fromDate={firstFlight?.departureDate}
-          toDate={lastFlight?.arrivalDate}
-        />
+        <RouteInfo flights={flights} fromDate={departureDate} toDate={arrivalDate} />
       </Box>
       <Box
         sx={{

@@ -32,6 +32,7 @@ import useDebounce from '@hooks/useDebounce';
 import { SearchQuery } from '@models/Search';
 import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import { ParsedUrlQueryInput } from 'querystring';
+import { useSearchParams } from 'next/navigation';
 import DateRangePicker from '../DateRangePicker';
 import LocationField from './LocationField';
 
@@ -116,6 +117,8 @@ export default function SearchField(props: SearchFieldProps) {
   const dateFieldRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const activeDebounced = useDebounce(active, 50);
+
+  const searchParams = useSearchParams();
 
   const datePopperOpen = active && shown && focusedInputId === inputIds.date;
 
@@ -410,6 +413,68 @@ export default function SearchField(props: SearchFieldProps) {
   useEffect(() => {
     applyDateTextValue(value?.fromDate, value?.toDate);
   }, [applyDateTextValue, value?.fromDate, value?.toDate]);
+
+  useEffect(() => {
+    const fromDateQuery = searchParams.get('fd');
+    const toDateQuery = searchParams.get('td');
+    const fromLocationQuery = searchParams.get('fl');
+    const toLocationQuery = searchParams.get('tl');
+    const fromAirportQuery = searchParams.get('fa');
+    const toAirportQuery = searchParams.get('ta');
+
+    let fromDate: Dayjs | null = null;
+    let toDate: Dayjs | null = null;
+
+    if (fromLocationQuery || fromAirportQuery) {
+      const fromOption = locationAutocompleteOptions.find(
+        (opt) =>
+          (fromLocationQuery &&
+            opt.type === 'location' &&
+            opt.id === parseInt(fromLocationQuery, 10)) ||
+          (fromAirportQuery && opt.type === 'airport' && opt.id === parseInt(fromAirportQuery, 10)),
+      );
+      if (fromOption) {
+        setValue((prev) => ({ ...prev, from: fromOption }));
+        setFromTextValue(fromOption.name);
+      }
+    }
+
+    if (toLocationQuery || toAirportQuery) {
+      const toOption = locationAutocompleteOptions.find(
+        (opt) =>
+          (toLocationQuery &&
+            opt.type === 'location' &&
+            opt.id === parseInt(toLocationQuery, 10)) ||
+          (toAirportQuery && opt.type === 'airport' && opt.id === parseInt(toAirportQuery, 10)),
+      );
+      if (toOption) {
+        setValue((prev) => ({ ...prev, to: toOption }));
+        setToTextValue(toOption.name);
+      }
+    }
+
+    if (fromDateQuery) {
+      fromDate = dayjs(parseInt(fromDateQuery, 10) * 1000);
+      setValue((prev) => ({ ...prev, fromDate }));
+    }
+
+    if (toDateQuery) {
+      toDate = dayjs(parseInt(toDateQuery, 10) * 1000);
+      setValue((prev) => ({ ...prev, toDate }));
+    }
+
+    if (fromDateQuery && toDateQuery) {
+      setRoundTrip(true);
+    }
+    if (fromDate) {
+      const formattedFromDate = fromDate.format(dateFormat);
+      if (toDate) {
+        setDateTextValue(`${formattedFromDate}-${toDate.format(dateFormat)}`);
+      } else {
+        setDateTextValue(formattedFromDate);
+      }
+    }
+  }, [searchParams, locationAutocompleteOptions, applyDateTextValue, setValue, setRoundTrip]);
 
   const zIndexOffset = variant === 'header' ? 2 : 1;
 

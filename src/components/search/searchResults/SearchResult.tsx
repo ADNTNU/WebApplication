@@ -11,14 +11,14 @@ export default function SearchResult(props: SearchResultProps) {
   const { trip } = props;
 
   const leaveFlightInfoProps = {
-    firstFlight: trip?.leaveFlightInitial,
-    lastFlight: trip?.leaveFlightFinal,
-    flightIntervals: trip?.leaveFlightIntervals,
+    firstFlight: trip?.leaveInitialFlight,
+    lastFlight: trip?.leaveInitialFlight,
+    stopCount: trip?.leaveStopCount,
   };
   const returnFlightInfoProps = {
-    firstFlight: trip?.returnFlightInitial,
-    lastFlight: trip?.returnFlightFinal,
-    flightIntervals: trip?.returnFlightIntervals,
+    firstFlight: trip?.returnInitialFlight,
+    lastFlight: trip?.returnArrivalFlight,
+    stopCount: trip?.returnStopCount,
   };
 
   return (
@@ -34,7 +34,7 @@ export default function SearchResult(props: SearchResultProps) {
     >
       <Stack flexGrow={1} gap={1}>
         <FlightInfo {...leaveFlightInfoProps} />
-        {returnFlightInfoProps && trip?.returnFlightInitial ? (
+        {returnFlightInfoProps && trip?.returnInitialFlight ? (
           <>
             <Divider
             // sx={{
@@ -53,7 +53,7 @@ export default function SearchResult(props: SearchResultProps) {
         //   backgroundColor: 'text.disabled',
         // }}
       />
-      <PriceInfo price={trip?.minPrice?.value} currency={trip?.minPrice?.currency} />
+      <PriceInfo price={trip?.minPrice?.price} currency={trip?.minPrice?.currency} />
     </Stack>
   );
 }
