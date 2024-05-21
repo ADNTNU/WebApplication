@@ -7,7 +7,12 @@ const top100Films = [
   { label: 'SAS', id: 1974 },
 ];
 
-function priceAndProviders() {
+type PriceAndProvidersProps = {
+  token: string;
+};
+
+export default function PriceAndProviders(props: PriceAndProvidersProps) {
+  const { token } = props;
   return (
     <Stack direction="column">
       <Typography variant="h4">Providers</Typography>
@@ -17,12 +22,13 @@ function priceAndProviders() {
       <Typography mb={2}>Add a new Provider</Typography>
 
       <Stack mb={4}>
-        <TextField label="Providers"></TextField>
+        <TextField label="Providers" />
       </Stack>
 
       <Typography variant="h4">Edit or delete Provider</Typography>
       <Typography mb={2}>Add a new Provider</Typography>
 
+      {/* TODO: Remove or make use of this empty Stack */}
       <Stack mb={4}></Stack>
 
       <Typography variant="h3">Prices</Typography>
@@ -39,10 +45,8 @@ function priceAndProviders() {
           sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Providers" />}
         />
-        <TextField label="Price"></TextField>
+        <TextField label="Price" />
       </Stack>
     </Stack>
   );
 }
-
-export default priceAndProviders;

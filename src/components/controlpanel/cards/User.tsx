@@ -24,11 +24,11 @@ const initialRows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-type userProps = {
-  token?: string;
+type UserProps = {
+  token: string;
 };
 
-function user(props: userProps) {
+function User(props: UserProps) {
   const { token } = props;
   const { data, error } = useUserSWR({ limit: 10, page: 1 });
   const [users, setUsers] = useState([]);
@@ -121,4 +121,4 @@ function user(props: userProps) {
   );
 }
 
-export default user;
+export default User;

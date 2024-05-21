@@ -10,7 +10,7 @@ type PostLocationProps = {
 
 export default async function postLocation(params: PostLocationProps) {
   const { token, data } = params;
-  const res = await fetch(apiRoutes.location, {
+  const res = await fetch(apiRoutes.controlPanel.baseUrls.location, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: JSON.stringify(data),
@@ -18,5 +18,7 @@ export default async function postLocation(params: PostLocationProps) {
   if (!res.ok) {
     throw new Error('Failed to post location.');
   }
+
+  // TODO: Decide whether or not to do something with the response
   console.log('Sweet');
 }

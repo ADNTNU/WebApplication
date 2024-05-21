@@ -11,6 +11,16 @@ const baseApiUrl = process.env.NEXT_PUBLIC_API_BASEURL;
 export const apiRoutes = {
   popularDestinations: ({ limit, from }: LimitProps & { from?: string }) =>
     `${baseApiUrl}/destinaions/popular?l=${limit}${from ? `&from=${from}` : ''}`,
-  user: ({ limit, page }: PaginationProps) => `${baseApiUrl}/users`,
-  location: `${baseApiUrl}/location`,
+  controlPanel: {
+    baseUrls: {
+      user: `${baseApiUrl}/users`,
+      location: `${baseApiUrl}/location`,
+    },
+    paginated: {
+      user: ({ limit, page }: PaginationProps) =>
+        `${apiRoutes.controlPanel.baseUrls.user}?l=${limit}&p=${page}`,
+      location: ({ limit, page }: PaginationProps) =>
+        `${apiRoutes.controlPanel.baseUrls.location}?l=${limit}&p=${page}`,
+    },
+  },
 };

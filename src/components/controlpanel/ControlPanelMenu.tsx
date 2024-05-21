@@ -12,13 +12,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CardTravelIcon from '@mui/icons-material/CardTravel';
 import FlightIcon from '@mui/icons-material/Flight';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
-import { ControlpanelTypes } from '@/constants/ControlpanelContext';
+import controlpanelPages from '@components/controlpanel/pages';
 
-interface Props {
-  onClick: (type: (typeof ControlpanelTypes)[keyof typeof ControlpanelTypes]) => void;
-}
+type Props = {
+  onClick: (type: (typeof controlpanelPages)[keyof typeof controlpanelPages]) => void;
+};
 
-const menu = ({ onClick }: Props) => {
+export default function ControlPanelMenu({ onClick }: Props) {
   const [countClick, setCountClick] = useState(false);
   const [countClick2, setCountClick2] = useState(false);
   const handleClick = () => {
@@ -39,13 +39,13 @@ const menu = ({ onClick }: Props) => {
         </ListSubheader>
       }
     >
-      <ListItemButton onClick={() => onClick(ControlpanelTypes.USER)}>
+      <ListItemButton onClick={() => onClick(controlpanelPages.USER)}>
         <ListItemIcon>
           <AccountCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Users" />
       </ListItemButton>
-      <ListItemButton onClick={() => onClick(ControlpanelTypes.TRIP)}>
+      <ListItemButton onClick={() => onClick(controlpanelPages.TRIP)}>
         <ListItemIcon>
           <CardTravelIcon />
         </ListItemIcon>
@@ -60,16 +60,16 @@ const menu = ({ onClick }: Props) => {
       </ListItemButton>
       <Collapse in={countClick} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.AIRLINE)}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(controlpanelPages.AIRLINE)}>
             <ListItemText primary="Airline" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.AIRPORT)}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(controlpanelPages.AIRPORT)}>
             <ListItemText primary="Airport" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.LOCATION)}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(controlpanelPages.LOCATION)}>
             <ListItemText primary="Location" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.FLIGHT)}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(controlpanelPages.FLIGHT)}>
             <ListItemText primary="Flight" />
           </ListItemButton>
         </List>
@@ -85,20 +85,18 @@ const menu = ({ onClick }: Props) => {
         <List component="div" disablePadding>
           <ListItemButton
             sx={{ pl: 4 }}
-            onClick={() => onClick(ControlpanelTypes.PRICESANDPROVIDERS)}
+            onClick={() => onClick(controlpanelPages.PRICESANDPROVIDERS)}
           >
             <ListItemText primary="Prices and Providers" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.CLASS)}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(controlpanelPages.CLASS)}>
             <ListItemText primary="Class" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(ControlpanelTypes.FEATURES)}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => onClick(controlpanelPages.FEATURES)}>
             <ListItemText primary="Features" />
           </ListItemButton>
         </List>
       </Collapse>
     </List>
   );
-};
-
-export default menu;
+}

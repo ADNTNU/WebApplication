@@ -7,10 +7,15 @@ const top100Films = [
   { label: 'New York', id: 1974 },
 ];
 
-function flight() {
+type FlightProps = {
+  token: string;
+};
+
+export default function Flight(props: FlightProps) {
+  const { token } = props;
   return (
     <Stack gap={2}>
-      <TextField label="name"></TextField>
+      <TextField label="name" />
       <Autocomplete
         disablePortal
         id="combo-box-demo"
@@ -32,10 +37,8 @@ function flight() {
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Airline" />}
       />
-      <TextField label="Departure date w time"></TextField>
-      <TextField label="Arrival date w time"></TextField>
+      <TextField label="Departure date w time" />
+      <TextField label="Arrival date w time" />
     </Stack>
   );
 }
-
-export default flight;

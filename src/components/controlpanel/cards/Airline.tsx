@@ -1,7 +1,12 @@
 import { Stack, Typography, TextField } from '@mui/material';
 import React from 'react';
 
-function airLine() {
+type AirlineProps = {
+  token: string;
+};
+
+export default function Airline(props: AirlineProps) {
+  const { token } = props;
   return (
     <Stack direction="column">
       <Typography variant="h3">Airline settings</Typography>
@@ -14,5 +19,3 @@ function airLine() {
     </Stack>
   );
 }
-
-export default airLine;

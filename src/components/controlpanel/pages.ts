@@ -1,4 +1,4 @@
-export const ControlpanelTypes = {
+const controlpanelPages = {
   USER: 'User',
   TRIP: 'Trip',
   AIRLINE: 'Airline',
@@ -9,3 +9,7 @@ export const ControlpanelTypes = {
   CLASS: 'Class',
   FEATURES: 'Features',
 } as const;
+
+export type ControlpanelPage = (typeof controlpanelPages)[keyof typeof controlpanelPages];
+
+export default controlpanelPages;

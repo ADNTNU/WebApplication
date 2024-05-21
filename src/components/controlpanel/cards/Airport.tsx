@@ -7,7 +7,12 @@ const top100Films = [
   { label: 'New York', id: 1974 },
 ];
 
-function airPort() {
+type AirportProps = {
+  token: string;
+};
+
+export default function Airport(props: AirportProps) {
+  const { token } = props;
   return (
     <Stack direction="column">
       <Typography variant="h3">Airport settings</Typography>
@@ -15,8 +20,8 @@ function airPort() {
       <Typography variant="h3">Add a new Airport</Typography>
       <p>Here you can add a new Airport, with a set Location that is used in flights.</p>
       <Stack direction="row" gap={2}>
-        <TextField label="name"></TextField>
-        <TextField label="code"></TextField>
+        <TextField label="name" />
+        <TextField label="code" />
         <Autocomplete
           disablePortal
           id="combo-box-demo"
@@ -28,5 +33,3 @@ function airPort() {
     </Stack>
   );
 }
-
-export default airPort;

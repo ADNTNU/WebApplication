@@ -7,7 +7,7 @@ import useSWR from 'swr';
 
 export default function useUserSWR({ limit, page }: PaginationProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<User[]>(
-    `${apiRoutes.user({ limit, page })}`,
+    `${apiRoutes.controlPanel.paginated.user({ limit, page })}`,
     (url: string) => fetcher<User[]>({ url }),
   );
 

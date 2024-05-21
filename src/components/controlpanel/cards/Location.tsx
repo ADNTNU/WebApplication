@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef, GridRowParams, GridRowSelectionModel } from '@mui/x-data-grid';
-import useLocationSWR from './useLocationSWR';
 import postLocation from '@serverActions/controlpanel/location';
+import useLocationSWR from './useLocationSWR';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -24,7 +24,12 @@ const columns: GridColDef[] = [
   { field: 'name', headerName: 'Last name', width: 150, editable: true },
 ];
 
-function location() {
+type LocationProps = {
+  token: string;
+};
+
+export default function Location(props: LocationProps) {
+  const { token } = props;
   const { data, error } = useLocationSWR({ limit: 10, page: 1 });
   const [locations, setLocations] = useState([]);
 
@@ -58,13 +63,13 @@ function location() {
                 name: formData.get('name') as string,
                 country: formData.get('country') as string,
               },
-              token: 
+              token,
             });
           }}
         >
           {' '}
-          <TextField label="country"></TextField>
-          <TextField label="name"></TextField>
+          <TextField label="country" />
+          <TextField label="name" />
           <Button
             component="label"
             role={undefined}
@@ -74,6 +79,10 @@ function location() {
           >
             Upload file
             <VisuallyHiddenInput type="file" />
+          </Button>
+          <Button type="submit" variant="contained">
+            {/* TODO: Change text in button */}
+            Knapp for å sende formen
           </Button>
         </form>
       </Stack>
@@ -94,12 +103,10 @@ function location() {
         }}
         pageSizeOptions={[5]}
         checkboxSelection
-        //onRowSelectionModelChange={setSelectionModel}
-        //processRowUpdate={handleProcessRowUpdate}
+        // onRowSelectionModelChange={setSelectionModel}
+        // processRowUpdate={handleProcessRowUpdate}
         disableRowSelectionOnClick
       />
     </Stack>
   );
 }
-
-export default location;

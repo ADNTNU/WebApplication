@@ -1,7 +1,12 @@
 import React from 'react';
 import { Divider, Stack } from '@mui/material';
 
-function trip() {
+type TripProps = {
+  token: string;
+};
+
+function Trip(props: TripProps) {
+  const { token } = props;
   return (
     <Stack direction="column">
       <div>trip</div>
@@ -10,4 +15,4 @@ function trip() {
   );
 }
 
-export default trip;
+export default Trip;
