@@ -111,14 +111,14 @@ const handler = NextAuth({
       const returnedToken = { ...token };
       if (user) {
         // User is available during sign-in
-        returnedToken.id = user.id;
+        returnedToken.token = user.jwt;
       }
       return returnedToken;
     },
     session({ session, token }) {
       const returnedSession = { ...session };
       if (returnedSession.user) {
-        returnedSession.user.id = token.id as string;
+        returnedSession.token = token.token;
       }
       return returnedSession;
     },
