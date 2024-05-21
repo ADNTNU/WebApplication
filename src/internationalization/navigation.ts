@@ -63,9 +63,11 @@ export const {
   usePathname,
   useRouter,
   getPathname,
+  permanentRedirect,
 } = createLocalizedPathnamesNavigation({ locales, localePrefix, pathnames });
 
-export type LinkProps<Pathname extends keyof typeof pathnames> = ComponentProps<
-  typeof I18nLink<Pathname>
->;
 export type Pathname = keyof typeof pathnames;
+
+export type LinkProps = ComponentProps<typeof I18nLink<Pathname>>;
+
+export type SafeHref = LinkProps['href'];

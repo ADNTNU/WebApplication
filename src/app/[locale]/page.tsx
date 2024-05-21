@@ -5,6 +5,9 @@ import PageSection from '@components/layout/main/PageSection';
 import SearchHero from '@/components/landing/SearchHero';
 import { Locale } from '@/internationalization/i18n';
 import PopularDestinations from '@/components/locations/PopularDestinations';
+import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { pick } from 'lodash';
+import AboutUs from '@components/landing/AboutUs';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   return generateTranslatedMetadata({ locale, page: 'Landing' });
@@ -12,14 +15,20 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default function Landing({ params: { locale } }: { params: { locale: Locale } }) {
   unstable_setRequestLocale(locale);
+  const messages = useMessages();
 
   return (
     <PageWrapper>
-      <PageSection>
-        <SearchHero />
+      <PageSection sx={{ pb: 2 }}>
+        <NextIntlClientProvider locale={locale} messages={pick(messages, 'common.trip')}>
+          <SearchHero />
+        </NextIntlClientProvider>
       </PageSection>
-      <PageSection sx={{ py: 1 }}>
+      <PageSection sx={{ py: 2 }}>
         <PopularDestinations />
+      </PageSection>
+      <PageSection sx={{ py: 2 }}>
+        <AboutUs />
       </PageSection>
     </PageWrapper>
   );

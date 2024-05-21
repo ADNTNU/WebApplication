@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,21 +16,16 @@
     "jsx": "preserve",
     "composite": true,
     "paths": {
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "@material/*": [
-        "./src/material/*"
-      ],
-      "@models/*": [
-        "./src/models/*"
-      ],
-      "@internationalization/*": [
-        "./src/internationalization/*"
-      ],
-      "@/*": [
-        "./src/*"
-      ]
+      "@components/*": ["./src/components/*"],
+      "@material/*": ["./src/material/*"],
+      "@models/*": ["./src/models/*"],
+      "@serverActions/*": ["./src/serverActions/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@internationalization/*": ["./src/internationalization/*"],
+      "@images/*": ["./public/images/*"],
+      "@/*": ["./src/*"]
     },
     "plugins": [
       {
@@ -51,7 +42,5 @@
     "next.config.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

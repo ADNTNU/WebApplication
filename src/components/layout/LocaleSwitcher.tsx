@@ -2,47 +2,22 @@
 
 import { Locale, locales } from '@/internationalization/i18n';
 import { useRouter, usePathname } from '@/internationalization/navigation';
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { NO, GB } from 'country-flag-icons/react/1x1';
-import { useState, MouseEvent, ComponentProps, useEffect, useTransition } from 'react';
+import { Box, Button, IconButton, Menu, MenuItem, PopoverOrigin } from '@mui/material';
+import { useState, MouseEvent, useEffect, useTransition } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import LocaleFlag from './LocaleFlag';
 
-type LocaleFlagProps = {
-  locale: Locale;
-  flagProps?: ComponentProps<typeof GB>;
-};
-
-type LocaleFlagReturn =
-  | {
-      flag: JSX.Element;
-      name: string;
-    }
-  | undefined;
-
-function LocaleFlag(props: LocaleFlagProps): LocaleFlagReturn {
-  const { locale, flagProps } = props;
-
-  switch (locale) {
-    case 'en':
-      return { flag: <GB {...flagProps} />, name: 'English' };
-    case 'nb':
-      return { flag: <NO {...flagProps} />, name: 'Norsk bokmål' };
-    default:
-      // eslint-disable-next-line no-case-declarations
-      const compileTimeCheck: never = locale;
-      throw new Error(`Unknown locale: ${compileTimeCheck}`);
-  }
-}
-
-type LanguageSwitcherProps = {
+type LocaleSwitcherProps = {
   iconSize?: number;
   menuIconSize?: number;
+  anchorOrigin?: PopoverOrigin;
+  transformOrigin?: PopoverOrigin;
 };
 
-export default function LanguageSwitcher(props: LanguageSwitcherProps) {
-  const { iconSize, menuIconSize } = props;
+export default function LocaleSwitcher(props: LocaleSwitcherProps) {
+  const { iconSize, menuIconSize, anchorOrigin, transformOrigin } = props;
 
   const router = useRouter();
   const pathname = usePathname();
@@ -97,28 +72,44 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
 
   return (
     <>
-      <Button onClick={handleClick} disabled={isPending && !mounted}>
-        {localeFlag}
-        <ExpandMoreIcon
-          sx={{
-            width: iconSize,
-            height: iconSize,
-          }}
-        />
-      </Button>
+      <Box>
+        <Button
+          onClick={handleClick}
+          disabled={isPending && !mounted}
+          id="locale-switcher-button"
+          aria-label="Locale switcher"
+          aria-controls="locale-menu"
+          aria-haspopup="menu"
+          aria-expanded={open ? 'true' : 'false'}
+        >
+          {localeFlag}
+          <ExpandMoreIcon
+            sx={{
+              width: iconSize,
+              height: iconSize,
+            }}
+          />
+        </Button>
+      </Box>
       <Menu
-        // aria-labelledby="demo-positioned-button"
+        id="locale-menu"
+        aria-label="Locale switcher menu"
+        aria-labelledby="locale-switcher-button"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
+        anchorOrigin={
+          anchorOrigin || {
+            vertical: 'bottom',
+            horizontal: 'right',
+          }
+        }
+        transformOrigin={
+          transformOrigin || {
+            vertical: 'top',
+            horizontal: 'right',
+          }
+        }
       >
         {locales.map((l) => {
           const flag = LocaleFlag({
@@ -137,6 +128,7 @@ export default function LanguageSwitcher(props: LanguageSwitcherProps) {
           return (
             <MenuItem
               onClick={handleLocaleClick(l)}
+              aria-label={`Switch to ${l}`}
               disabled={isPending}
               key={l}
               sx={{ gap: 1 }}

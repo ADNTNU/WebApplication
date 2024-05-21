@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
 import { Locale, locales } from '@/internationalization/i18n';
 import { unstable_setRequestLocale } from 'next-intl/server';
-
-// import { pick } from 'lodash';
-// import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { pick } from 'lodash';
+import { NextIntlClientProvider, useMessages } from 'next-intl';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nb';
 import 'dayjs/locale/en';
 import FlightFinderCssVarsProvider from '@components/layout/FlightFinderCssVarsProvider';
 import AuthProvider from '@components/login/AuthProvider';
+import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -22,7 +22,7 @@ export default function LocaleLayout({
   params: { locale: Locale };
 }) {
   unstable_setRequestLocale(locale);
-  // const messages = useMessages();
+  const messages = useMessages();
 
   switch (locale) {
     case 'en':
@@ -37,15 +37,18 @@ export default function LocaleLayout({
       console.error(`Unhandled locale: ${compileTimeCheck}`);
       break;
   }
-
+  // TODO: Make sure NextIntlClientProvider is not commented out in the final version
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body>
-        {/* <NextIntlClientProvider locale={locale} messages={pick(messages, ['Error', 'Nav'])}> */}
-        <FlightFinderCssVarsProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </FlightFinderCssVarsProvider>
         {/* </NextIntlClientProvider> */}
+        <NextIntlClientProvider locale={locale} messages={pick(messages, ['error', 'nav'])}>
+          <SearchFieldProvider>
+            <FlightFinderCssVarsProvider locale={locale}>
+              <AuthProvider>{children}</AuthProvider>
+            </FlightFinderCssVarsProvider>
+          </SearchFieldProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -11,17 +11,43 @@ const gridItemSx: GridSx = {
   height: '250px',
 };
 
+const tempPopularDestinations: PopularDestination[] = [
+  {
+    id: 1,
+    name: 'Paris',
+    image: 'https://source.unsplash.com/400x400/?paris',
+    flightCount: 58,
+  },
+  {
+    id: 2,
+    name: 'New York',
+    image: 'https://source.unsplash.com/400x400/?new-york',
+    flightCount: 42,
+  },
+  {
+    id: 3,
+    name: 'Tokyo',
+    image: 'https://source.unsplash.com/400x400/?tokyo',
+    flightCount: 33,
+  },
+  {
+    id: 4,
+    name: 'London',
+    image: 'https://source.unsplash.com/400x400/?london',
+    flightCount: 27,
+  },
+];
+
 export default function PopularDestinations() {
   // TODO: Implement usePopularDestinationsSWR
   // const { data: popularDestinations } = usePopularDestinationsSWR({ limit: 4 });
-  const popularDestinations: PopularDestination[] | undefined = undefined as
-    | PopularDestination[]
-    | undefined;
+  const popularDestinations: PopularDestination[] | undefined = tempPopularDestinations;
 
-  const t = useTranslations('Flights');
+  const tPD = useTranslations('components.popularDestinations');
+  const t = useTranslations('common.trip');
   return (
     <Stack gap={2}>
-      <Typography variant="h4">Popular destinations</Typography>
+      <Typography variant="h4">{tPD('title')}</Typography>
       <Grid container spacing={2} flexGrow={1} justifyContent="space-between">
         {popularDestinations
           ? popularDestinations.map((destination) => {

@@ -1,42 +1,75 @@
-import { Box, Drawer } from '@mui/material';
+import { Box, Drawer, IconButton, Stack } from '@mui/material';
 import Link from '@components/navigation/Link';
-import { useTranslations } from 'next-intl';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchField from '@components/search/searchField';
+import { MainLinkHref } from './links';
+import LocaleSwitcher from '../LocaleSwitcher';
 
 type MobileMenuProps = {
   open: boolean;
-  onClose: () => void;
+  setOpen: (open: boolean) => void;
+  mainLinks: { href: MainLinkHref; label: string }[];
 };
 
 export default function MobileMenu(props: MobileMenuProps) {
-  const { open, onClose } = props;
+  const { open, setOpen, mainLinks } = props;
 
-  const t = useTranslations('Nav');
+  const onClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Drawer
-      anchor="right"
-      open={open}
-      onClose={onClose}
-      sx={{
-        '& .MuiDrawer-paper': {
-          width: '100%',
-          maxWidth: '300px',
-          padding: '1rem',
-          backgroundColor: 'background.paper',
-        },
-      }}
-    >
-      <Box
+    <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1} gap={2}>
+      <Box flexGrow={1} display="flex">
+        <SearchField variant="header" />
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <IconButton onClick={() => setOpen(true)}>
+          <MenuIcon fontSize="large" />
+        </IconButton>
+      </Box>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={onClose}
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '1rem',
+          '& .MuiDrawer-paper': {
+            width: '100%',
+            maxWidth: '300px',
+            padding: '1rem',
+            backgroundColor: 'background.paper',
+          },
         }}
       >
-        <Link href="/">{t('home')}</Link>
-        <Link href="/about">{t('about')}</Link>
-      </Box>
-    </Drawer>
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '1rem',
+            flexGrow: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Stack gap={2}>
+            {mainLinks.map((link) => (
+              <Link key={link.href} href={link.href}>
+                {link.label}
+              </Link>
+            ))}
+          </Stack>
+          <LocaleSwitcher
+            iconSize={24}
+            transformOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+          />
+        </Box>
+      </Drawer>
+    </Stack>
   );
 }

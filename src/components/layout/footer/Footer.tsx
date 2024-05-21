@@ -11,7 +11,7 @@ import CssThemeSwitcher from '../CssThemeSwitcher';
 
 export default function Footer(/* props: FooterProps */) {
   // const {} = props;
-  const t = useTranslations('Nav');
+  const t = useTranslations('nav');
   return (
     <Box
       component="footer"
