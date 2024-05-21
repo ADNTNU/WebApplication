@@ -11,18 +11,21 @@ declare module 'next-auth' {
     // refreshToken: string;
     // idToken: string;
     // exp: number;
-    role: string[];
+    jwt: string;
+    // role: string[];
   }
 
   interface Session {
     user: DefaultSession['user'] & User;
     expires: string;
     error: string;
+    token?: string;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
+    token?: string;
     // idToken?: string;
   }
 }
