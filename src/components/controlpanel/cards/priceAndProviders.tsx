@@ -9,17 +9,28 @@ const top100Films = [
 
 function priceAndProviders() {
   return (
-    <Stack>
-      <Typography variant="h3">Providers</Typography>
-      <p>Infor about the providers</p>
-      <Stack>
+    <Stack direction="column">
+      <Typography variant="h4">Providers</Typography>
+      <Typography mb={4}>Infor about the providers</Typography>
+
+      <Typography variant="h4">Add new Provider</Typography>
+      <Typography mb={2}>Add a new Provider</Typography>
+
+      <Stack mb={4}>
         <TextField label="Providers"></TextField>
       </Stack>
 
-      <Divider></Divider>
+      <Typography variant="h4">Edit or delete Provider</Typography>
+      <Typography mb={2}>Add a new Provider</Typography>
+
+      <Stack mb={4}></Stack>
 
       <Typography variant="h3">Prices</Typography>
-      <p>Info about the price</p>
+      <Typography mb={4}>Info about the price</Typography>
+
+      <Typography variant="h4">Add new price</Typography>
+      <Typography mb={2}>Add a new Provider</Typography>
+
       <Stack direction="row" gap={2}>
         <Autocomplete
           disablePortal

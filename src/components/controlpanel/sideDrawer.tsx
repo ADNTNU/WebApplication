@@ -35,7 +35,7 @@ const menu = ({ onClick }: Props) => {
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
+          Users and Trip settings
         </ListSubheader>
       }
     >

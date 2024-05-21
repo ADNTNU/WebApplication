@@ -1,35 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Snackbar, Alert, Divider, Stack, Typography, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams, GridRowSelectionModel } from '@mui/x-data-grid';
+import useUserSWR from './useUserSWR';
 
-const columns: GridColDef<(typeof initialRows)[number]>[] = [
+const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: 'firstName',
-    headerName: 'First name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'role',
-    headerName: 'Role',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: true,
-    width: 160,
-  },
+  { field: 'firstName', headerName: 'First name', width: 150, editable: true },
+  { field: 'lastName', headerName: 'Last name', width: 150, editable: true },
+  { field: 'email', headerName: 'Email', width: 200, editable: true },
+  { field: 'roles', headerName: 'Roles', width: 130 }, // Assuming you want to display roles
+  // Add more columns as needed
 ];
 
 const initialRows = [
@@ -44,12 +24,32 @@ const initialRows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-function user() {
-  const [users, setUsers] = useState(initialRows);
+type userProps = {
+  token?: string;
+};
+
+function user(props: userProps) {
+  const { token } = props;
+  const { data, error } = useUserSWR({ limit: 10, page: 1 });
+  const [users, setUsers] = useState([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+  useEffect(() => {
+    if (data) {
+      setUsers(
+        data.map((user) => ({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          roles: user.roles.map((role) => role.name).join(', '),
+        })),
+      );
+    }
+  }, [data]);
 
   const handleProcessRowUpdate = (newRow: GridRowParams) => {
     console.log(`User Updated: ID ${newRow.id}, Data:`, newRow);
