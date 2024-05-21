@@ -28,6 +28,7 @@ export default async function NotFound() {
           description={description}
           goBackToLastPage={goBackToLastPage}
           goToHomePage={goToHomePage}
+          hasLocale
         />
       </PageSection>
     </PageWrapper>

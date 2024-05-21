@@ -13,6 +13,7 @@ export default function NotFound() {
           description={description}
           goBackToLastPage={goBackToLastPage}
           goToHomePage={goToHomePage}
+          hasLocale={false}
         />
       </body>
     </html>
