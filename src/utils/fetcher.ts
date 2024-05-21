@@ -1,8 +1,9 @@
 import { ScopedMutator } from 'swr/_internal';
-import { headers } from 'next/headers';
 
 type FetcherProps = RequestInit & {
   url: RequestInfo | URL;
+  noDataReturn?: unknown;
+  token?: string;
 };
 
 class FetcherError extends Error {
@@ -26,20 +27,21 @@ export type FetcherSWRReturn<T> = {
 };
 
 export default async function fetcher<T>(props: FetcherProps): Promise<T> {
-  const { url, ...rest } = props;
-  const headerList = headers();
-  const token = headerList.get('next-auth.session-token');
+  const { url, noDataReturn, token, ...rest } = props;
 
   const options = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer: ${token}`,
+      ...(token && { Authorization: `Bearer: ${token}` }),
     },
     ...rest,
   };
   const res = await fetch(url, options);
 
   if (!res.ok) {
+    if (noDataReturn) {
+      return noDataReturn as T;
+    }
     throw new FetcherError(
       'An error occurred while fetching the data',
       await res.json(),
