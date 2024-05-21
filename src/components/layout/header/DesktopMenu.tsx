@@ -2,6 +2,7 @@ import { Box, Stack } from '@mui/material';
 import SearchField from '@components/search/searchField';
 import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import LocaleSwitcher from '../LocaleSwitcher';
+import Account from './Account';
 
 type DesktopMenuProps = {
   // mainLinks: { href: MainLinkHref; label: string }[];
@@ -17,6 +18,7 @@ export default function DesktopMenu(props: DesktopMenuProps) {
           <SearchField variant="header" locationAutocompleteOptions={locationAutocompleteOptions} />
         </Box>
       </Box>
+      <Account iconSize={30} />
       <LocaleSwitcher iconSize={24} />
     </Stack>
   );

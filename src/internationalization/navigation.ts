@@ -3,7 +3,7 @@ import { locales } from '@/internationalization/i18n';
 import { ComponentProps } from 'react';
 import { LocalePrefix } from 'next-intl/dist/types/src/shared/types';
 
-export const localePrefix: LocalePrefix | undefined = 'always'; // default
+export const localePrefix: LocalePrefix | undefined = 'always';
 
 // The `pathnames` object holds pairs of internal
 // and external paths, separated by locale.
@@ -32,6 +32,16 @@ export const pathnames = {
   '/trip/[tripId]': {
     en: '/trip/[tripId]',
     nb: '/flytur/[tripId]',
+  },
+
+  '/signup': {
+    en: '/signup',
+    nb: '/registrer',
+  },
+
+  '/login': {
+    en: '/login',
+    nb: '/innlogging',
   },
 
   // Dynamic params are supported via square brackets

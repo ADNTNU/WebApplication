@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/nb';
 import 'dayjs/locale/en';
 import FlightFinderCssVarsProvider from '@components/layout/FlightFinderCssVarsProvider';
+import AuthProvider from '@components/login/AuthProvider';
 import SearchFieldProvider from '@components/search/searchField/SearchFieldProvider';
 
 export function generateStaticParams() {
@@ -40,9 +41,12 @@ export default function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body>
+        {/* </NextIntlClientProvider> */}
         <NextIntlClientProvider locale={locale} messages={pick(messages, ['error', 'nav'])}>
           <SearchFieldProvider>
-            <FlightFinderCssVarsProvider locale={locale}>{children}</FlightFinderCssVarsProvider>
+            <FlightFinderCssVarsProvider locale={locale}>
+              <AuthProvider>{children}</AuthProvider>
+            </FlightFinderCssVarsProvider>
           </SearchFieldProvider>
         </NextIntlClientProvider>
       </body>
