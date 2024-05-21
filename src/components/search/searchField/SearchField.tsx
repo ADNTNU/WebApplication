@@ -394,7 +394,14 @@ export default function SearchField(props: SearchFieldProps) {
       }
     }
     if (id === inputIds.date) {
+      setValidDate(true);
       applyDateTextValue(value?.fromDate, value?.toDate);
+    }
+    if (id === inputIds.from) {
+      setValidFrom(true);
+    }
+    if (id === inputIds.to) {
+      setValidTo(true);
     }
   };
 
@@ -464,6 +471,7 @@ export default function SearchField(props: SearchFieldProps) {
     }
 
     if (fromDateQuery && toDateQuery) {
+      // TODO: Fix bug where roundTrip is not able to be changed
       setRoundTrip(true);
     }
     if (fromDate) {
@@ -716,8 +724,8 @@ export default function SearchField(props: SearchFieldProps) {
                     hoveredDate={hoveredDate}
                     selectedFromDate={value?.fromDate}
                     selectedToDate={value?.toDate}
-                    setRange={setRoundTrip}
-                    range={roundTrip}
+                    setRoundTrip={setRoundTrip}
+                    roundTrip={roundTrip}
                     setRangeLabel={capitalizeFirstLetter(t('roundTrip'))}
                   />
                 </Paper>
