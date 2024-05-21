@@ -3,7 +3,7 @@ import { locales } from '@/internationalization/i18n';
 import { ComponentProps } from 'react';
 import { LocalePrefix } from 'next-intl/dist/types/src/shared/types';
 
-export const localePrefix: LocalePrefix | undefined = 'always'; // default
+export const localePrefix: LocalePrefix | undefined = 'always';
 
 // The `pathnames` object holds pairs of internal
 // and external paths, separated by locale.

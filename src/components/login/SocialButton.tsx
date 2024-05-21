@@ -12,7 +12,7 @@ export default function SocialButton({
   Icon = GoogleIcon,
 }: SocialButtonProps) {
   return (
-    <Button variant="outlined" startIcon={<Icon />}>
+    <Button variant="outlined" size="large" startIcon={<Icon />}>
       {text}
     </Button>
   );

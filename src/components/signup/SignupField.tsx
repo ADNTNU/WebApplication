@@ -1,20 +1,47 @@
-import { Button, TextField, Stack } from '@mui/material';
-import React from 'react';
-import NavigationLink from '@components/navigation/NavigationLink';
+'use client';
 
-function SignupField() {
+import Link from '@components/navigation/Link';
+import { Button, TextField, Stack } from '@mui/material';
+import { signIn } from 'next-auth/react';
+import React from 'react';
+
+function SignupFields() {
   return (
-    <Stack direction="column" spacing={1}>
-      <TextField required id="outlined-basic" label="First Name" variant="outlined" />
-      <TextField required id="outlined-basic" label="Last Name" variant="outlined" />
-      <TextField required id="outlined-basic" label="Email" variant="outlined" />
-      <TextField required id="outlined-basic" label="Password" variant="outlined" type="Password" />
-      <NavigationLink href="/login">Already got an account?</NavigationLink>
-      <Button variant="contained" color="primary">
-        Signup
-      </Button>
-    </Stack>
+    <form
+      action={(formData) => {
+        signIn('register', {
+          email: formData.get('email') as string,
+          password: formData.get('password') as string,
+          firstName: formData.get('first-name') as string,
+          lastName: formData.get('last-name') as string,
+        });
+      }}
+    >
+      <Stack direction="column" gap={1}>
+        <TextField
+          required
+          name="first-name"
+          id="first-name"
+          label="First Name"
+          variant="outlined"
+        />
+        <TextField required name="last-name" id="last-name" label="Last Name" variant="outlined" />
+        <TextField required name="email" id="email" label="Email" variant="outlined" />
+        <TextField
+          required
+          name="password"
+          id="password"
+          label="Password"
+          variant="outlined"
+          type="Password"
+        />
+        <Link href="/login">Already got an account?</Link>
+        <Button variant="contained" color="primary" type="submit">
+          Signup
+        </Button>
+      </Stack>
+    </form>
   );
 }
 
-export default SignupField;
+export default SignupFields;
