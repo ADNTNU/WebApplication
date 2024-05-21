@@ -8,13 +8,13 @@ import { useEffect, useState, MouseEvent } from 'react';
 
 type AccountProps = {
   iconSize?: number;
-  menuIconSize?: number;
+  // menuIconSize?: number;
   anchorOrigin?: PopoverOrigin;
   transformOrigin?: PopoverOrigin;
 };
 
 export default function Account(props: AccountProps) {
-  const { iconSize, menuIconSize, anchorOrigin, transformOrigin } = props;
+  const { iconSize, anchorOrigin, transformOrigin } = props;
   const { data: session } = useSession();
 
   const [mounted, setMounted] = useState(false);
