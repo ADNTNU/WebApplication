@@ -1,4 +1,5 @@
 import { ScopedMutator } from 'swr/_internal';
+import { headers } from 'next/headers';
 
 type FetcherProps = RequestInit & {
   url: RequestInfo | URL;
@@ -26,7 +27,17 @@ export type FetcherSWRReturn<T> = {
 
 export default async function fetcher<T>(props: FetcherProps): Promise<T> {
   const { url, ...rest } = props;
-  const res = await fetch(url, rest);
+  const headerList = headers();
+  const token = headerList.get('next-auth.session-token');
+
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer: ${token}`,
+    },
+    ...rest,
+  };
+  const res = await fetch(url, options);
 
   if (!res.ok) {
     throw new FetcherError(
