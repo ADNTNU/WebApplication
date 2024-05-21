@@ -39,6 +39,7 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
+    "src/types/**/*.ts",
     "next.config.js",
     ".next/types/**/*.ts"
   ],
