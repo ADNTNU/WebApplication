@@ -1,4 +1,4 @@
-import { Stack, Typography, TextField, Button, Divider } from '@mui/material';
+import { Stack, Typography, TextField, Button, Divider, Alert } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
@@ -26,15 +26,17 @@ const columns: GridColDef[] = [
   { field: 'name', headerName: 'Name', width: 150, editable: true },
 ];
 
-const handleProcessRowUpdate = async (newRow: PutLocation, token: string) => {
+const handleProcessRowUpdate = async (newRow: GridRowModel, token: string) => {
   console.log(`User Updated: ID ${newRow.id}, Name ${newRow.name} Data:`, newRow);
+
   try {
-    const updatedLocation = {
-      id: newRow.id as string, // Directly using newRow.id
-      name: newRow.name, // Directly using newRow.name
-      country: newRow.country, // Directly using newRow.country
-      image: 'URL', // Adjust or dynamically set as needed
+    const updatedLocation: PutLocation = {
+      id: newRow.id as string,
+      name: newRow.name as string,
+      country: newRow.country as string,
+      image: 'Needs to be added',
     };
+    console.log('Updated Location:', updatedLocation);
 
     await putLocation({
       data: updatedLocation,
@@ -54,7 +56,7 @@ type LocationProps = {
 
 export default function Location(props: LocationProps) {
   const { token } = props;
-  const { data, error } = useLocationSWR({ limit: 10, page: 1 });
+  const { data } = useLocationSWR({ limit: 10, page: 1 });
   const [locations, setLocations] = useState<LocationType[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
 
@@ -117,6 +119,7 @@ export default function Location(props: LocationProps) {
       <Stack direction="row" gap={2} mb={4}>
         <form
           action={(formData) => {
+            // try {
             postLocation({
               data: {
                 name: formData.get('name') as string,
@@ -125,6 +128,9 @@ export default function Location(props: LocationProps) {
               },
               token,
             });
+            // } catch (error) {
+
+            // }
           }}
         >
           {' '}
@@ -164,9 +170,7 @@ export default function Location(props: LocationProps) {
         pageSizeOptions={[5]}
         checkboxSelection
         onRowSelectionModelChange={setSelectionModel}
-        processRowUpdate={(newRow: GridRowModel) =>
-          handleProcessRowUpdate(newRow as PutLocation, token)
-        }
+        processRowUpdate={(newRow: GridRowModel) => handleProcessRowUpdate(newRow, token)}
         disableRowSelectionOnClick
         onProcessRowUpdateError={(error) => console.error('Process row update failed:', error)}
       />

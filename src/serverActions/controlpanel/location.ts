@@ -35,13 +35,14 @@ export default async function postLocation(params: PostLocationProps) {
 
 export async function putLocation(params: PutLocationProps) {
   const { token, data } = params;
-  const res = await fetch(apiRoutes.controlPanel.baseUrls.location + `/${data.id}`, {
+
+  const res = await fetch(`${apiRoutes.controlPanel.baseUrls.location}/${data.id}`, {
     method: 'PUT',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
-    throw new Error('Failed to put location.');
+    throw new Error(`Failed to put location. Error: ${JSON.stringify(await res.json())}`);
   }
 
   // TODO: Decide whether or not to do something with the response
@@ -50,7 +51,7 @@ export async function putLocation(params: PutLocationProps) {
 
 export async function deleteLocation(params: DeleteLocationProps) {
   const { token, data } = params;
-  const res = await fetch(apiRoutes.controlPanel.baseUrls.location + `/${data.id}`, {
+  const res = await fetch(`${apiRoutes.controlPanel.baseUrls.location}/${data.id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   });
