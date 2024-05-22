@@ -1,14 +1,21 @@
 import { PaginationProps, SearchProps } from '@/apiRoutes';
 import { SearchQuery } from '@models/Search';
 import { Alert } from '@mui/material';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import SearchResults from './SearchResults';
 
 function InvalidSearchQueryError({ message }: { message: string }) {
   return <Alert severity="error">{message}</Alert>;
 }
 
-export default function SearchResultsQueryParser(props: SearchQuery) {
-  const { fa, fd, fl, l, p, ta, td, tl } = props;
+type SearchResultsQueryParserProps = {
+  locationAutocompleteOptions: LocationOrAirportOption[];
+};
+
+export default function SearchResultsQueryParser(
+  props: SearchQuery & SearchResultsQueryParserProps,
+) {
+  const { fa, fd, fl, l, p, ta, td, tl, locationAutocompleteOptions } = props;
   let from: SearchProps['from'] | undefined;
   let to: SearchProps['to'] | undefined;
   let departureDate: SearchProps['departureDate'] | undefined;
@@ -25,10 +32,10 @@ export default function SearchResultsQueryParser(props: SearchQuery) {
       to = ta ? { airportId: ta } : { locationId: tl as string };
     }
     if (fd) {
-      departureDate = new Date(parseInt(fd, 10));
+      departureDate = new Date(parseInt(fd, 10) * 1000);
     }
     if (td) {
-      returnDate = new Date(parseInt(td, 10));
+      returnDate = new Date(parseInt(td, 10) * 1000);
     }
     if (l) {
       limit = parseInt(l, 10);
@@ -57,5 +64,7 @@ export default function SearchResultsQueryParser(props: SearchQuery) {
     return <InvalidSearchQueryError message="Invalid search query. Please try again" />;
   }
 
-  return <SearchResults {...searchParams} />;
+  return (
+    <SearchResults locationAutocompleteOptions={locationAutocompleteOptions} {...searchParams} />
+  );
 }

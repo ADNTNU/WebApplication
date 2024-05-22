@@ -50,7 +50,10 @@ export default async function Search({
         </PageSection>
         <PageSection /*  sx={{ mt: 2 }} */>
           <NextIntlClientProvider messages={pick(messages, 'common.trip', 'actions')}>
-            <SearchResultsQueryParser {...searchParams} />
+            <SearchResultsQueryParser
+              {...searchParams}
+              locationAutocompleteOptions={locationAutocompleteOptions}
+            />
           </NextIntlClientProvider>
         </PageSection>
       </PageWrapper>

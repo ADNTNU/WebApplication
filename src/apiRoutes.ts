@@ -29,8 +29,10 @@ function searchFunction(props: PaginationProps & SearchProps) {
     return Reflect.has(data, 'airportId');
   };
 
-  const fromDateUnixString = Math.floor(departureDate.getTime()).toString();
-  const toDateUnixString = returnDate ? Math.floor(returnDate.getTime()).toString() : undefined;
+  const fromDateUnixString = Math.floor(departureDate.getTime() / 1000).toString();
+  const toDateUnixString = returnDate
+    ? Math.floor(returnDate.getTime() / 1000).toString()
+    : undefined;
 
   let fromAirportId: string | undefined;
   let fromLocationId: string | undefined;

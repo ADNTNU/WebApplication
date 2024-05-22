@@ -496,7 +496,7 @@ function SuspendedSearchField(props: SearchFieldProps) {
       } else {
         setDateTextValue(formattedFromDate);
       }
-    } else {
+    } else if (fromDateQuery) {
       setValidDate(false);
     }
   }, [
