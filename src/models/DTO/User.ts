@@ -7,8 +7,9 @@ export type User = {
   permission: string;
 };
 
-export type PostUser = {
+export type GetUser = {
   id: number;
   firstname: string;
   lastname: string;
+  email: string;
 };

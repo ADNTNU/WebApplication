@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Snackbar, Alert, Divider, Stack, Typography, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams, GridRowSelectionModel } from '@mui/x-data-grid';
 import useUserSWR from './useUserSWR';
+import { GetUser } from '@models/DTO/User';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'firstName', headerName: 'First name', width: 150, editable: true },
-  { field: 'lastName', headerName: 'Last name', width: 150, editable: true },
+  { field: 'firstname', headerName: 'First name', width: 150, editable: true },
+  { field: 'lastname', headerName: 'Last name', width: 150, editable: true },
   { field: 'email', headerName: 'Email', width: 200, editable: true },
-  { field: 'roles', headerName: 'Roles', width: 130 }, // Assuming you want to display roles
-  // Add more columns as needed
 ];
 
 const initialRows = [
@@ -31,7 +30,7 @@ type UserProps = {
 function User(props: UserProps) {
   const { token } = props;
   const { data, error } = useUserSWR({ limit: 10, page: 1 });
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<GetUser[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -42,10 +41,9 @@ function User(props: UserProps) {
       setUsers(
         data.map((user) => ({
           id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          firstname: user.firstname,
+          lastname: user.lastname,
           email: user.email,
-          roles: user.roles.map((role) => role.name).join(', '),
         })),
       );
     }
@@ -85,12 +83,10 @@ function User(props: UserProps) {
     <Stack direction="column">
       <Typography variant="h2">User actions</Typography>
       <p>Here we can add, edit and remove users</p>
-      <Typography variant="h4">Add new user</Typography>
+      <Typography variant="h4">Add user role</Typography>
       <Stack direction="row">
-        <TextField label="First name"></TextField>
-        <TextField label="Last name"></TextField>
-        <TextField label="email"></TextField>
-        <TextField label="password"></TextField>
+        <TextField label="User id"></TextField>
+        <TextField label="Role id"></TextField>
       </Stack>
       <Typography variant="h4">Edit / Remove exsisting user</Typography>
       <DataGrid

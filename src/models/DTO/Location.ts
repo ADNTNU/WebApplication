@@ -6,6 +6,25 @@ export type PopularDestination = {
 };
 
 export type Location = {
-  name: string;
+  id: number;
   country: string;
+  name: string;
+  image: string;
+};
+
+export type PostLocation = {
+  country: string;
+  name: string;
+  image: string;
+};
+
+export type PutLocation = {
+  id: string;
+  country: string;
+  name: string;
+  image: string;
+};
+
+export type DeleteLocation = {
+  id: string;
 };

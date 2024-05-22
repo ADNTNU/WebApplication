@@ -15,6 +15,7 @@ export const apiRoutes = {
     baseUrls: {
       user: `${baseApiUrl}/users`,
       location: `${baseApiUrl}/location`,
+      trip: `${baseApiUrl}/trip`,
     },
     paginated: {
       user: ({ limit, page }: PaginationProps) =>

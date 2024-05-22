@@ -2,9 +2,11 @@ import { Stack, Typography, TextField, Button, Divider } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import { DataGrid, GridColDef, GridRowParams, GridRowSelectionModel } from '@mui/x-data-grid';
-import postLocation from '@serverActions/controlpanel/location';
+import { DataGrid, GridColDef, GridRowModel, GridRowSelectionModel } from '@mui/x-data-grid';
+import postLocation, { putLocation, deleteLocation } from '@serverActions/controlpanel/location';
 import useLocationSWR from './useLocationSWR';
+import { Location as LocationType } from '@models/Location';
+import { PutLocation } from '@models/DTO/Location';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -20,9 +22,31 @@ const VisuallyHiddenInput = styled('input')({
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'country', headerName: 'First name', width: 150, editable: true },
-  { field: 'name', headerName: 'Last name', width: 150, editable: true },
+  { field: 'country', headerName: 'Country', width: 150, editable: true },
+  { field: 'name', headerName: 'Name', width: 150, editable: true },
 ];
+
+const handleProcessRowUpdate = async (newRow: PutLocation, token: string) => {
+  console.log(`User Updated: ID ${newRow.id}, Name ${newRow.name} Data:`, newRow);
+  try {
+    const updatedLocation = {
+      id: newRow.id as string, // Directly using newRow.id
+      name: newRow.name, // Directly using newRow.name
+      country: newRow.country, // Directly using newRow.country
+      image: 'URL', // Adjust or dynamically set as needed
+    };
+
+    await putLocation({
+      data: updatedLocation,
+      token,
+    });
+    console.log('Location updated successfully');
+  } catch (error) {
+    console.error('Failed to update location', error);
+    throw new Error('Update failed'); // Handle this error appropriately in your UI
+  }
+  return newRow;
+};
 
 type LocationProps = {
   token: string;
@@ -31,7 +55,41 @@ type LocationProps = {
 export default function Location(props: LocationProps) {
   const { token } = props;
   const { data, error } = useLocationSWR({ limit: 10, page: 1 });
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState<LocationType[]>([]);
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+
+  const handleDeleteLocations = async () => {
+    if (selectionModel.length === 0) {
+      console.log('No locations selected for deletion.');
+      return;
+    }
+
+    // Optional: Confirm dialog before deletion
+    const confirm = window.confirm('Are you sure you want to delete these locations?');
+    if (!confirm) return;
+
+    try {
+      // Assuming deleteLocation sends a DELETE request to your server
+      await Promise.all(
+        selectionModel.map((locationId) =>
+          deleteLocation({
+            token,
+            data: { id: locationId.toString() }, // Ensure the id is converted to string if necessary
+          }),
+        ),
+      );
+
+      // Update local state to remove deleted locations
+      const remainingLocations = locations.filter(
+        (location) => !selectionModel.includes(location.id),
+      );
+      setLocations(remainingLocations);
+      setSelectionModel([]); // Clear selection after deletion
+      console.log('Locations deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete locations', error);
+    }
+  };
 
   useEffect(() => {
     if (data) {
@@ -40,6 +98,7 @@ export default function Location(props: LocationProps) {
           id: location.id,
           country: location.country,
           name: location.name,
+          image: location.image,
         })),
       );
     }
@@ -62,14 +121,15 @@ export default function Location(props: LocationProps) {
               data: {
                 name: formData.get('name') as string,
                 country: formData.get('country') as string,
+                image: 'URL',
               },
               token,
             });
           }}
         >
           {' '}
-          <TextField label="country" />
-          <TextField label="name" />
+          <TextField label="country" id="country" name="country" />
+          <TextField label="name" id="name" name="name" />
           <Button
             component="label"
             role={undefined}
@@ -103,10 +163,16 @@ export default function Location(props: LocationProps) {
         }}
         pageSizeOptions={[5]}
         checkboxSelection
-        // onRowSelectionModelChange={setSelectionModel}
-        // processRowUpdate={handleProcessRowUpdate}
+        onRowSelectionModelChange={setSelectionModel}
+        processRowUpdate={(newRow: GridRowModel) =>
+          handleProcessRowUpdate(newRow as PutLocation, token)
+        }
         disableRowSelectionOnClick
+        onProcessRowUpdateError={(error) => console.error('Process row update failed:', error)}
       />
+      <Button variant="contained" onClick={handleDeleteLocations}>
+        Delete Selected Locations
+      </Button>
     </Stack>
   );
 }
