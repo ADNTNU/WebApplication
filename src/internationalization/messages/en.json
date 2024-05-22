@@ -30,7 +30,8 @@
       "zeroToPluralStops": "0-{to} stops",
       "oneToPluralStops": "1-{to} stops",
       "pluralToPluralStops": "{from}-{to} stops",
-      "noFlights": "No flights",
+      "allStops": "all stops",
+      "noFlights": "no flights",
       "oneFlight": "1 flight",
       "pluralFlights": "{flights} flights",
       "roundTrip": "round trip"
@@ -48,8 +49,7 @@
     "203": {
       "title": "203",
       "description": "You are not authorized to view this page"
-    },
-    "locale": "en"
+    }
   },
   "nav": {
     "home": "Home",
@@ -70,6 +70,7 @@
   "actions": {
     "show": "Show",
     "showMessage": "Show {message}",
+    "showDetails": "Show details",
     "hide": "Hide",
     "hideMessage": "Hide {message}",
     "expand": "Expand",
@@ -102,5 +103,8 @@
         "description": "Our vision is to become the leading flight search engine in the world"
       }
     }
+  },
+  "locale": {
+    "value": "en"
   }
 }

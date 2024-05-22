@@ -15,7 +15,7 @@ import {
   Theme,
   useMediaQuery,
 } from '@mui/material';
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import dayjs, { Dayjs } from 'dayjs';
@@ -49,7 +49,7 @@ export type SearchFieldProps = {
 
 const dateFormat = 'DD/MM/YYYY';
 
-export default function SearchField(props: SearchFieldProps) {
+function SuspendedSearchField(props: SearchFieldProps) {
   const { obstructedRef, variant, locationAutocompleteOptions } = props;
 
   // To add more translations, you have to add them to the
@@ -788,5 +788,13 @@ export default function SearchField(props: SearchFieldProps) {
         </Box>
       </RootElement>
     </>
+  );
+}
+
+export default function SearchField(props: SearchFieldProps) {
+  return (
+    <Suspense>
+      <SuspendedSearchField {...props} />
+    </Suspense>
   );
 }

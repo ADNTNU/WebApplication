@@ -23,7 +23,7 @@ function SkeletonButton() {
 
 type MenuWrapperProps = {
   downBreakpoint?: Breakpoint;
-  mainLinks: { href: MainLinkHref; label: string }[];
+  mainLinks?: { href: MainLinkHref; label: string }[];
   locationAutocompleteOptions: LocationOrAirportOption[];
 };
 

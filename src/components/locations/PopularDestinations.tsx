@@ -5,6 +5,7 @@ import { ComponentProps } from 'react';
 // import { PopularDestination } from '@models/DTO/Location';
 import { useTranslations } from 'next-intl';
 import PageSection from '@components/layout/main/PageSection';
+import capitalizeFirstLetter from '@utils/capitalizeFirstLetter';
 import usePopularDestinationsSWR from './usePopularDestinationsSWR';
 import LocationCard from './LocationCard';
 
@@ -63,7 +64,7 @@ export default function PopularDestinations(props: PopularDestinationsProps) {
             ? popularDestinations.map((destination) => {
                 let flightCount;
                 if (destination.flightCount === 0) {
-                  flightCount = t('noFlights');
+                  flightCount = capitalizeFirstLetter(t('noFlights'));
                 } else if (destination.flightCount === 1) {
                   flightCount = t('oneFlight');
                 } else {

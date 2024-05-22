@@ -12,7 +12,7 @@ export default function SearchResult(props: SearchResultProps) {
 
   const leaveFlightInfoProps = {
     firstFlight: trip?.leaveInitialFlight,
-    lastFlight: trip?.leaveInitialFlight,
+    lastFlight: trip?.leaveArrivalFlight,
     flightIntervals: trip?.leaveFlightIntervals,
   };
   const returnFlightInfoProps = {
@@ -48,12 +48,22 @@ export default function SearchResult(props: SearchResultProps) {
       <Divider
         orientation="vertical"
         flexItem
-        // sx={{
-        //   // width: '1px',
-        //   backgroundColor: 'text.disabled',
-        // }}
+        sx={{
+          display: { xs: 'none', md: 'block' },
+        }}
       />
-      <PriceInfo price={trip?.minPrice?.price} currency={trip?.minPrice?.currency} />
+      <Divider
+        orientation="horizontal"
+        flexItem
+        sx={{
+          display: { xs: 'block', md: 'none' },
+        }}
+      />
+      <PriceInfo
+        price={trip?.minPrice?.price}
+        currency={trip?.minPrice?.currency}
+        tripId={trip?.id.toString()}
+      />
     </Stack>
   );
 }

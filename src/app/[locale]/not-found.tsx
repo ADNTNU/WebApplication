@@ -1,13 +1,14 @@
 import PageSection from '@components/layout/main/PageSection';
 import PageWrapper from '@components/layout/main/PageWrapper';
-import { Locale } from '@internationalization/i18n';
 import { getTranslations } from 'next-intl/server';
 import getLocationAutocompleteOptions from '@components/serverComponents/getLocationAutocomplete';
 import NotFoundComponent from '@components/NotFound';
+import { Locale } from '@internationalization/i18n';
 
 export default async function NotFound() {
+  const localeT = await getTranslations('locale');
+  const locale = localeT('value') as Locale;
   const t = await getTranslations('error');
-  const locale = t('locale') as Locale;
   const description = t('404.description');
   const actionT = await getTranslations('nav.actions');
   const goBackToLastPage = actionT('goBackToLastPage');

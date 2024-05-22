@@ -9,7 +9,7 @@ import LocaleSwitcher from '../LocaleSwitcher';
 type MobileMenuProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  mainLinks: { href: MainLinkHref; label: string }[];
+  mainLinks?: { href: MainLinkHref; label: string }[];
   locationAutocompleteOptions: LocationOrAirportOption[];
 };
 
@@ -53,11 +53,13 @@ export default function MobileMenu(props: MobileMenuProps) {
           }}
         >
           <Stack gap={2}>
-            {mainLinks.map((link) => (
-              <Link key={link.href} href={link.href}>
-                {link.label}
-              </Link>
-            ))}
+            {mainLinks?.length
+              ? mainLinks.map((link) => (
+                  <Link key={link.href} href={link.href}>
+                    {link.label}
+                  </Link>
+                ))
+              : null}
           </Stack>
           <LocaleSwitcher
             iconSize={24}

@@ -6,7 +6,7 @@ import { pick } from 'lodash';
 import { Locale } from '@internationalization/i18n';
 import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import MenuWrapper from './MenuWrapper';
-import { mainLinks } from './links';
+// import { mainLinks } from './links';
 import HeaderWrapper from './HeaderWrapper';
 
 type HeaderProps = {
@@ -19,10 +19,13 @@ export default function Header(props: HeaderProps) {
   const t = useTranslations('nav');
   const messages = useMessages();
 
-  const internationalizedMainLinks = mainLinks.map((link) => ({
-    href: link.href,
-    label: t(link.i18nNS),
-  }));
+  const internationalizedMainLinks = undefined;
+  // const internationalizedMainLinks = mainLinks.map((link) => {
+  //   return {
+  //       href: link.href,
+  //       label: t(link.i18nNS),
+  //     }})
+  //   : [];
 
   return (
     <HeaderWrapper>
