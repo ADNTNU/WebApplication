@@ -102,6 +102,11 @@
         "title": "Our vision",
         "description": "Our vision is to become the leading flight search engine in the world"
       }
+    },
+    "themeSwitcher": {
+      "theme": "Theme",
+      "dark": "Dark",
+      "light": "Light"
     }
   },
   "locale": {

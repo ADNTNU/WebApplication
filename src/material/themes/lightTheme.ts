@@ -31,8 +31,8 @@ const lightThemeOptions: ThemeOptionsWithName = {
       // disabledBackground: 'rgba(0, 0, 0, 0.12)',
     },
     background: {
-      // default: '#FFFFFF',
-      // paper: '#E9E9E9',
+      default: '#FAFAFA',
+      paper: '#FFFFFF',
     },
     mode: 'light',
   },

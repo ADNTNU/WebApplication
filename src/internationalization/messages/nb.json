@@ -102,6 +102,11 @@
         "title": "Vår visjon",
         "description": "Vår visjon er å bli den ledende flysøkemotoren i verden"
       }
+    },
+    "themeSwitcher": {
+      "theme": "Utseende",
+      "dark": "Mørk",
+      "light": "Lys"
     }
   },
   "locale": {

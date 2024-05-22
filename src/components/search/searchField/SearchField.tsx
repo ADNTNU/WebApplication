@@ -2,7 +2,7 @@
 
 import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
 import { useRouter } from '@internationalization/navigation';
-import { alpha } from '@mui/material/styles';
+// import { alpha } from '@mui/material/styles';
 import {
   Backdrop,
   Box,
@@ -547,7 +547,7 @@ function SuspendedSearchField(props: SearchFieldProps) {
             border: '1px solid',
             borderColor: (theme) => (active && shown ? 'primary.main' : theme.palette.divider),
             // Fixes a bug where the background color is darker in the header
-            backgroundColor: (theme) => alpha(theme.palette.background.default, 1),
+            // backgroundColor: (theme) => alpha(theme.palette.background.paper, 1),
             transition: 'opacity 0.2s ease-in-out',
             ...(!shown
               ? {

@@ -11,7 +11,7 @@ export default function ButtonLink(props: ButtonLinkProps) {
   return (
     // @ts-expect-error - Validation passed to parent
     <I18nLink href={href} locale={locale} passHref>
-      <Button {...rest} />
+      <Button {...rest} aria-hidden tabIndex={-1} />
     </I18nLink>
   );
 }

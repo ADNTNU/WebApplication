@@ -10,11 +10,17 @@ import {
   SupportedColorScheme,
   useColorScheme,
 } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-export default function CssThemeSwitcher() {
+export default function ThemeSwitcher() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations('components.themeSwitcher');
+
+  const label = t('theme');
+  const darkName = t('dark');
+  const lightName = t('light');
 
   useEffect(() => {
     setMounted(true);
@@ -28,10 +34,10 @@ export default function CssThemeSwitcher() {
 
   return (
     <FormControl>
-      <InputLabel id="theme-select-label">Theme</InputLabel>
+      <InputLabel id="theme-select-label">{label}</InputLabel>
       <Select
         value={mode}
-        label="Theme"
+        label={label}
         aria-label="Change theme"
         labelId="theme-select-label"
         disabled={!mounted}
@@ -47,6 +53,12 @@ export default function CssThemeSwitcher() {
         </MenuItem>
         {Object.keys(commonTheme.colorSchemes).map((k) => {
           const themeMode = k as SupportedColorScheme;
+          let name: string = themeMode;
+          if (themeMode === 'dark') {
+            name = darkName;
+          } else if (themeMode === 'light') {
+            name = lightName;
+          }
           return (
             <MenuItem
               key={themeMode}
@@ -55,7 +67,7 @@ export default function CssThemeSwitcher() {
                 setMode(themeMode);
               }}
             >
-              {capitalizeFirstLetter(k)}
+              {capitalizeFirstLetter(name)}
             </MenuItem>
           );
         })}

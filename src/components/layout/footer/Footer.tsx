@@ -1,9 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import NavigationLink from '@components/navigation/NavigationLink';
-import { useTranslations } from 'next-intl';
+import { NextIntlClientProvider, useMessages, useTranslations } from 'next-intl';
+import { pick } from 'lodash';
 import { FooterContainer, FooterSection } from './FooterComponents';
 // import ThemeSwitcher from './ThemeSwitcher';
-import CssThemeSwitcher from '../CssThemeSwitcher';
+import ThemeSwitcher from '../ThemeSwitcher';
 
 // type FooterProps = {
 
@@ -12,13 +13,14 @@ import CssThemeSwitcher from '../CssThemeSwitcher';
 export default function Footer(/* props: FooterProps */) {
   // const {} = props;
   const t = useTranslations('nav');
+  const messages = useMessages();
   return (
     <Box
       component="footer"
       sx={{
         width: '100%',
         height: 'auto',
-        backgroundColor: 'background.paper',
+        // backgroundColor: 'background.paper',
         padding: '1rem',
         marginTop: '1rem',
       }}
@@ -27,8 +29,9 @@ export default function Footer(/* props: FooterProps */) {
     >
       <FooterContainer>
         <FooterSection>
-          {/* <ThemeSwitcher /> */}
-          <CssThemeSwitcher />
+          <NextIntlClientProvider messages={pick(messages, 'components.themeSwitcher')}>
+            <ThemeSwitcher />
+          </NextIntlClientProvider>
         </FooterSection>
         <FooterSection />
         <FooterSection sx={{ textAlign: 'right' }}>

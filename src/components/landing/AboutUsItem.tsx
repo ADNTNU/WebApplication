@@ -15,7 +15,6 @@ export type AboutUsItemProps = {
 export default function AboutUsItem(props: AboutUsItemProps) {
   const { title, description, image, /* imageSources, */ direction, links } = props;
   return (
-    // <Paper sx={{ borderRadius: 2 }} elevation={2}>
     <Stack
       sx={{
         flexDirection: { xs: 'column', md: direction === 'left' ? 'row' : 'row-reverse' },
@@ -24,6 +23,8 @@ export default function AboutUsItem(props: AboutUsItemProps) {
         borderRadius: 2,
         overflow: 'hidden',
       }}
+      component={Paper}
+      elevation={3}
     >
       <Box sx={{ width: { xs: '100%', md: '50%' }, position: 'relative' }} height={400}>
         {/* Cover  */}
