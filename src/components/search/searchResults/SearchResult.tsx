@@ -13,12 +13,12 @@ export default function SearchResult(props: SearchResultProps) {
   const leaveFlightInfoProps = {
     firstFlight: trip?.leaveInitialFlight,
     lastFlight: trip?.leaveInitialFlight,
-    stopCount: trip?.leaveStopCount,
+    flightIntervals: trip?.leaveFlightIntervals,
   };
   const returnFlightInfoProps = {
     firstFlight: trip?.returnInitialFlight,
     lastFlight: trip?.returnArrivalFlight,
-    stopCount: trip?.returnStopCount,
+    flightIntervals: trip?.returnFlightIntervals,
   };
 
   return (

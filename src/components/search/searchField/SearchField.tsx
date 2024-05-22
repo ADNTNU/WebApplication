@@ -35,6 +35,7 @@ import { ParsedUrlQueryInput } from 'querystring';
 import { useSearchParams } from 'next/navigation';
 import DateRangePicker from '../DateRangePicker';
 import LocationField from './LocationField';
+import RootElement from './RootElement';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -422,6 +423,12 @@ export default function SearchField(props: SearchFieldProps) {
   }, [applyDateTextValue, value?.fromDate, value?.toDate]);
 
   useEffect(() => {
+    if (!roundTrip && value?.toDate) {
+      setValue((prev) => ({ ...prev, toDate: null }));
+    }
+  }, [roundTrip, setValue, value?.toDate]);
+
+  useEffect(() => {
     const fromDateQuery = searchParams.get('fd');
     const toDateQuery = searchParams.get('td');
     const fromLocationQuery = searchParams.get('fl');
@@ -430,7 +437,9 @@ export default function SearchField(props: SearchFieldProps) {
     const toAirportQuery = searchParams.get('ta');
 
     let fromDate: Dayjs | null = null;
+    let fromDateValid = false;
     let toDate: Dayjs | null = null;
+    let toDateValid = false;
 
     if (fromLocationQuery || fromAirportQuery) {
       const fromOption = locationAutocompleteOptions.find(
@@ -443,6 +452,9 @@ export default function SearchField(props: SearchFieldProps) {
       if (fromOption) {
         setValue((prev) => ({ ...prev, from: fromOption }));
         setFromTextValue(fromOption.name);
+      } else {
+        setValue((prev) => ({ ...prev, from: null }));
+        setValidFrom(false);
       }
     }
 
@@ -457,32 +469,45 @@ export default function SearchField(props: SearchFieldProps) {
       if (toOption) {
         setValue((prev) => ({ ...prev, to: toOption }));
         setToTextValue(toOption.name);
+      } else {
+        setValue((prev) => ({ ...prev, to: null }));
+        setValidTo(false);
       }
     }
 
     if (fromDateQuery) {
       fromDate = dayjs(parseInt(fromDateQuery, 10) * 1000);
-      setValue((prev) => ({ ...prev, fromDate }));
+      fromDateValid = fromDate ? fromDate.isValid() : false;
     }
 
     if (toDateQuery) {
       toDate = dayjs(parseInt(toDateQuery, 10) * 1000);
-      setValue((prev) => ({ ...prev, toDate }));
+      toDateValid = toDate ? toDate.isValid() : false;
     }
 
-    if (fromDateQuery && toDateQuery) {
-      // TODO: Fix bug where roundTrip is not able to be changed
-      setRoundTrip(true);
-    }
-    if (fromDate) {
+    if (fromDate && fromDateValid) {
+      setRoundTrip(false);
+      setValue((prev) => ({ ...prev, fromDate }));
       const formattedFromDate = fromDate.format(dateFormat);
-      if (toDate) {
+      if (toDate && toDateValid) {
+        setRoundTrip(true);
+        setValue((prev) => ({ ...prev, toDate }));
         setDateTextValue(`${formattedFromDate}-${toDate.format(dateFormat)}`);
       } else {
         setDateTextValue(formattedFromDate);
       }
+    } else {
+      setValidDate(false);
     }
-  }, [searchParams, locationAutocompleteOptions, applyDateTextValue, setValue, setRoundTrip]);
+  }, [
+    searchParams,
+    locationAutocompleteOptions,
+    setValue,
+    setRoundTrip,
+    setValidTo,
+    setValidFrom,
+    setValidDate,
+  ]);
 
   const zIndexOffset = variant === 'header' ? 2 : 1;
 
@@ -498,22 +523,12 @@ export default function SearchField(props: SearchFieldProps) {
           ...(activeDebounced && { transition: 'opacity 0s !important' }),
         }}
       />
-      <Paper
-        elevation={variant === 'landing' ? 2 : undefined}
-        ref={variant !== 'header' ? obstructedRef : undefined}
-        sx={{
-          zIndex:
-            active && shown
-              ? (theme) => {
-                  return theme.zIndex.appBar + zIndexOffset;
-                }
-              : undefined,
-          position: 'relative',
-          left: shown ? undefined : '-10000px',
-          display: 'flex',
-          borderRadius: 5,
-          mx: 'auto',
-        }}
+      <RootElement
+        variant={variant}
+        active={active}
+        shown={shown}
+        zIndexOffset={zIndexOffset}
+        obstructedRef={obstructedRef}
       >
         <Box
           role={shown ? 'search' : undefined}
@@ -771,7 +786,7 @@ export default function SearchField(props: SearchFieldProps) {
             </IconButton>
           </Box>
         </Box>
-      </Paper>
+      </RootElement>
     </>
   );
 }

@@ -8,7 +8,7 @@ import AirportInfo from './AirportInfo';
 type FlightInfoProps = {
   firstFlight?: FlightSearchResult | null;
   lastFlight?: FlightSearchResult | null;
-  flightIntervals?: FlightSearchResult[];
+  flightIntervals?: FlightSearchResult[] | null;
 };
 
 export default function FlightInfo(props: FlightInfoProps) {
@@ -43,6 +43,7 @@ export default function FlightInfo(props: FlightInfoProps) {
   return (
     <Box
       sx={{
+        flexGrow: 1,
         display: 'grid',
         gridTemplateRows: 'repeat(2, 1fr)',
         gridTemplateColumns: 'repeat(12, 1fr)',

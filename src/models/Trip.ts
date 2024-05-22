@@ -17,8 +17,8 @@ export type TripSearchResult = {
   minPrice: PriceSearchResult;
   leaveInitialFlight: FlightSearchResult;
   leaveArrivalFlight: FlightSearchResult | null;
+  leaveFlightIntervals: FlightSearchResult[] | null;
   returnInitialFlight: FlightSearchResult | null;
   returnArrivalFlight: FlightSearchResult | null;
-  leaveStopCount: number;
-  returnStopCount: number;
+  returnFlightIntervals: FlightSearchResult[] | null;
 };
