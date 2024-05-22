@@ -5,10 +5,11 @@ type LocationCardProps = {
   title?: string;
   image?: string;
   subtitle?: string;
+  sizes?: string;
 };
 
 export default function LocationCard(props: LocationCardProps) {
-  const { title, image, subtitle } = props;
+  const { title, image, subtitle, sizes } = props;
   return title && image ? (
     <Box
       sx={{
@@ -19,7 +20,7 @@ export default function LocationCard(props: LocationCardProps) {
         overflow: 'hidden',
       }}
     >
-      <Image src={image} alt={title} fill style={{ objectFit: 'cover' }} />
+      <Image src={image} alt={title} fill style={{ objectFit: 'cover' }} sizes={sizes} />
       <Box
         sx={{
           background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, #000000 100%)',

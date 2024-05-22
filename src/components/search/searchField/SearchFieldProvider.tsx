@@ -25,9 +25,11 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
   const [value, setValue] = useState<SearchFieldValue | null>(defaultValues.value);
   const [focusedInputId, setFocusedInputId] = useState<string | null>(defaultValues.focusedInputId);
   const [active, setActive] = useState<boolean>(defaultValues.active);
-  const [validDate, setValidDate] = useState<boolean>(defaultValues.validDate);
   const [roundTrip, setRoundTrip] = useState<boolean>(defaultValues.roundTrip);
-  const [dateTextValue, setDateTextValue] = useState<string | null>(defaultValues.dateTextValue);
+  const [validDate, setValidDate] = useState<boolean>(defaultValues.validDate);
+  const [validFrom, setValidFrom] = useState<boolean>(defaultValues.validFrom);
+  const [validTo, setValidTo] = useState<boolean>(defaultValues.validTo);
+
   // const debouncedActive = useDebounce(active, 50);
   const pathname = usePathname();
 
@@ -135,9 +137,11 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
       setValidDate,
       roundTrip,
       setRoundTrip,
-      dateTextValue,
-      setDateTextValue,
       reset,
+      validFrom,
+      setValidFrom,
+      validTo,
+      setValidTo,
     };
   }, [
     showHeaderSearchField,
@@ -146,8 +150,9 @@ export default function SearchFieldProvider(props: SearchFieldWrapperProps) {
     active,
     validDate,
     roundTrip,
-    dateTextValue,
     reset,
+    validFrom,
+    validTo,
   ]);
 
   return (

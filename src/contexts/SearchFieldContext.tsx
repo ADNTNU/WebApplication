@@ -1,9 +1,10 @@
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import { Dayjs } from 'dayjs';
 import { Dispatch, RefObject, SetStateAction, createContext } from 'react';
 
 export type SearchFieldValue = {
-  from?: string;
-  to?: string;
+  from?: LocationOrAirportOption | null;
+  to?: LocationOrAirportOption | null;
   fromDate?: Dayjs | null;
   toDate?: Dayjs | null;
 };
@@ -13,9 +14,13 @@ export const defaultValues = {
   value: null,
   focusedInputId: null,
   active: false,
-  validDate: false,
   roundTrip: true,
-  dateTextValue: null,
+  // dateTextValue: null,
+  validDate: true,
+  // fromTextValue: null,
+  validFrom: true,
+  // toTextValue: null,
+  validTo: true,
 } as const;
 
 export type ResetOptions = {
@@ -43,9 +48,17 @@ type SearchFieldContextType = {
   setValidDate: Dispatch<SetStateAction<boolean>>;
   roundTrip: boolean;
   setRoundTrip: Dispatch<SetStateAction<boolean>>;
-  dateTextValue: string | null;
-  setDateTextValue: Dispatch<SetStateAction<string | null>>;
+  // dateTextValue: string | null;
+  // setDateTextValue: Dispatch<SetStateAction<string | null>>;
   reset: (props?: ResetOptions) => void;
+  // fromTextValue: string | null;
+  // setFromTextValue: Dispatch<SetStateAction<string | null>>;
+  validFrom: boolean;
+  setValidFrom: Dispatch<SetStateAction<boolean>>;
+  // toTextValue: string | null;
+  // setToTextValue: Dispatch<SetStateAction<string | null>>;
+  validTo: boolean;
+  setValidTo: Dispatch<SetStateAction<boolean>>;
 };
 
 const SearchFieldContext = createContext<SearchFieldContextType | undefined>(undefined);

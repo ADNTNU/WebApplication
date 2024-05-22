@@ -1,44 +1,43 @@
 'use client';
 
 import {
-  createTheme as MUIcreateTheme,
+  // createTheme as MUIcreateTheme,
   responsiveFontSizes,
   experimental_extendTheme as extendTheme,
   Theme as MUITheme,
 } from '@mui/material/styles';
-import { Theme, ThemeMode, ThemeOptionsWithName } from '@/models/Theme';
 import breakpoints from './breakpoints';
-import overrides, { cssOverrides } from './overrides';
+import overrides from './overrides';
 import darkThemeOptions from './darkTheme';
 import lightThemeOptions from './lightTheme';
 
-export default function createTheme(ffTheme: ThemeOptionsWithName): Theme {
-  const { name, ...restTheme } = ffTheme;
+// export default function createTheme(ffTheme: ThemeOptionsWithName): Theme {
+//   const { name, ...restTheme } = ffTheme;
 
-  let theme = MUIcreateTheme({
-    breakpoints: {
-      ...breakpoints,
-    },
-  });
+//   let theme = MUIcreateTheme({
+//     breakpoints: {
+//       ...breakpoints,
+//     },
+//   });
 
-  theme = MUIcreateTheme(theme, {
-    typography: {
-      h6: {
-        fontWeight: 400,
-      },
-    },
-    ...restTheme,
-  });
+//   theme = MUIcreateTheme(theme, {
+//     typography: {
+//       h6: {
+//         fontWeight: 400,
+//       },
+//     },
+//     ...restTheme,
+//   });
 
-  theme = responsiveFontSizes(theme, { breakpoints: ['sm', 'md', 'lg', 'xl'], factor: 2 });
+//   theme = responsiveFontSizes(theme, { breakpoints: ['sm', 'md', 'lg', 'xl'], factor: 2 });
 
-  theme.components = overrides(theme);
+//   theme.components = overrides(theme);
 
-  return {
-    name,
-    theme,
-  };
-}
+//   return {
+//     name,
+//     theme,
+//   };
+// }
 
 export function createCommonTheme() {
   const themeOpts = {
@@ -61,7 +60,7 @@ export function createCommonTheme() {
     {
       ...themeOpts,
       components: {
-        ...cssOverrides(theme),
+        ...overrides(theme),
       },
       breakpoints,
     },
@@ -76,9 +75,9 @@ export function createCommonTheme() {
 
 export const commonTheme = createCommonTheme();
 
-const darkTheme = createTheme(darkThemeOptions);
-const lightTheme = createTheme(lightThemeOptions);
-export const themes: { [K in ThemeMode]: Theme } = {
-  Dark: darkTheme,
-  Light: lightTheme,
-};
+// const darkTheme = createTheme(darkThemeOptions);
+// const lightTheme = createTheme(lightThemeOptions);
+// export const themes: { [K in ThemeMode]: Theme } = {
+//   Dark: darkTheme,
+//   Light: lightTheme,
+// };

@@ -5,7 +5,7 @@ import { useRouter, usePathname } from '@/internationalization/navigation';
 import { Box, Button, IconButton, Menu, MenuItem, PopoverOrigin } from '@mui/material';
 import { useState, MouseEvent, useEffect, useTransition } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import LocaleFlag from './LocaleFlag';
 
@@ -21,6 +21,7 @@ export default function LocaleSwitcher(props: LocaleSwitcherProps) {
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const params = useParams();
   const locale = useLocale() as Locale;
   const [isPending, startTransition] = useTransition();
@@ -51,7 +52,7 @@ export default function LocaleSwitcher(props: LocaleSwitcherProps) {
         // @ts-expect-error -- TypeScript will validate that only known `params`
         // are used in combination with a given `pathname`. Since the two will
         // always match for the current route, we can skip runtime checks.
-        { pathname, params },
+        { pathname, params, query: Object.fromEntries(searchParams.entries()) },
         { locale: l },
       );
     });

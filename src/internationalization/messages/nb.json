@@ -30,7 +30,8 @@
       "zeroToPluralStops": "0-{to} mellomlandinger",
       "oneToPluralStops": "1-{to} mellomlandinger",
       "pluralToPluralStops": "{from}-{to} mellomlandinger",
-      "noFlights": "Ingen flyvninger",
+      "allStops": "alle mellomlandinger",
+      "noFlights": "ingen flyvninger",
       "oneFlight": "1 flyvning",
       "pluralFlights": "{flights} flyvninger",
       "roundTrip": "tur-retur"
@@ -48,8 +49,7 @@
     "203": {
       "title": "203",
       "description": "Du er ikke autorisert til å se denne siden."
-    },
-    "locale": "nb"
+    }
   },
   "nav": {
     "home": "Hjem",
@@ -70,6 +70,7 @@
   "actions": {
     "show": "Vis",
     "showMessage": "Vis {message}",
+    "showDetails": "Vis detaljer",
     "hide": "Skjul",
     "hideMessage": "Skjul {message}",
     "expand": "Utvid",
@@ -87,6 +88,23 @@
         "inAirDuration": "Tid i luften",
         "layoverDuration": "Ventetid"
       }
+    },
+    "about": {
+      "mission": {
+        "title": "Vårt oppdrag",
+        "description": "Vårt oppdrag er å hjelpe deg med å finne de beste flyvningene til de beste prisene"
+      },
+      "team": {
+        "title": "Teamet vårt",
+        "description": "Teamet vårt består av de beste flyeksperterne i verden"
+      },
+      "vision": {
+        "title": "Vår visjon",
+        "description": "Vår visjon er å bli den ledende flysøkemotoren i verden"
+      }
     }
+  },
+  "locale": {
+    "value": "nb"
   }
 }

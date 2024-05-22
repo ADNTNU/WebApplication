@@ -4,15 +4,17 @@ import { Stack, Typography } from '@mui/material';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import PageSection from '@components/layout/main/PageSection';
 import { Locale } from '@/internationalization/i18n';
+import getLocationAutocompleteOptions from '@components/serverComponents/getLocationAutocomplete';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   return generateTranslatedMetadata({ locale, page: 'About' });
 }
 
-export default function About({ params: { locale } }: { params: { locale: Locale } }) {
+export default async function About({ params: { locale } }: { params: { locale: Locale } }) {
   unstable_setRequestLocale(locale);
+  const locationAutocompleteOptions = await getLocationAutocompleteOptions();
   return (
-    <PageWrapper>
+    <PageWrapper locationAutocompleteOptions={locationAutocompleteOptions}>
       <PageSection sx={{ pt: 2 }}>
         <Typography variant="h2" component="h1" gutterBottom>
           About us

@@ -5,8 +5,14 @@ import useSearchFieldContext from '@hooks/context/useSearchFieldContext';
 import { Box, Paper } from '@mui/material';
 import Image from 'next/image';
 import heroBackgroud from '@images/hero-background.jpg';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 
-export default function SearchHero() {
+type SearchHeroProps = {
+  locationAutocompleteOptions: readonly LocationOrAirportOption[];
+};
+
+export default function SearchHero(props: SearchHeroProps) {
+  const { locationAutocompleteOptions } = props;
   const { obstructedRef } = useSearchFieldContext();
   return (
     <Paper
@@ -16,6 +22,8 @@ export default function SearchHero() {
         width: '100%',
         position: 'relative',
         overflow: 'hidden',
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
       }}
     >
       <Image
@@ -26,6 +34,7 @@ export default function SearchHero() {
           objectFit: 'cover',
           filter: 'brightness(0.75)' /* blur(0.25px)', */,
         }}
+        priority
         sizes="max-width: 1200px) 100vw, 1200px"
       />
       <Box
@@ -39,7 +48,11 @@ export default function SearchHero() {
           background: 'rgba(0, 0, 0, 0.7)',
         }}
       >
-        <SearchField obstructedRef={obstructedRef} variant="landing" />
+        <SearchField
+          obstructedRef={obstructedRef}
+          variant="landing"
+          locationAutocompleteOptions={locationAutocompleteOptions}
+        />
       </Box>
     </Paper>
   );

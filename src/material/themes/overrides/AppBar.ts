@@ -1,20 +1,6 @@
-import { Theme } from '@mui/material/styles';
 import { CssComponentReturn, CssOverridesProps } from './models';
 
-export function AppBar(theme: Theme) {
-  return {
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: theme.palette.background.default,
-          height: 75,
-        },
-      },
-    },
-  };
-}
-
-export function CssAppBar(theme: CssOverridesProps): CssComponentReturn {
+export default function AppBar(theme: CssOverridesProps): CssComponentReturn {
   return {
     MuiAppBar: {
       styleOverrides: {

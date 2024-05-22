@@ -162,8 +162,8 @@ type DateRangePickerProps = DateCalendarProps<Dayjs> & {
   hoveredDate: Dayjs | null;
   selectedFromDate: Dayjs | null | undefined;
   selectedToDate: Dayjs | null | undefined;
-  setRange?: (range: boolean) => void;
-  range?: boolean;
+  setRoundTrip?: (roundTrip: boolean) => void;
+  roundTrip?: boolean;
   setRangeLabel?: string;
   value: Dayjs | null;
   rootProps?: ComponentProps<typeof Stack>;
@@ -177,8 +177,8 @@ export default function DateRangePicker(props: DateRangePickerProps) {
     selectedToDate,
     slots,
     slotProps,
-    setRange,
-    range = true,
+    setRoundTrip,
+    roundTrip = true,
     setRangeLabel,
     value,
     rootProps,
@@ -188,9 +188,9 @@ export default function DateRangePicker(props: DateRangePickerProps) {
   return (
     <Stack {...rootProps}>
       <Stack padding={2} direction="row">
-        {setRange ? (
+        {setRoundTrip ? (
           <FormControlLabel
-            control={<Switch checked={range} onChange={() => setRange(!range)} />}
+            control={<Switch checked={roundTrip} onChange={() => setRoundTrip(!roundTrip)} />}
             label={setRangeLabel}
           />
         ) : null}
@@ -202,7 +202,7 @@ export default function DateRangePicker(props: DateRangePickerProps) {
             day: (ownerState) => ({
               selectedFromDate,
               selectedToDate,
-              range,
+              range: roundTrip,
               hoveredDate,
               onPointerEnter: () => setHoveredDate(ownerState.day),
               onPointerLeave: () => setHoveredDate(null),

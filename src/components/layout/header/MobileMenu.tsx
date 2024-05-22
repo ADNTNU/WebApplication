@@ -2,17 +2,19 @@ import { Box, Drawer, IconButton, Stack } from '@mui/material';
 import Link from '@components/navigation/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchField from '@components/search/searchField';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import { MainLinkHref } from './links';
 import LocaleSwitcher from '../LocaleSwitcher';
 
 type MobileMenuProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  mainLinks: { href: MainLinkHref; label: string }[];
+  mainLinks?: { href: MainLinkHref; label: string }[];
+  locationAutocompleteOptions: LocationOrAirportOption[];
 };
 
 export default function MobileMenu(props: MobileMenuProps) {
-  const { open, setOpen, mainLinks } = props;
+  const { open, setOpen, mainLinks, locationAutocompleteOptions } = props;
 
   const onClose = () => {
     setOpen(false);
@@ -21,7 +23,7 @@ export default function MobileMenu(props: MobileMenuProps) {
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1} gap={2}>
       <Box flexGrow={1} display="flex">
-        <SearchField variant="header" />
+        <SearchField variant="header" locationAutocompleteOptions={locationAutocompleteOptions} />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton onClick={() => setOpen(true)}>
@@ -51,11 +53,13 @@ export default function MobileMenu(props: MobileMenuProps) {
           }}
         >
           <Stack gap={2}>
-            {mainLinks.map((link) => (
-              <Link key={link.href} href={link.href}>
-                {link.label}
-              </Link>
-            ))}
+            {mainLinks?.length
+              ? mainLinks.map((link) => (
+                  <Link key={link.href} href={link.href}>
+                    {link.label}
+                  </Link>
+                ))
+              : null}
           </Stack>
           <LocaleSwitcher
             iconSize={24}

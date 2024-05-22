@@ -11,19 +11,19 @@ export default function SearchResult(props: SearchResultProps) {
   const { trip } = props;
 
   const leaveFlightInfoProps = {
-    firstFlight: trip?.leaveFlightInitial,
-    lastFlight: trip?.leaveFlightFinal,
+    firstFlight: trip?.leaveInitialFlight,
+    lastFlight: trip?.leaveArrivalFlight,
     flightIntervals: trip?.leaveFlightIntervals,
   };
   const returnFlightInfoProps = {
-    firstFlight: trip?.returnFlightInitial,
-    lastFlight: trip?.returnFlightFinal,
+    firstFlight: trip?.returnInitialFlight,
+    lastFlight: trip?.returnArrivalFlight,
     flightIntervals: trip?.returnFlightIntervals,
   };
 
   return (
-    <Paper
-      component={Stack}
+    <Stack
+      component={Paper}
       width="100%"
       padding={1}
       gap={1}
@@ -34,7 +34,7 @@ export default function SearchResult(props: SearchResultProps) {
     >
       <Stack flexGrow={1} gap={1}>
         <FlightInfo {...leaveFlightInfoProps} />
-        {returnFlightInfoProps && trip?.returnFlightInitial ? (
+        {returnFlightInfoProps && trip?.returnInitialFlight ? (
           <>
             <Divider
             // sx={{
@@ -48,12 +48,22 @@ export default function SearchResult(props: SearchResultProps) {
       <Divider
         orientation="vertical"
         flexItem
-        // sx={{
-        //   // width: '1px',
-        //   backgroundColor: 'text.disabled',
-        // }}
+        sx={{
+          display: { xs: 'none', md: 'block' },
+        }}
       />
-      <PriceInfo price={trip?.minPrice?.value} currency={trip?.minPrice?.currency} />
-    </Paper>
+      <Divider
+        orientation="horizontal"
+        flexItem
+        sx={{
+          display: { xs: 'block', md: 'none' },
+        }}
+      />
+      <PriceInfo
+        price={trip?.minPrice?.price}
+        currency={trip?.minPrice?.currency}
+        tripId={trip?.id.toString()}
+      />
+    </Stack>
   );
 }

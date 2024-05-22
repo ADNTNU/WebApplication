@@ -6,6 +6,7 @@ import getInitColorSchemeScript from '@mui/system/cssVars/getInitColorSchemeScri
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { Locale } from '@internationalization/i18n';
+import setDayjsLocale from '@internationalization/utils/setDayjsLocale';
 
 export default function FlightFinderCssVarsProvider({
   children,
@@ -14,6 +15,7 @@ export default function FlightFinderCssVarsProvider({
   children: ReactNode;
   locale: Locale;
 }) {
+  setDayjsLocale(locale);
   return (
     <>
       {getInitColorSchemeScript({
