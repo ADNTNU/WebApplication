@@ -19,6 +19,10 @@
     "Trip": {
       "title": "Trip - {tripId}",
       "description": ""
+    },
+    "Redirect": {
+      "title": "Should redirect to external ordering service",
+      "description": ""
     }
   },
   "common": {
@@ -34,8 +38,21 @@
       "noFlights": "no flights",
       "oneFlight": "1 flight",
       "pluralFlights": "{flights} flights",
-      "roundTrip": "round trip"
-    }
+      "oneWay": "one way",
+      "roundTrip": "round trip",
+      "departure": "departure",
+      "return": "return",
+      "type": "type",
+      "inAirDuration": "in air duration",
+      "layoverDuration": "layover duration",
+      "totalDuration": "total duration"
+    },
+    "flight": {},
+    "airport": {
+      "departureAirport": "departure airport",
+      "arrivalAirport": "arrival airport"
+    },
+    "none": "none"
   },
   "error": {
     "404": {
@@ -107,6 +124,37 @@
       "theme": "Theme",
       "dark": "Dark",
       "light": "Light"
+    },
+    "searchField": {
+      "inputs": {
+        "from": {
+          "label": "From?",
+          "placeholder": "Search for location"
+        },
+        "to": {
+          "label": "To?",
+          "placeholder": "Search for location"
+        },
+        "date": {
+          "label": "When?",
+          "placeholder": "DD/MM/YYYY"
+        },
+        "generic": {
+          "placeholder": "Search",
+          "label": "Search for flights"
+        },
+        "search": {
+          "placeholder": "Search",
+          "label": "Search"
+        }
+      }
+    },
+    "redirect": {
+      "title": "Redirect information",
+      "description": "In a real production environment, this page would redirect to the provider's website to book the trip."
+    },
+    "trip": {
+      "book": "Book"
     }
   },
   "locale": {

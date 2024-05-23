@@ -8,8 +8,8 @@ export type Flight = {
   departureAirport: Airport;
   arrivalAirport: Airport;
   airline: Airline;
-  departureDate: Date;
-  arrivalDate: Date;
+  departureDate: ISODateString;
+  arrivalDate: ISODateString;
 };
 
 export type FlightSearchResult = {

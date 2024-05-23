@@ -17,7 +17,11 @@
       "description": ""
     },
     "Trip": {
-      "title": "Tur - {tripId}",
+      "title": "Flytur - {tripId}",
+      "description": ""
+    },
+    "Redirect": {
+      "title": "Skal omdirigere til ekstern tjeneste",
       "description": ""
     }
   },
@@ -34,8 +38,21 @@
       "noFlights": "ingen flyvninger",
       "oneFlight": "1 flyvning",
       "pluralFlights": "{flights} flyvninger",
-      "roundTrip": "tur-retur"
-    }
+      "oneWay": "en veis",
+      "roundTrip": "tur-retur",
+      "departure": "avreise",
+      "return": "retur",
+      "type": "type",
+      "inAirDuration": "tid i luften",
+      "layoverDuration": "ventetid",
+      "totalDuration": "total varighet"
+    },
+    "flight": {},
+    "airport": {
+      "departureAirport": "avreise flyplass",
+      "arrivalAirport": "ankomst flyplass"
+    },
+    "none": "Ingen"
   },
   "error": {
     "404": {
@@ -107,6 +124,40 @@
       "theme": "Utseende",
       "dark": "Mørk",
       "light": "Lys"
+    },
+    "searchField": {
+      "inputs": {
+        "from": {
+          "label": "Fra?",
+          "placeholder": "Legg til sted"
+        },
+        "to": {
+          "label": "Til?",
+          "placeholder": "Legg til sted"
+        },
+        "date": {
+          "label": "Når?",
+          "placeholder": "DD/MM/YYYY"
+        },
+        "generic": {
+          "placeholder": "Søk",
+          "label": "Søk etter flyreiser"
+        },
+        "search": {
+          "placeholder": "Søk",
+          "label": "Søk"
+        }
+      }
+    },
+    "redirect": {
+      "title": "Omdirigeringsinformasjon",
+      "description": "I et reelt produksjonsmiljø ville denne siden omdirigert til leverandørens nettsted for å bestille turen."
+    },
+    "trip": {
+      "provider": "leverandør",
+      "price": "pris",
+      "currency": "valuta",
+      "book": "bestill"
     }
   },
   "locale": {

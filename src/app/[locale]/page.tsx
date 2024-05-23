@@ -1,4 +1,4 @@
-import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
+import { getMessages, getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import generateTranslatedMetadata from '@/utils/translatedMetadata';
 import PageWrapper from '@components/layout/main/PageWrapper';
 import PageSection from '@components/layout/main/PageSection';
@@ -9,6 +9,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { pick } from 'lodash';
 import AboutUs from '@components/landing/AboutUs';
 import getLocationAutocompleteOptions from '@components/serverComponents/getLocationAutocomplete';
+import { getTranslatedInputs } from '@components/search/searchField/inputs';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   return generateTranslatedMetadata({ locale, page: 'Landing' });
@@ -18,12 +19,17 @@ export default async function Landing({ params: { locale } }: { params: { locale
   unstable_setRequestLocale(locale);
   const messages = await getMessages();
   const locationAutocompleteOptions = await getLocationAutocompleteOptions();
+  const searchFieldT = await getTranslations('components.searchField');
+  const translatedInputs = getTranslatedInputs(searchFieldT);
 
   return (
     <PageWrapper locationAutocompleteOptions={locationAutocompleteOptions}>
       <PageSection sx={{ pb: 2 }}>
         <NextIntlClientProvider locale={locale} messages={pick(messages, 'common.trip')}>
-          <SearchHero locationAutocompleteOptions={locationAutocompleteOptions} />
+          <SearchHero
+            locationAutocompleteOptions={locationAutocompleteOptions}
+            inputs={translatedInputs}
+          />
         </NextIntlClientProvider>
       </PageSection>
       <NextIntlClientProvider

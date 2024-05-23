@@ -6,13 +6,15 @@ import { Box, Paper } from '@mui/material';
 import Image from 'next/image';
 import heroBackgroud from '@images/hero-background.jpg';
 import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
+import { InputMap } from '@components/search/searchField/inputs';
 
 type SearchHeroProps = {
   locationAutocompleteOptions: readonly LocationOrAirportOption[];
+  inputs: InputMap;
 };
 
 export default function SearchHero(props: SearchHeroProps) {
-  const { locationAutocompleteOptions } = props;
+  const { locationAutocompleteOptions, inputs } = props;
   const { obstructedRef } = useSearchFieldContext();
   return (
     <Paper
@@ -42,16 +44,18 @@ export default function SearchHero(props: SearchHeroProps) {
           height: '100%',
           width: '100%',
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
           background: 'rgba(0, 0, 0, 0.7)',
+          px: { xs: 4, sm: 8, md: 10 },
         }}
       >
         <SearchField
           obstructedRef={obstructedRef}
           variant="landing"
           locationAutocompleteOptions={locationAutocompleteOptions}
+          inputs={inputs}
         />
       </Box>
     </Paper>

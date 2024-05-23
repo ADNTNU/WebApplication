@@ -4,6 +4,7 @@ import { Box, Skeleton, useMediaQuery } from '@mui/material';
 import { Breakpoint, useTheme } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
+import { InputMap } from '@components/search/searchField/inputs';
 import MobileMenu from './MobileMenu';
 import DesktopMenu from './DesktopMenu';
 import { MainLinkHref } from './links';
@@ -25,10 +26,11 @@ type MenuWrapperProps = {
   downBreakpoint?: Breakpoint;
   mainLinks?: { href: MainLinkHref; label: string }[];
   locationAutocompleteOptions: LocationOrAirportOption[];
+  inputs: InputMap;
 };
 
 export default function MenuWrapper(props: MenuWrapperProps) {
-  const { downBreakpoint, mainLinks, locationAutocompleteOptions } = props;
+  const { downBreakpoint, mainLinks, locationAutocompleteOptions, inputs } = props;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(downBreakpoint || 'md'));
@@ -50,8 +52,9 @@ export default function MenuWrapper(props: MenuWrapperProps) {
       setOpen={setOpen}
       mainLinks={mainLinks}
       locationAutocompleteOptions={locationAutocompleteOptions}
+      inputs={inputs}
     />
   ) : (
-    <DesktopMenu locationAutocompleteOptions={locationAutocompleteOptions} />
+    <DesktopMenu locationAutocompleteOptions={locationAutocompleteOptions} inputs={inputs} />
   );
 }

@@ -33,12 +33,13 @@ type LocationFieldProps = {
   handleChange: (value: LocationOrAirportOption | null) => void;
   handleBlur: () => void;
   zIndexOffset: number;
-  variant: 'header' | 'landing';
+  variant: 'dialog' | 'header' | 'landing';
   valid: boolean;
   handleKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   handleKeyUp: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   inputAdornmentIcon: ReactNode;
   handleFocusOrClick: (id: string) => void;
+  disablePortal?: boolean;
 };
 
 export default function LocationField(props: LocationFieldProps) {
@@ -60,9 +61,11 @@ export default function LocationField(props: LocationFieldProps) {
     handleKeyDown,
     handleKeyUp,
     inputAdornmentIcon,
+    disablePortal,
   } = props;
   return (
     <Autocomplete
+      disablePortal={disablePortal}
       options={options}
       id={id}
       // type="search"

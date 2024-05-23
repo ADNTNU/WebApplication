@@ -1,31 +1,29 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { DefaultSession } from 'next-auth';
 
+type Role = 'ROLE_ADMIN' | 'ROLE_USER';
+
 declare module 'next-auth' {
   // TODO: Add wanted properties to next-auth types
   interface User {
-    // id: string;
-    // email: string;
-    // cognitoGroups: string[];
-    // accessToken: string;
-    // refreshToken: string;
-    // idToken: string;
-    // exp: number;
     jwt: string;
-    // role: string[];
+    email: string;
+    roles: Role[];
+    iat: number;
+    exp: number;
   }
 
   interface Session {
     user: DefaultSession['user'] & User;
     expires: string;
     error: string;
-    token?: string;
+    token: string;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    token?: string;
-    // idToken?: string;
+    user: DefaultSession['user'] & User;
+    token: string;
   }
 }

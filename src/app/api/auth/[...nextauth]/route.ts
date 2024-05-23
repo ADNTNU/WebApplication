@@ -1,4 +1,5 @@
-import NextAuth from 'next-auth';
+import { DecodedJWT, parseJwt } from '@utils/jwt';
+import NextAuth, { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { cookies } from 'next/headers';
 
@@ -98,8 +99,18 @@ const handler = NextAuth({
           if (res.status !== 200 && res.status !== 201) {
             throw new Error('User already exists');
           }
+          const decodedJWT: DecodedJWT = parseJwt(data.jwt);
 
-          return data;
+          const user: User = {
+            jwt: data.jwt,
+            id: decodedJWT.sub,
+            email: decodedJWT.sub,
+            roles: decodedJWT.roles.map((role) => role.authority),
+            iat: decodedJWT.iat,
+            exp: decodedJWT.exp,
+          };
+
+          return user;
         } catch (error) {
           return null;
         }
@@ -110,7 +121,6 @@ const handler = NextAuth({
     jwt({ token, user }) {
       const returnedToken = { ...token };
       if (user) {
-        // User is available during sign-in
         returnedToken.token = user.jwt;
       }
       return returnedToken;
@@ -118,7 +128,7 @@ const handler = NextAuth({
     session({ session, token }) {
       const returnedSession = { ...session };
       if (returnedSession.user) {
-        returnedSession.token = token.token;
+        returnedSession.user = token.user;
       }
       return returnedSession;
     },

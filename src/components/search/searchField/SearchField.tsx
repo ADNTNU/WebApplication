@@ -5,7 +5,7 @@ import { useRouter } from '@internationalization/navigation';
 // import { alpha } from '@mui/material/styles';
 import {
   Backdrop,
-  Box,
+  Dialog,
   Divider,
   IconButton,
   InputAdornment,
@@ -15,7 +15,17 @@ import {
   Theme,
   useMediaQuery,
 } from '@mui/material';
-import { RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  RefObject,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  MouseEvent,
+  FocusEvent,
+  KeyboardEvent,
+} from 'react';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import dayjs, { Dayjs } from 'dayjs';
@@ -36,6 +46,9 @@ import { useSearchParams } from 'next/navigation';
 import DateRangePicker from '../DateRangePicker';
 import LocationField from './LocationField';
 import RootElement from './RootElement';
+import { InputMap } from './inputs';
+import InputWrapper from './InputWrapper';
+import SearchFieldDialog from './SearchFieldDrawer';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -43,44 +56,21 @@ dayjs.extend(dayjsIsBetween);
 
 export type SearchFieldProps = {
   obstructedRef?: RefObject<HTMLDivElement>;
-  variant: 'header' | 'landing';
+  variant: 'dialog' | 'header' | 'landing';
   locationAutocompleteOptions: readonly LocationOrAirportOption[];
+  inputs: InputMap;
 };
 
 const dateFormat = 'DD/MM/YYYY';
 
 function SuspendedSearchField(props: SearchFieldProps) {
-  const { obstructedRef, variant, locationAutocompleteOptions } = props;
+  const { obstructedRef, variant, locationAutocompleteOptions, inputs } = props;
 
   // To add more translations, you have to add them to the
   // pick(messages) in the wrapper server components
   const t = useTranslations('common.trip');
   const compact = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
 
-  const inputs: {
-    [key: string]: {
-      id: string;
-      label: string;
-      placeholder?: string;
-      ownerId?: string;
-    };
-  } = {
-    from: {
-      id: 'search-field-input-from',
-      label: 'Fra?',
-      placeholder: 'Legg til sted',
-      ownerId: 'autocomplete-from',
-    },
-    to: {
-      id: 'search-field-input-to',
-      label: 'Til?',
-      placeholder: 'Legg til sted',
-      ownerId: 'autocomplete-to',
-    },
-    date: { id: 'search-field-input-date', label: 'Når?', placeholder: 'DD/MM/YYYY' },
-    search: { id: 'search-field-button-search', label: 'Søk' },
-    generic: { id: 'search-field-input-generic', label: 'Søk etter flyreiser' },
-  };
   const inputIds: {
     [key: string]: (typeof inputs)[keyof typeof inputs]['id'];
   } = {
@@ -114,6 +104,7 @@ function SuspendedSearchField(props: SearchFieldProps) {
   const [fromTextValue, setFromTextValue] = useState<string | null>(null);
   const [toTextValue, setToTextValue] = useState<string | null>(null);
   const [dateTextValue, setDateTextValue] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const dateFieldRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -333,6 +324,7 @@ function SuspendedSearchField(props: SearchFieldProps) {
 
   const handleBlur = () => {
     setActive(false);
+    setDialogOpen(false);
   };
 
   const handleChangeFromText = (fromText: string) => {
@@ -382,8 +374,20 @@ function SuspendedSearchField(props: SearchFieldProps) {
     [roundTrip],
   );
 
-  const handleFocusOrClick = (id: string, focusElement?: boolean) => {
+  const handleFocusOrClick = (
+    id: string,
+    focusElement?: boolean,
+    e?: FocusEvent | KeyboardEvent | MouseEvent,
+  ) => {
+    if (id === inputIds.generic) {
+      if (e) {
+        e.preventDefault();
+      }
+      setDialogOpen(true);
+    }
+
     if (Object.values(inputIds).includes(id)) {
+      console.log('focusing', id);
       setFocusedInputId(id);
       setActive(true);
     }
@@ -511,7 +515,87 @@ function SuspendedSearchField(props: SearchFieldProps) {
 
   const zIndexOffset = variant === 'header' ? 2 : 1;
 
-  const { from, to } = value || {};
+  const { from, to, fromDate, toDate } = value || {};
+
+  if (compact && variant === 'header') {
+    return (
+      <RootElement
+        variant={variant}
+        active={active}
+        shown={shown}
+        zIndexOffset={zIndexOffset}
+        obstructedRef={obstructedRef}
+        compact={compact}
+      >
+        <InputWrapper
+          handleFocusOrClick={handleFocusOrClick}
+          inputId={inputs.generic.id}
+          zIndexOffset={zIndexOffset}
+          active={active}
+          shown={shown}
+          variant={variant}
+          focus={false}
+        >
+          <TextField
+            onClick={(e) => handleFocusOrClick(inputIds.generic, false, e)}
+            placeholder={inputs.generic.label}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
+            onFocus={(e) => handleFocusOrClick(inputIds.generic, false, e)}
+            onBlur={handleBlur}
+            sx={{
+              zIndex: (theme) =>
+                active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
+              '& fieldset': { border: 'none' },
+            }}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </InputWrapper>
+        {/* <Dialog open={dialogOpen}>
+          <SuspendedSearchField {...props} />
+        </Dialog> */}
+        {/* <SearchFieldDialog
+          variant="dialog"
+          active={active}
+          shown={shown}
+          zIndexOffset={zIndexOffset}
+          compact={compact}
+          handleFocusOrClick={handleFocusOrClick}
+          inputs={inputs}
+          locationAutocompleteOptions={locationAutocompleteOptions}
+          fromTextValue={fromTextValue}
+          handleChangeFrom={handleChangeFrom}
+          handleChangeFromText={handleChangeFromText}
+          handleBlur={handleBlur}
+          validFrom={validFrom}
+          handleKeyDown={handleKeyDown}
+          handleKeyUp={handleKeyUp}
+          toTextValue={toTextValue}
+          handleChangeTo={handleChangeTo}
+          handleChangeToText={handleChangeToText}
+          validTo={validTo}
+          validDate={validDate}
+          dateTextValue={dateTextValue}
+          handleChangeDateText={handleChangeDateText}
+          handleDateFieldBlur={handleDateFieldBlur}
+          datePopperOpen={datePopperOpen}
+          handleChangeDate={handleChangeDate}
+          setHoveredDate={setHoveredDate}
+          hoveredDate={hoveredDate}
+          fromDate={fromDate}
+          toDate={toDate}
+          setRoundTrip={setRoundTrip}
+          roundTrip={roundTrip}
+          handleSearch={handleSearch}
+          closeDatePopper={() => setFocusedInputId(null)}
+          dialogOpen={dialogOpen}
+          t={t}
+        /> */}
+      </RootElement>
+    );
+  }
 
   return (
     <>
@@ -529,224 +613,37 @@ function SuspendedSearchField(props: SearchFieldProps) {
         shown={shown}
         zIndexOffset={zIndexOffset}
         obstructedRef={obstructedRef}
+        compact={compact}
       >
-        <Box
-          role={shown ? 'search' : undefined}
-          sx={{
-            zIndex: active && shown ? (theme) => theme.zIndex.appBar + zIndexOffset : undefined,
-            flexGrow: 1,
-            flexShrink: 1,
-            mx: 'auto',
-            maxWidth: '800px',
-            position: 'relative',
-            overflow: 'hidden',
-            display: 'flex',
-            borderRadius: 5,
-            flexDirection: variant === 'header' && compact ? 'row' : { xs: 'column', md: 'row' },
-            justifyContent: 'center',
-            border: '1px solid',
-            borderColor: (theme) => (active && shown ? 'primary.main' : theme.palette.divider),
-            // Fixes a bug where the background color is darker in the header
-            // backgroundColor: (theme) => alpha(theme.palette.background.paper, 1),
-            transition: 'opacity 0.2s ease-in-out',
-            ...(!shown
-              ? {
-                  opacity: 0,
-                }
-              : {
-                  opacity: 1,
-                }),
-          }}
-        >
-          {variant === 'header' && compact ? (
-            <Box
-              alignItems="end"
-              display="flex"
-              onClick={() => handleFocusOrClick(inputIds.generic, true)}
-              sx={{
-                position: 'relative',
-                zIndex: (theme) =>
-                  active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
-                cursor: 'text',
-              }}
-            >
-              <TextField
-                onClick={() => handleFocusOrClick(inputIds.generic, true)}
-                placeholder={inputs.generic.label}
-                onKeyDown={handleKeyDown}
-                onKeyUp={handleKeyUp}
-                onFocus={() => handleFocusOrClick(inputIds.generic)}
-                onBlur={handleBlur}
-                sx={{
-                  zIndex: (theme) =>
-                    active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
-                  '& fieldset': { border: 'none' },
-                }}
-              />
-            </Box>
-          ) : (
-            <>
-              <Box
-                alignItems="end"
-                display="flex"
-                onClick={() => handleFocusOrClick(inputIds.from, true)}
-                sx={{
-                  position: 'relative',
-                  zIndex: (theme) =>
-                    active && shown ? theme.zIndex.appBar + zIndexOffset + 1 : undefined,
-                  cursor: 'text',
-                  ...(variant !== 'header' && {
-                    minHeight: '5rem',
-                  }),
-                  flexGrow: 1,
-                }}
-              >
-                <LocationField
-                  options={locationAutocompleteOptions}
-                  id={inputs.from.id}
-                  label={inputs.from.label}
-                  placeholder={inputs.from.placeholder}
-                  shown={shown}
-                  value={from || null}
-                  textValue={fromTextValue || ''}
-                  handleChange={handleChangeFrom}
-                  handleChangeText={handleChangeFromText}
-                  handleFocusOrClick={handleFocusOrClick}
-                  handleBlur={handleBlur}
-                  zIndexOffset={zIndexOffset + 1}
-                  variant={variant}
-                  valid={validFrom}
-                  handleKeyDown={handleKeyDown}
-                  handleKeyUp={handleKeyUp}
-                  inputAdornmentIcon={
-                    <FlightTakeoffIcon color={!validFrom ? 'error' : undefined} />
-                  }
-                />
-              </Box>
-              <Divider
-                flexItem
-                sx={{
-                  borderBottomWidth: { xs: 'thin', md: 0 },
-                  borderRightWidth: { xs: 0, md: 'thin' },
-                }}
-              />
-              <Box
-                alignItems="end"
-                display="flex"
-                // onClick={() => handleFocusOrClick(inputIds.to, true)}
-                sx={{
-                  cursor: 'text',
-                  ...(variant !== 'header' && {
-                    minHeight: '5rem',
-                  }),
-                  flexGrow: 1,
-                }}
-              >
-                <LocationField
-                  options={locationAutocompleteOptions}
-                  id={inputs.to.id}
-                  label={inputs.to.label}
-                  placeholder={inputs.to.placeholder}
-                  shown={shown}
-                  value={to || null}
-                  textValue={toTextValue || ''}
-                  handleChange={handleChangeTo}
-                  handleChangeText={handleChangeToText}
-                  handleFocusOrClick={handleFocusOrClick}
-                  handleBlur={handleBlur}
-                  zIndexOffset={zIndexOffset + 1}
-                  variant={variant}
-                  valid={validTo}
-                  handleKeyDown={handleKeyDown}
-                  handleKeyUp={handleKeyUp}
-                  inputAdornmentIcon={<FlightLandIcon color={!validTo ? 'error' : undefined} />}
-                />
-              </Box>
-              <Divider
-                flexItem
-                sx={{
-                  borderBottomWidth: { xs: 'thin', md: 0 },
-                  borderRightWidth: { xs: 0, md: 'thin' },
-                }}
-              />
-              <Box
-                alignItems="end"
-                display="flex"
-                onClick={() => handleFocusOrClick(inputIds.date, true)}
-                ref={dateFieldRef}
-                sx={{
-                  cursor: 'text',
-                  ...(variant !== 'header' && {
-                    minHeight: '5rem',
-                  }),
-                }}
-              >
-                <TextField
-                  placeholder={variant === 'header' ? inputs.date.label : inputs.date.placeholder}
-                  label={variant === 'header' ? undefined : inputs.date.label}
-                  aria-label={inputs.date.label}
-                  id={inputs.date.id}
-                  // aria-controls={inputIds.date}
-                  aria-hidden={!shown}
-                  tabIndex={shown ? undefined : -1}
-                  hidden={!shown}
-                  error={!validDate}
-                  // color={!!dateTextValue?.length && !validDate ? 'error' : undefined}
-                  value={dateTextValue || ''}
-                  onChange={(e) => handleChangeDateText(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onKeyUp={handleKeyUp}
-                  onFocus={() => handleFocusOrClick(inputs.date.id)}
-                  onBlur={handleDateFieldBlur}
-                  inputProps={{
-                    tabIndex: shown ? undefined : -1,
-                    hidden: !shown,
-                    pattern:
-                      '([0-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/d{4}(-([0-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/d{4})?',
-                  }}
-                  // eslint-disable-next-line react/jsx-no-duplicate-props
-                  InputProps={{
-                    color: !validDate ? 'error' : undefined,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CalendarMonthIcon color={!validDate ? 'error' : undefined} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    minWidth: '250px',
-                    '& fieldset': { border: 'none' },
-                  }}
-                />
-              </Box>
-              <Popper
-                open={datePopperOpen}
-                anchorEl={dateFieldRef.current}
-                onKeyUp={handleKeyUp}
-                placement="bottom"
-                sx={{ zIndex: (theme) => theme.zIndex.appBar + zIndexOffset + 1 }}
-              >
-                <Paper onKeyUp={handleKeyUp}>
-                  <DateRangePicker
-                    rootProps={{
-                      onKeyUp: handleKeyUp,
-                    }}
-                    onChange={(d) => handleChangeDate(d)}
-                    disablePast
-                    value={null}
-                    disableHighlightToday
-                    setHoveredDate={setHoveredDate}
-                    hoveredDate={hoveredDate}
-                    selectedFromDate={value?.fromDate}
-                    selectedToDate={value?.toDate}
-                    setRoundTrip={setRoundTrip}
-                    roundTrip={roundTrip}
-                    setRangeLabel={capitalizeFirstLetter(t('roundTrip'))}
-                  />
-                </Paper>
-              </Popper>
-            </>
-          )}
+        <>
+          <InputWrapper
+            handleFocusOrClick={handleFocusOrClick}
+            inputId={inputs.from.id}
+            zIndexOffset={zIndexOffset}
+            active={active}
+            shown={shown}
+            variant={variant}
+          >
+            <LocationField
+              options={locationAutocompleteOptions}
+              id={inputs.from.id}
+              label={inputs.from.label}
+              placeholder={inputs.from.placeholder}
+              shown={shown}
+              value={from || null}
+              textValue={fromTextValue || ''}
+              handleChange={handleChangeFrom}
+              handleChangeText={handleChangeFromText}
+              handleFocusOrClick={handleFocusOrClick}
+              handleBlur={handleBlur}
+              zIndexOffset={zIndexOffset + 1}
+              variant={variant}
+              valid={validFrom}
+              handleKeyDown={handleKeyDown}
+              handleKeyUp={handleKeyUp}
+              inputAdornmentIcon={<FlightTakeoffIcon color={!validFrom ? 'error' : undefined} />}
+            />
+          </InputWrapper>
           <Divider
             flexItem
             sx={{
@@ -754,38 +651,152 @@ function SuspendedSearchField(props: SearchFieldProps) {
               borderRightWidth: { xs: 0, md: 'thin' },
             }}
           />
-          {/* TODO: Add internationalized aria-labels */}
-          <Box
-            alignItems="end"
-            display="flex"
-            onClick={handleSearch}
-            sx={{
-              cursor: 'text',
-              ...(variant !== 'header' && {
-                minHeight: { xs: undefined, md: '5rem' },
-              }),
-              backgroundColor: 'primary.main',
-            }}
+          <InputWrapper
+            handleFocusOrClick={handleFocusOrClick}
+            inputId={inputs.to.id}
+            zIndexOffset={zIndexOffset}
+            active={active}
+            shown={shown}
+            variant={variant}
           >
-            <IconButton
-              id={inputIds.search}
-              aria-label="search"
+            <LocationField
+              options={locationAutocompleteOptions}
+              id={inputs.to.id}
+              label={inputs.to.label}
+              placeholder={inputs.to.placeholder}
+              shown={shown}
+              value={to || null}
+              textValue={toTextValue || ''}
+              handleChange={handleChangeTo}
+              handleChangeText={handleChangeToText}
+              handleFocusOrClick={handleFocusOrClick}
+              handleBlur={handleBlur}
+              zIndexOffset={zIndexOffset + 1}
+              variant={variant}
+              valid={validTo}
+              handleKeyDown={handleKeyDown}
+              handleKeyUp={handleKeyUp}
+              inputAdornmentIcon={<FlightLandIcon color={!validTo ? 'error' : undefined} />}
+            />
+          </InputWrapper>
+          <Divider
+            flexItem
+            sx={{
+              borderBottomWidth: { xs: 'thin', md: 0 },
+              borderRightWidth: { xs: 0, md: 'thin' },
+            }}
+          />
+          <InputWrapper
+            handleFocusOrClick={handleFocusOrClick}
+            inputId={inputs.date.id}
+            zIndexOffset={zIndexOffset}
+            active={active}
+            shown={shown}
+            variant={variant}
+            customRef={dateFieldRef}
+          >
+            <TextField
+              placeholder={variant === 'header' ? inputs.date.label : inputs.date.placeholder}
+              label={variant === 'header' ? undefined : inputs.date.label}
+              aria-label={inputs.date.label}
+              id={inputs.date.id}
+              // aria-controls={inputIds.date}
               aria-hidden={!shown}
               tabIndex={shown ? undefined : -1}
               hidden={!shown}
-              disableRipple
-              onFocus={() => handleFocusOrClick(inputIds.search)}
-              onClick={handleSearch}
-              onBlur={handleBlur}
-              sx={{
-                height: '100%',
-                width: '100%',
+              error={!validDate}
+              // color={!!dateTextValue?.length && !validDate ? 'error' : undefined}
+              value={dateTextValue || ''}
+              onChange={(e) => handleChangeDateText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
+              onFocus={() => handleFocusOrClick(inputs.date.id)}
+              onBlur={handleDateFieldBlur}
+              inputProps={{
+                tabIndex: shown ? undefined : -1,
+                hidden: !shown,
+                pattern:
+                  '([0-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/d{4}(-([0-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/d{4})?',
               }}
-            >
-              <SearchIcon sx={{ color: 'white' }} />
-            </IconButton>
-          </Box>
-        </Box>
+              // eslint-disable-next-line react/jsx-no-duplicate-props
+              InputProps={{
+                color: !validDate ? 'error' : undefined,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarMonthIcon color={!validDate ? 'error' : undefined} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                minWidth: '250px',
+                '& fieldset': { border: 'none' },
+              }}
+            />
+          </InputWrapper>
+          <Popper
+            open={datePopperOpen}
+            anchorEl={dateFieldRef.current}
+            onKeyUp={handleKeyUp}
+            placement="bottom"
+            sx={{ zIndex: (theme) => theme.zIndex.appBar + zIndexOffset + 1 }}
+          >
+            <Paper onKeyUp={handleKeyUp}>
+              <DateRangePicker
+                rootProps={{
+                  onKeyUp: handleKeyUp,
+                }}
+                onChange={(d) => handleChangeDate(d)}
+                disablePast
+                value={null}
+                disableHighlightToday
+                setHoveredDate={setHoveredDate}
+                hoveredDate={hoveredDate}
+                selectedFromDate={fromDate}
+                selectedToDate={toDate}
+                setRoundTrip={setRoundTrip}
+                roundTrip={roundTrip}
+                setRangeLabel={capitalizeFirstLetter(t('roundTrip'))}
+                closeDatePopper={() => setFocusedInputId(null)}
+              />
+            </Paper>
+          </Popper>
+        </>
+        <Divider
+          flexItem
+          sx={{
+            borderBottomWidth: { xs: 'thin', md: 0 },
+            borderRightWidth: { xs: 0, md: 'thin' },
+          }}
+        />
+        {/* TODO: Add internationalized aria-labels */}
+        <InputWrapper
+          handleFocusOrClick={handleFocusOrClick}
+          inputId={inputs.search.id}
+          zIndexOffset={zIndexOffset}
+          active={active}
+          shown={shown}
+          variant={variant}
+          backgroundColor="primary.main"
+          onClick={handleSearch}
+        >
+          <IconButton
+            id={inputIds.search}
+            aria-label="search"
+            aria-hidden={!shown}
+            tabIndex={shown ? undefined : -1}
+            hidden={!shown}
+            disableRipple
+            onFocus={() => handleFocusOrClick(inputIds.search)}
+            onClick={handleSearch}
+            onBlur={handleBlur}
+            sx={{
+              height: '100%',
+              width: '100%',
+            }}
+          >
+            <SearchIcon sx={{ color: 'white' }} />
+          </IconButton>
+        </InputWrapper>
       </RootElement>
     </>
   );

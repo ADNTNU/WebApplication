@@ -1,8 +1,9 @@
-import { FormControlLabel, Stack, Switch } from '@mui/material';
+import { FormControlLabel, IconButton, Stack, Switch } from '@mui/material';
 import styled from '@mui/system/styled';
 import { DateCalendar, DateCalendarProps, PickersDay, PickersDayProps } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs';
 import { ComponentProps } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 
 type CustomPickerDayProps = PickersDayProps<Dayjs> & {
   isSelected: boolean;
@@ -167,6 +168,7 @@ type DateRangePickerProps = DateCalendarProps<Dayjs> & {
   setRangeLabel?: string;
   value: Dayjs | null;
   rootProps?: ComponentProps<typeof Stack>;
+  closeDatePopper: () => void;
 };
 
 export default function DateRangePicker(props: DateRangePickerProps) {
@@ -182,18 +184,22 @@ export default function DateRangePicker(props: DateRangePickerProps) {
     setRangeLabel,
     value,
     rootProps,
+    closeDatePopper,
     ...rest
   } = props;
 
   return (
     <Stack {...rootProps}>
-      <Stack padding={2} direction="row">
+      <Stack padding={2} direction="row" justifyContent="space-between">
         {setRoundTrip ? (
           <FormControlLabel
             control={<Switch checked={roundTrip} onChange={() => setRoundTrip(!roundTrip)} />}
             label={setRangeLabel}
           />
         ) : null}
+        <IconButton onClick={() => closeDatePopper}>
+          <CloseIcon />
+        </IconButton>
       </Stack>
       <Stack direction="row">
         <DateCalendar
