@@ -4,8 +4,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchField from '@components/search/searchField';
 import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import { InputMap } from '@components/search/searchField/inputs';
+import CloseIcon from '@mui/icons-material/Close';
 import { MainLinkHref } from './links';
 import LocaleSwitcher from '../LocaleSwitcher';
+import Account from './Account';
 
 type MobileMenuProps = {
   open: boolean;
@@ -59,6 +61,27 @@ export default function MobileMenu(props: MobileMenuProps) {
           }}
         >
           <Stack gap={2}>
+            <Stack direction="row" justifyContent="flex-end">
+              <IconButton onClick={onClose}>
+                <CloseIcon fontSize="large" />
+              </IconButton>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <LocaleSwitcher
+                iconSize={24}
+                transformOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+              />
+              <Account iconSize={30} />
+            </Stack>
+          </Stack>
+          <Stack gap={2}>
             {mainLinks?.length
               ? mainLinks.map((link) => (
                   <Link key={link.href} href={link.href}>
@@ -67,17 +90,6 @@ export default function MobileMenu(props: MobileMenuProps) {
                 ))
               : null}
           </Stack>
-          <LocaleSwitcher
-            iconSize={24}
-            transformOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-          />
         </Box>
       </Drawer>
     </Stack>

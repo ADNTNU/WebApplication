@@ -24,8 +24,9 @@ export default function RootElement(props: RootElementProps) {
                 return theme.zIndex.appBar + zIndexOffset;
               }
             : undefined,
-        position: 'relative',
-        left: shown ? undefined : '-10000px',
+        position: variant === 'header' && compact && active ? 'absolute' : 'relative',
+        top: variant === 'header' && compact && active ? 40 : undefined,
+        left: shown ? (variant === 'header' && compact && active ? 40 : undefined) : '-10000px',
         display: 'flex',
         borderRadius: 5,
         mx: 'auto',
@@ -43,7 +44,8 @@ export default function RootElement(props: RootElementProps) {
           overflow: 'hidden',
           display: 'flex',
           borderRadius: 5,
-          flexDirection: variant === 'header' && compact ? 'row' : { xs: 'column', md: 'row' },
+          flexDirection:
+            variant === 'header' && compact && !active ? 'row' : { xs: 'column', md: 'row' },
           justifyContent: 'center',
           border: '1px solid',
           borderColor: (theme) => (active && shown ? 'primary.main' : theme.palette.divider),

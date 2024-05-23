@@ -61,4 +61,5 @@ export const apiRoutes = {
   search: searchFunction,
   locationAutocomplete: `${baseApiUrl}/search/autocomplete-locations`,
   trip: (tripId: string) => `${baseApiUrl}/trip/${tripId}`,
+  saved: `${baseApiUrl}/saved`,
 };

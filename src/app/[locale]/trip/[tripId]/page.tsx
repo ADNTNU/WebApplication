@@ -26,7 +26,6 @@ async function getTrip(tripId: string) {
   }
 
   const trip = await res.json();
-
   // console.log('trip', trip);
   return trip;
 }
@@ -40,6 +39,7 @@ export default async function Trip({
   const messages = await getMessages();
   const locationAutocompleteOptions = await getLocationAutocompleteOptions();
   const trip: TripType = await getTrip(tripId);
+
   return (
     <PageWrapper locationAutocompleteOptions={locationAutocompleteOptions}>
       <PageSection sx={{ paddingY: 2 }}>

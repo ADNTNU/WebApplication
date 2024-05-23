@@ -8,8 +8,10 @@ import { Flight } from '@models/Flight';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useTranslations } from 'next-intl';
+import postSaved from '@serverActions/saved';
 import TripPrices from './TripPrices';
 import TripOverview from './TripOverview';
+import SaveButton from './SaveButton';
 
 dayjs.extend(relativeTime);
 
@@ -22,6 +24,7 @@ export default function TripSection(props: TripSectionProps) {
 
   const t = useTranslations('common.trip');
   const cT = useTranslations('common');
+  const comT = useTranslations('components.trip');
 
   const firstFlight = trip.leaveInitialFlight;
   const flightIntervals = trip.leaveFlightIntervals;
@@ -85,8 +88,16 @@ export default function TripSection(props: TripSectionProps) {
           fill
           style={{ objectFit: 'cover' }}
           sizes="max-width: 1152px) 97vw, 1152px"
+          priority
         />
       </Box>
+
+      <SaveButton
+        tripId={trip.id}
+        serverAction={postSaved}
+        localizedDeleteText={comT('delete')}
+        localizedSaveText={comT('save')}
+      />
 
       <Stack sx={{ flexDirection: { xs: 'column', md: 'row' } }} gap={2}>
         <TripOverview

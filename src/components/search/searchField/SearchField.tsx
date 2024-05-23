@@ -382,8 +382,15 @@ function SuspendedSearchField(props: SearchFieldProps) {
     }
 
     if (Object.values(inputIds).includes(id)) {
+      let closeDatePopper = false;
+      if (datePopperOpen && id === inputIds.date) {
+        closeDatePopper = true;
+      }
       setFocusedInputId(id);
       setActive(true);
+      if (closeDatePopper) {
+        setFocusedInputId(null);
+      }
     }
 
     if (focusElement) {
@@ -511,7 +518,7 @@ function SuspendedSearchField(props: SearchFieldProps) {
 
   const { from, to, fromDate, toDate } = value || {};
 
-  if (compact && variant === 'header') {
+  if (compact && variant === 'header' && !active) {
     return (
       <RootElement
         variant={variant}
@@ -547,46 +554,6 @@ function SuspendedSearchField(props: SearchFieldProps) {
             }}
           />
         </InputWrapper>
-        {/* <Dialog open={dialogOpen}>
-          <SuspendedSearchField {...props} />
-        </Dialog> */}
-        {/* <SearchFieldDialog
-          variant="dialog"
-          active={active}
-          shown={shown}
-          zIndexOffset={zIndexOffset}
-          compact={compact}
-          handleFocusOrClick={handleFocusOrClick}
-          inputs={inputs}
-          locationAutocompleteOptions={locationAutocompleteOptions}
-          fromTextValue={fromTextValue}
-          handleChangeFrom={handleChangeFrom}
-          handleChangeFromText={handleChangeFromText}
-          handleBlur={handleBlur}
-          validFrom={validFrom}
-          handleKeyDown={handleKeyDown}
-          handleKeyUp={handleKeyUp}
-          toTextValue={toTextValue}
-          handleChangeTo={handleChangeTo}
-          handleChangeToText={handleChangeToText}
-          validTo={validTo}
-          validDate={validDate}
-          dateTextValue={dateTextValue}
-          handleChangeDateText={handleChangeDateText}
-          handleDateFieldBlur={handleDateFieldBlur}
-          datePopperOpen={datePopperOpen}
-          handleChangeDate={handleChangeDate}
-          setHoveredDate={setHoveredDate}
-          hoveredDate={hoveredDate}
-          fromDate={fromDate}
-          toDate={toDate}
-          setRoundTrip={setRoundTrip}
-          roundTrip={roundTrip}
-          handleSearch={handleSearch}
-          closeDatePopper={() => setFocusedInputId(null)}
-          dialogOpen={dialogOpen}
-          t={t}
-        /> */}
       </RootElement>
     );
   }

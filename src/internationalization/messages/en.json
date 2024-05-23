@@ -154,7 +154,12 @@
       "description": "In a real production environment, this page would redirect to the provider's website to book the trip."
     },
     "trip": {
-      "book": "Book"
+      "provider": "provider",
+      "price": "price",
+      "currency": "currency",
+      "book": "book",
+      "save": "save",
+      "delete": "delete"
     }
   },
   "locale": {
