@@ -5,7 +5,6 @@ import { useRouter } from '@internationalization/navigation';
 // import { alpha } from '@mui/material/styles';
 import {
   Backdrop,
-  Dialog,
   Divider,
   IconButton,
   InputAdornment,
@@ -48,7 +47,6 @@ import LocationField from './LocationField';
 import RootElement from './RootElement';
 import { InputMap } from './inputs';
 import InputWrapper from './InputWrapper';
-import SearchFieldDialog from './SearchFieldDrawer';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -104,7 +102,6 @@ function SuspendedSearchField(props: SearchFieldProps) {
   const [fromTextValue, setFromTextValue] = useState<string | null>(null);
   const [toTextValue, setToTextValue] = useState<string | null>(null);
   const [dateTextValue, setDateTextValue] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const dateFieldRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -324,7 +321,6 @@ function SuspendedSearchField(props: SearchFieldProps) {
 
   const handleBlur = () => {
     setActive(false);
-    setDialogOpen(false);
   };
 
   const handleChangeFromText = (fromText: string) => {
@@ -383,11 +379,9 @@ function SuspendedSearchField(props: SearchFieldProps) {
       if (e) {
         e.preventDefault();
       }
-      setDialogOpen(true);
     }
 
     if (Object.values(inputIds).includes(id)) {
-      console.log('focusing', id);
       setFocusedInputId(id);
       setActive(true);
     }
