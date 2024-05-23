@@ -167,6 +167,7 @@ type DateRangePickerProps = DateCalendarProps<Dayjs> & {
   setRangeLabel?: string;
   value: Dayjs | null;
   rootProps?: ComponentProps<typeof Stack>;
+  closeDatePopper: () => void;
 };
 
 export default function DateRangePicker(props: DateRangePickerProps) {
@@ -182,12 +183,13 @@ export default function DateRangePicker(props: DateRangePickerProps) {
     setRangeLabel,
     value,
     rootProps,
+    closeDatePopper,
     ...rest
   } = props;
 
   return (
     <Stack {...rootProps}>
-      <Stack padding={2} direction="row">
+      <Stack padding={2} direction="row" justifyContent="space-between">
         {setRoundTrip ? (
           <FormControlLabel
             control={<Switch checked={roundTrip} onChange={() => setRoundTrip(!roundTrip)} />}

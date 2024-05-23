@@ -3,7 +3,8 @@ import { Price, PriceSearchResult } from './Price';
 
 export type Trip = {
   id: number;
-  minPrice: Price;
+  prices: Price[];
+  classTrypes: string[];
   leaveInitialFlight: Flight;
   leaveArrivalFlight?: Flight;
   leaveFlightIntervals?: Flight[];

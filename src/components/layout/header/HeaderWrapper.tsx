@@ -8,7 +8,7 @@ export default function HeaderWrapper({ children }: { children: ReactNode }) {
   const { obstructorRef } = useSearchFieldContext();
 
   return (
-    <AppBar position="sticky" ref={obstructorRef}>
+    <AppBar position="sticky" ref={obstructorRef} sx={{ flexGrow: 1 }}>
       {children}
     </AppBar>
   );

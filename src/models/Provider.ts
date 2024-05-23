@@ -1,3 +1,4 @@
 export type Provider = {
-  // TODO: Implement
+  id: number;
+  name: string;
 };

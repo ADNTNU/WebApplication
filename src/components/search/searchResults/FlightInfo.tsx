@@ -1,19 +1,20 @@
 import { Airline } from '@models/Airline';
-import { FlightSearchResult } from '@models/Flight';
+import { Flight, FlightSearchResult } from '@models/Flight';
 import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import ConnectingAirportsIcon from '@mui/icons-material/ConnectingAirports';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+// eslint-disable-next-line import/no-cycle
 import RouteInfo from './RouteInfo';
 import AirportInfo from './AirportInfo';
 
 dayjs.extend(relativeTime);
 
 type FlightInfoProps = {
-  firstFlight?: FlightSearchResult | null;
-  lastFlight?: FlightSearchResult | null;
-  flightIntervals?: FlightSearchResult[] | null;
+  firstFlight?: Flight | FlightSearchResult | null;
+  lastFlight?: Flight | FlightSearchResult | null;
+  flightIntervals?: Flight[] | FlightSearchResult[] | null;
   collapseStops?: boolean;
 };
 

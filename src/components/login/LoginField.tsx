@@ -2,13 +2,19 @@
 
 import { Button, Stack, TextField } from '@mui/material';
 import Link from '@components/navigation/Link';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 function LoginFields() {
+  const { data: session } = useSession();
+
+  if (session?.expires && parseInt(session.expires, 10) < Date.now()) {
+    signOut();
+  }
+
   return (
     <form
-      action={(formData) => {
-        signIn('signin', {
+      action={async (formData) => {
+        await signIn('signin', {
           email: formData.get('email') as string,
           password: formData.get('password') as string,
         });

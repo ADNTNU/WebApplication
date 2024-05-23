@@ -1,6 +1,6 @@
 'use client';
 
-import { FlightSearchResult } from '@models/Flight';
+import { Flight, FlightSearchResult } from '@models/Flight';
 import { Box, Button, Collapse, Paper, Skeleton, Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { ComponentProps, useState } from 'react';
@@ -10,8 +10,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import FlightInfo from './FlightInfo';
 
 type RouteInfoProps = {
-  firstFlight?: FlightSearchResult | null;
-  lastFlight?: FlightSearchResult | null;
+  firstFlight?: Flight | FlightSearchResult | null;
+  lastFlight?: Flight | FlightSearchResult | null;
   flightIntervals?: FlightSearchResult[] | null;
   fontSize: ComponentProps<typeof Typography>['fontSize'];
 };

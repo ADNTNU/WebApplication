@@ -1,5 +1,6 @@
 'use client';
 
+import Link from '@components/navigation/Link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton, Menu, MenuItem, PopoverOrigin } from '@mui/material';
 import { Box } from '@mui/system';
@@ -22,6 +23,9 @@ export default function Account(props: AccountProps) {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
+    if (!session) {
+      signIn();
+    }
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -67,15 +71,12 @@ export default function Account(props: AccountProps) {
           }
         }
       >
-        {session ? (
-          <MenuItem onClick={() => signOut()} aria-label="Sign out" sx={{ gap: 1 }}>
-            Sign out
-          </MenuItem>
-        ) : (
-          <MenuItem onClick={() => signIn()} aria-label="Sign in" sx={{ gap: 1 }}>
-            Sign in
-          </MenuItem>
-        )}
+        <MenuItem {...{ component: Link, href: '/controlpanel' }} aria-label="Controlpanel">
+          Controlpanel
+        </MenuItem>
+        <MenuItem onClick={() => signOut()} aria-label="Sign out" sx={{ gap: 1 }}>
+          Sign out
+        </MenuItem>
       </Menu>
     </>
   );
