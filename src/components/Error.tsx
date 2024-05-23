@@ -1,9 +1,5 @@
-'use client';
-
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import ButtonLink from './navigation/ButtonLink';
-
-// import { useTranslations } from 'next-intl';
 
 export default function Error({
   error,
@@ -12,14 +8,28 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // const t = useTranslations('Error');
-
   return (
-    <Box>
-      <Typography variant="h4">{error.message}</Typography>
-      {/* <h1>{t('title')}</h1> */}
-      <Button onClick={reset}>Retry</Button>
-      <ButtonLink href="/">Go to home page</ButtonLink>
+    <Box
+      sx={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 2,
+        my: 'auto',
+      }}
+    >
+      <Stack sx={{ maxWidth: 600, justifyContent: 'center', alignItems: 'center' }}>
+        <Typography variant="h4" component="h1">
+          {error.message}
+        </Typography>
+        <Stack direction="row" gap={2}>
+          <Button onClick={reset}>Retry</Button>
+          <ButtonLink href="/">Go to home page</ButtonLink>
+        </Stack>
+      </Stack>
     </Box>
   );
 }

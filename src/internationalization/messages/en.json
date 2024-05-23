@@ -1,7 +1,7 @@
 {
-  "Page": {
+  "page": {
     "Landing": {
-      "title": "Home",
+      "title": "Flight Finder",
       "description": "Flight finder is one of the leading flight search engines in the world. We help thousands of people around the globe to find the best flights"
     },
     "Search": {
@@ -19,48 +19,150 @@
     "Trip": {
       "title": "Trip - {tripId}",
       "description": ""
+    },
+    "Redirect": {
+      "title": "Should redirect to external ordering service",
+      "description": ""
     }
   },
-  "Landing": {
-    "test": "test",
-    "testing": "testing"
+  "common": {
+    "trip": {
+      "direct": "Direct",
+      "oneStop": "1 stop",
+      "pluralStops": "{stops} stops",
+      "zeroToOneStop": "0-1 stops",
+      "zeroToPluralStops": "0-{to} stops",
+      "oneToPluralStops": "1-{to} stops",
+      "pluralToPluralStops": "{from}-{to} stops",
+      "allStops": "all stops",
+      "noFlights": "no flights",
+      "oneFlight": "1 flight",
+      "pluralFlights": "{flights} flights",
+      "oneWay": "one way",
+      "roundTrip": "round trip",
+      "departure": "departure",
+      "return": "return",
+      "type": "type",
+      "inAirDuration": "in air duration",
+      "layoverDuration": "layover duration",
+      "totalDuration": "total duration"
+    },
+    "flight": {},
+    "airport": {
+      "departureAirport": "departure airport",
+      "arrivalAirport": "arrival airport"
+    },
+    "none": "none"
   },
-  "Flights": {
-    "direct": "Direct",
-    "oneStop": "1 stop",
-    "pluralStops": "{stops} stops",
-    "noFlights": "No flights",
-    "oneFlight": "1 flight",
-    "pluralFlights": "{flights} flights"
-  },
-  "Error": {
+  "error": {
     "404": {
       "title": "404",
-      "description": "Page not found",
-      "backAction": "Go to last page",
-      "homeAction": "Go back to home page"
+      "description": "Page not found"
+    },
+    "500": {
+      "title": "500",
+      "description": "Something went wrong. Please try again later"
+    },
+    "203": {
+      "title": "203",
+      "description": "You are not authorized to view this page"
     }
   },
-  "Nav": {
+  "nav": {
     "home": "Home",
     "search": "Search",
     "privacy": "Privacy Policy",
     "about": "About",
-    "Action": {
+    "actions": {
       "goTo": "Go to {page}",
       "goToPage": "Go to {page} page",
       "goToHomePage": "Go to home page",
+      "goToLastPage": "Go to last page",
       "goBackTo": "Go back to {page}",
       "goBackToPage": "Go back to {page} page",
-      "goBackToHomePage": "Go back to home page"
+      "goBackToHomePage": "Go back to home page",
+      "goBackToLastPage": "Go back to last page"
     }
   },
-  "Actions": {
+  "actions": {
     "show": "Show",
     "showMessage": "Show {message}",
+    "showDetails": "Show details",
     "hide": "Hide",
     "hideMessage": "Hide {message}",
     "expand": "Expand",
     "expandMessage": "Expand {message}"
+  },
+  "components": {
+    "popularDestinations": {
+      "title": "Popular destinations"
+    },
+    "search": {
+      "filters": {
+        "stopCount": "Number of layovers",
+        "price": "Price",
+        "totalDuration": "Total duration",
+        "inAirDuration": "In air duration",
+        "layoverDuration": "Layover duration"
+      }
+    },
+    "about": {
+      "mission": {
+        "title": "Our mission",
+        "description": "Our mission is to help people find the best flights at the best prices"
+      },
+      "team": {
+        "title": "Our team",
+        "description": "Our team is made up of the best flight experts in the world"
+      },
+      "vision": {
+        "title": "Our vision",
+        "description": "Our vision is to become the leading flight search engine in the world"
+      }
+    },
+    "themeSwitcher": {
+      "theme": "Theme",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "searchField": {
+      "inputs": {
+        "from": {
+          "label": "From?",
+          "placeholder": "Search for location"
+        },
+        "to": {
+          "label": "To?",
+          "placeholder": "Search for location"
+        },
+        "date": {
+          "label": "When?",
+          "placeholder": "DD/MM/YYYY"
+        },
+        "generic": {
+          "placeholder": "Search",
+          "label": "Search for flights"
+        },
+        "search": {
+          "placeholder": "Search",
+          "label": "Search"
+        }
+      }
+    },
+    "redirect": {
+      "title": "Redirect information",
+      "description": "In a real production environment, this page would redirect to the provider's website to book the trip."
+    },
+    "trip": {
+      "provider": "provider",
+      "price": "price",
+      "currency": "currency",
+      "book": "book",
+      "save": "save",
+      "delete": "delete"
+    }
+  },
+  "locale": {
+    "value": "en"
   }
 }

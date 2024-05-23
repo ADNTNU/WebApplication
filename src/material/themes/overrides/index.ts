@@ -1,13 +1,10 @@
-import { Theme } from '@mui/material';
-import { AppBar, CssAppBar } from './AppBar';
+import AppBar from './AppBar';
+import MuiCssBaseline from './MuiCssBaseline';
 import { CssComponentReturn, CssOverridesProps } from './models';
+import '@mui/material/Slider';
 
-const overrides = (theme: Theme) => {
-  return Object.assign(AppBar(theme) /* , MuiCssBaseline(theme) */);
+const overrides = (theme: CssOverridesProps): CssComponentReturn => {
+  return Object.assign(AppBar(theme), MuiCssBaseline());
 };
 
 export default overrides;
-
-export const cssOverrides = (theme: CssOverridesProps): CssComponentReturn => {
-  return Object.assign(CssAppBar(theme) /* , MuiCssBaseline() */);
-};

@@ -1,9 +1,11 @@
+'use client';
+
 import { Typography } from '@mui/material';
 import Link from '@components/navigation/Link';
 import { ComponentProps } from 'react';
-import { LinkProps, pathnames } from '@/internationalization/navigation';
+import { LinkProps } from '@/internationalization/navigation';
 
-export const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
+const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
   cursor: 'pointer',
   textDecoration: 'none',
   '&:hover': {
@@ -11,17 +13,9 @@ export const navigationLinkStyles: ComponentProps<typeof Typography>['sx'] = {
   },
 };
 
-type NavigationLinkProps<Pathname extends keyof typeof pathnames> = ComponentProps<
-  typeof Typography
-> &
-  LinkProps<Pathname>;
+type NavigationLinkProps = Omit<ComponentProps<typeof Typography> & LinkProps, 'ref'>;
 
-export default function NavigationLink<Pathname extends keyof typeof pathnames>({
-  children,
-  sx,
-  variant,
-  ...rest
-}: NavigationLinkProps<Pathname>) {
+export default function NavigationLink({ children, sx, variant, ...rest }: NavigationLinkProps) {
   const sxWithDefaults = {
     ...navigationLinkStyles,
     ...sx,

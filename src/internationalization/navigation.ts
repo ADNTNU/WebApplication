@@ -3,7 +3,7 @@ import { locales } from '@/internationalization/i18n';
 import { ComponentProps } from 'react';
 import { LocalePrefix } from 'next-intl/dist/types/src/shared/types';
 
-export const localePrefix: LocalePrefix | undefined = 'always'; // default
+export const localePrefix: LocalePrefix | undefined = 'as-needed';
 
 // The `pathnames` object holds pairs of internal
 // and external paths, separated by locale.
@@ -34,6 +34,26 @@ export const pathnames = {
     nb: '/flytur/[tripId]',
   },
 
+  '/signup': {
+    en: '/signup',
+    nb: '/registrer',
+  },
+
+  '/login': {
+    en: '/login',
+    nb: '/innlogging',
+  },
+
+  '/controlpanel': {
+    en: '/controlpanel',
+    nb: '/kontrollpanel',
+  },
+
+  '/redirect': {
+    en: '/redirect',
+    nb: '/omdirigere',
+  },
+
   // Dynamic params are supported via square brackets
   // '/news/[articleSlug]-[articleId]': {
   //   en: '/news/[articleSlug]-[articleId]',
@@ -53,9 +73,11 @@ export const {
   usePathname,
   useRouter,
   getPathname,
+  permanentRedirect,
 } = createLocalizedPathnamesNavigation({ locales, localePrefix, pathnames });
 
-export type LinkProps<Pathname extends keyof typeof pathnames> = ComponentProps<
-  typeof I18nLink<Pathname>
->;
 export type Pathname = keyof typeof pathnames;
+
+export type LinkProps = ComponentProps<typeof I18nLink<Pathname>>;
+
+export type SafeHref = LinkProps['href'];

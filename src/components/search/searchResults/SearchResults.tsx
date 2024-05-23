@@ -1,93 +1,71 @@
-import { TripSearchResult } from '@models/Trip';
-import { Stack } from '@mui/material';
+'use client';
+
+import { Alert, Stack } from '@mui/material';
+// import useSearchFilterContext from '@hooks/context/useSearchFilterContext';
+import { PaginationProps, SearchProps } from '@/apiRoutes';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
 import SearchResult from './SearchResult';
+import useSearchSWR from './useSearchSWR';
 
-type SearchResultsProps = {
-  trips?: TripSearchResult[];
-};
-
-export default function SearchResults(props: SearchResultsProps) {
-  let { trips } = props;
-
-  const tempData: TripSearchResult = {
-    id: 2134,
-    minPrice: {
-      value: 1234,
-      currency: 'NOK',
-    },
-    leaveFlightInitial: {
-      airline: {
-        id: 3123124,
-        name: 'Temp Airline',
-        logo: 'https://www.svgrepo.com/show/522436/plane.svg',
-      },
-      id: 4312,
-      fromAirport: {
-        code: 'OSL',
-        id: 231894,
-        location: {
-          id: 89321,
-          name: 'Oslo',
-          country: 'Norway',
-        },
-        name: 'Oslo Airport',
-      },
-      toAirport: {
-        code: 'AES',
-        id: 231894,
-        location: {
-          id: 89321,
-          name: 'Alesund',
-          country: 'Norway',
-        },
-        name: 'Alesund Airport Vigra',
-      },
-      departureDate: new Date(Date.now() - 43 * 60 * 1000),
-      arrivalDate: new Date(),
-      name: 'Temp Flight',
-    },
-    returnFlightInitial: {
-      airline: {
-        id: 3123124,
-        name: 'Temp Airline 2',
-        logo: 'https://www.svgrepo.com/show/522436/plane.svg',
-      },
-      id: 4312,
-      fromAirport: {
-        code: 'AES',
-        id: 231894,
-        location: {
-          id: 89321,
-          name: 'Alesund',
-          country: 'Norway',
-        },
-        name: 'Alesund Airport Vigra',
-      },
-      toAirport: {
-        code: 'OSL',
-        id: 231894,
-        location: {
-          id: 89321,
-          name: 'Oslo',
-          country: 'Norway',
-        },
-        name: 'Oslo Airport',
-      },
-      departureDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      arrivalDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 31 * 60 * 1000),
-      name: 'Temp Flight',
-    },
+type SearchResultsProps = PaginationProps &
+  SearchProps & {
+    locationAutocompleteOptions: LocationOrAirportOption[];
   };
 
-  if (tempData && !trips) {
-    trips = Array.from({ length: 10 }).map(() => tempData);
+export default function SearchResults(props: SearchResultsProps) {
+  const { locationAutocompleteOptions, ...searchParams } = props;
+
+  // const { filters } = useSearchFilterContext();
+
+  const { data: trips } = useSearchSWR({
+    ...searchParams,
+  });
+
+  if (trips && !trips.length) {
+    const { from, to, departureDate, returnDate } = searchParams;
+    let fromName: string | undefined;
+    let toName: string | undefined;
+    const fromDate = departureDate.toDateString();
+    const toDate = returnDate?.toDateString();
+
+    const isAirportId = (data: object): data is { airportId: string } => {
+      return Reflect.has(data, 'airportId');
+    };
+    if (isAirportId(from)) {
+      fromName = locationAutocompleteOptions.find(
+        (option) => option.id === parseInt(from.airportId, 10),
+      )?.name;
+    } else {
+      fromName = locationAutocompleteOptions.find(
+        (option) => option.id === parseInt(from.locationId, 10),
+      )?.name;
+    }
+    if (isAirportId(to)) {
+      toName = locationAutocompleteOptions.find(
+        (option) => option.id === parseInt(to.airportId, 10),
+      )?.name;
+    } else {
+      toName = locationAutocompleteOptions.find(
+        (option) => option.id === parseInt(to.locationId, 10),
+      )?.name;
+    }
+
+    return (
+      <Alert severity="info">
+        No trips found for &quot;{fromName}&quot; to &quot;{toName}&quot; from &quot;{fromDate}
+        &quot; to &quot;{toDate}&quot;
+      </Alert>
+    );
   }
 
   return (
     <Stack width="100%" gap={2}>
-      {trips
+      {trips && trips.length
         ? trips.map((trip) => <SearchResult key={trip.id} trip={trip} />)
-        : Array.from({ length: 10 }).map(() => <SearchResult key="searchResultSkeleton" />)}
+        : Array.from({ length: 10 }).map((_, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <SearchResult key={`searchResultSkeleton-${i}`} />
+          ))}
     </Stack>
   );
 }

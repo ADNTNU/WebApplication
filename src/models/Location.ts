@@ -2,7 +2,7 @@ export type Location = {
   id: number;
   name: string;
   country: string;
-  image: string;
+  image: string | null;
 };
 
 export type LocationSearchResult = {

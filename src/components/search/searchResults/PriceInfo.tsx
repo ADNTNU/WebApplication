@@ -1,16 +1,21 @@
-import { Button, Skeleton, Stack, Typography } from '@mui/material';
+import ButtonLink from '@components/navigation/ButtonLink';
+import { Box, Skeleton, Stack, Typography } from '@mui/material';
+import capitalizeFirstLetter from '@utils/capitalizeFirstLetter';
+import { useTranslations } from 'next-intl';
 
 type PriceInfoProps = {
   price?: number;
   currency?: string;
+  tripId?: string;
 };
 
 export default function PriceInfo(props: PriceInfoProps) {
-  const { price, currency } = props;
+  const { price, currency, tripId } = props;
+  const t = useTranslations('actions');
 
   const priceFontSize = '1.5rem';
 
-  if (!price || !currency) {
+  if (!price || !currency || !tripId) {
     return (
       <Stack width="100px" gap={2} alignItems="center" marginY="auto">
         <Skeleton width="60%" variant="text" sx={{ fontSize: priceFontSize }} />
@@ -21,12 +26,22 @@ export default function PriceInfo(props: PriceInfoProps) {
 
   return (
     <Stack flexGrow={0} gap={2} marginY="auto">
-      <Typography fontWeight="bold" fontSize={priceFontSize} textAlign="right">
+      <Typography
+        fontWeight="bold"
+        fontSize={priceFontSize}
+        sx={{ textAlign: { xs: 'left', md: 'right' } }}
+      >
         {price} {currency}
       </Typography>
-      <Button variant="contained" color="primary">
-        Book
-      </Button>
+      <Box display="flex" sx={{ justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
+        <ButtonLink
+          href={{ pathname: '/trip/[tripId]', params: { tripId } }}
+          variant="contained"
+          color="primary"
+        >
+          {capitalizeFirstLetter(t('showDetails'))}
+        </ButtonLink>
+      </Box>
     </Stack>
   );
 }

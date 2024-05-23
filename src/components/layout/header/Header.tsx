@@ -1,58 +1,66 @@
-import { AppBar, Container, Stack } from '@mui/material';
-import LogoDevIcon from '@mui/icons-material/LogoDev';
-import Link from '@components/navigation/Link';
-import NavigationLink from '@components/navigation/NavigationLink';
-import { useTranslations } from 'next-intl';
-import LanguageSwitcher from '../LanguageSwitcher';
+import { Container, Stack } from '@mui/material';
+import FlightIcon from '@mui/icons-material/Flight';
+import { NextIntlClientProvider, useMessages, useTranslations } from 'next-intl';
+import IconButton from '@components/navigation/IconButton';
+import { pick } from 'lodash';
+import { Locale } from '@internationalization/i18n';
+import { LocationOrAirportOption } from '@models/DTO/LocationOrAirport';
+import { getTranslatedInputs } from '@components/search/searchField/inputs';
+import MenuWrapper from './MenuWrapper';
+// import { mainLinks } from './links';
+import HeaderWrapper from './HeaderWrapper';
 
-// type HeaderProps = {
+type HeaderProps = {
+  locale?: Locale;
+  locationAutocompleteOptions: LocationOrAirportOption[];
+};
 
-// };
+export default function Header(props: HeaderProps) {
+  const { locale, locationAutocompleteOptions } = props;
+  const t = useTranslations('nav');
+  const searchFieldT = useTranslations('components.searchField');
+  const translatedInputs = getTranslatedInputs(searchFieldT);
+  const messages = useMessages();
 
-export default function Header(/* props: HeaderProps */) {
-  // const {} = props;
-  const t = useTranslations('Nav');
-
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const internationalizedMainLinks = undefined;
+  // const internationalizedMainLinks = mainLinks.map((link) => {
+  //   return {
+  //       href: link.href,
+  //       label: t(link.i18nNS),
+  //     }})
+  //   : [];
 
   return (
-    <AppBar position="sticky">
+    <HeaderWrapper>
       <Container
         sx={{
           justifyContent: 'space-between',
           alignItems: 'center',
           display: 'flex',
           height: '100%',
+          width: '100%',
         }}
       >
         <Stack
           component="nav"
           flexDirection="row"
-          gap={3}
+          gap={4}
           alignItems="center"
-          flexGrow={1}
+          width="100%"
           justifyContent="flex-start"
         >
-          <Link href="/" width={40} height={40} aria-label={t('Action.goToHomePage')}>
-            <LogoDevIcon
-              color="primary"
-              sx={{
-                fontSize: 40,
-              }}
+          <IconButton href="/" aria-label={t('actions.goToHomePage')} disableRipple>
+            <FlightIcon color="primary" fontSize="large" />
+          </IconButton>
+          <NextIntlClientProvider locale={locale} messages={pick(messages, 'common.trip')}>
+            <MenuWrapper
+              mainLinks={internationalizedMainLinks}
+              locationAutocompleteOptions={locationAutocompleteOptions}
+              inputs={translatedInputs}
             />
-          </Link>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
-            <Stack gap={1} alignItems="center" direction="row">
-              <NavigationLink href="/search">{t('search')}</NavigationLink>
-            </Stack>
-            {/* <TestLocaleSwitcher /> */}
-            <LanguageSwitcher iconSize={24} />
-          </Stack>
+          </NextIntlClientProvider>
         </Stack>
-        {/* Add login and internationalization buttons or drawer if mobile */}
-        {/* {isMobile ? <MobileMenu /> : <DesktopMenu />} */}
       </Container>
-    </AppBar>
+    </HeaderWrapper>
   );
 }
